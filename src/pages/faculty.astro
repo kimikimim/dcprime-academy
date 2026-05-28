@@ -2,52 +2,12 @@
 import Layout from '../components/layout/Layout.astro';
 
 const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
-
-const faculty = [
-  // 수학 (ㄱ~ㅎ)
-  { subject: '수학', name: '김경우', image: '/images/faculty/math-김경우.jpg', motto: '포기하지 않는 학생 곁에 끝까지 함께합니다.' },
-  { subject: '수학', name: '김성환', image: '/images/faculty/math-김성환.jpg', motto: '수학의 원리를 깨달으면 두려움이 사라집니다.' },
-  { subject: '수학', name: '나정환', image: '/images/faculty/math-나정환.jpg', motto: '한 문제 한 문제가 실력이 됩니다.' },
-  { subject: '수학', name: '박명신', image: '/images/faculty/math-박명신.jpg', motto: '작은 성취가 쌓여 큰 자신감이 됩니다.' },
-  { subject: '수학', name: '박주원', image: '/images/faculty/math-박주원.jpg', motto: '기초부터 탄탄하게, 함께 올라가겠습니다.' },
-  { subject: '수학', name: '이재원', image: '/images/faculty/math-이재원.jpg', motto: '틀린 문제에서 실력이 자랍니다.' },
-  { subject: '수학', name: '이희승', image: '/images/faculty/math-이희승.jpg', motto: '이해 없는 암기는 없습니다.' },
-  { subject: '수학', name: '조해공', image: '/images/faculty/math-조해공.jpg', motto: '정확한 개념이 최고의 무기입니다.' },
-  { subject: '수학', name: '함성훈', image: '/images/faculty/math-함성훈.jpg', motto: '꾸준함이 재능을 이깁니다.' },
-  { subject: '수학', name: '허선영', image: '/images/faculty/math-허선영.jpg', motto: '모든 학생에게 맞는 풀이법이 있습니다.' },
-  // 영어
-  { subject: '영어', name: '양승경', image: '/images/faculty/eng-양승경.jpg', motto: '영어는 도구입니다. 자신있게 쓰게 합니다.' },
-  { subject: '영어', name: '양윤정', image: '/images/faculty/eng-양윤정.jpg', motto: '읽고 듣고 쓰는 힘을 함께 키웁니다.' },
-  { subject: '영어', name: '이소희', image: '/images/faculty/eng-이소희.jpg', motto: '점수도 실력도, 함께 올립니다.' },
-  { subject: '영어', name: '이정헌', image: '/images/faculty/eng-이정헌.jpg', motto: '문법의 틀 위에 독해를 쌓습니다.' },
-  { subject: '영어', name: '정다운', image: '/images/faculty/eng-정다운.jpg', motto: '영어가 편안해지는 그날까지.' },
-  { subject: '영어', name: '조하늘', image: '/images/faculty/eng-조하늘.jpg', motto: '즐겁게 배우면 오래 기억합니다.' },
-  { subject: '영어', name: '최용우', image: '/images/faculty/eng-최용우.jpg', motto: '시험에서 흔들리지 않는 실력을 만듭니다.' },
-  { subject: '영어', name: '박채원', image: '/images/faculty/eng-박채원.jpg', motto: '학생의 가능성을 끝까지 믿습니다.' },
-  // 과학
-  { subject: '과학', name: '김응태', image: '/images/faculty/sci-김응태.jpg', motto: '왜 그런지 알면 과학이 쉬워집니다.' },
-  { subject: '과학', name: '김현철', image: '/images/faculty/sci-김현철.jpg', motto: '원리를 이해하면 어떤 문제도 풀립니다.' },
-  // 국어
-  { subject: '국어', name: '고수민', image: '/images/faculty/kor-고수민.jpg', motto: '글을 읽는 힘이 모든 공부의 기초입니다.' },
-  { subject: '국어', name: '석민지', image: '/images/faculty/kor-석민지.jpg', motto: '정확히 읽고 논리적으로 쓰게 합니다.' },
-  // 탐독
-  { subject: '탐독', name: '남명심', image: '/images/faculty/read-남명심.jpg', motto: '깊이 읽는 습관이 모든 학문의 시작입니다.' },
-];
-
-const subjectColors: Record<string, string> = {
-  '수학': 'text-blue-500',
-  '영어': 'text-green-500',
-  '과학': 'text-orange-500',
-  '국어': 'text-brand',
-  '탐독': 'text-purple-500',
-};
 ---
 
 <Layout title="강사소개 - 대치프라임" description="대치프라임 강사진을 소개합니다.">
 
   <div class="min-h-screen bg-white">
 
-    <!-- 페이지 타이틀 -->
     <div class="border-b border-gray-200 bg-white">
       <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold text-gray-900">강사소개</h1>
@@ -73,60 +33,89 @@ const subjectColors: Record<string, string> = {
       </div>
     </div>
 
-    <!-- 강사 그리드 -->
     <div class="container mx-auto px-4 py-10">
-      <div id="faculty-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-        {faculty.map((f) => (
-          <div
-            class="faculty-card bg-gray-50 rounded-xl overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-            data-subject={f.subject}
-          >
-            <!-- 강사 이미지 -->
-            <div class="relative h-52 bg-gray-200">
-              <img
-                src={f.image}
-                alt={f.name}
-                class="w-full h-full object-cover object-top"
-                onerror="this.style.display='none'"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-            </div>
-
-            <!-- 과목 + 이름 + 다짐 -->
-            <div class="px-4 py-3">
-              <p class={`text-xs font-semibold mb-0.5 ${subjectColors[f.subject]}`}>{f.subject}</p>
-              <p class="text-sm font-bold text-gray-900 mb-2">{f.name} 선생님</p>
-              <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">{f.motto}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <!-- 데이터 없을 때 -->
-      <div id="empty-msg" class="hidden text-center py-20 text-gray-400 text-sm">
-        해당 과목 강사 정보를 준비 중입니다.
-      </div>
+      <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
+      <div id="faculty-grid" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"></div>
+      <div id="empty-msg" class="hidden text-center py-20 text-gray-400 text-sm">해당 과목 강사 정보를 준비 중입니다.</div>
     </div>
 
   </div>
 </Layout>
 
 <script>
-  function init() {
-    const tabs = document.querySelectorAll<HTMLButtonElement>('.subject-tab');
-    const cards = document.querySelectorAll<HTMLElement>('.faculty-card');
-    const emptyMsg = document.getElementById('empty-msg');
+  import { supabase } from '../lib/supabase';
 
-    function filter(subject: string) {
-      let visible = 0;
-      cards.forEach(card => {
-        const match = subject === '전체' || card.getAttribute('data-subject') === subject;
-        card.style.display = match ? '' : 'none';
-        if (match) visible++;
-      });
-      if (emptyMsg) emptyMsg.classList.toggle('hidden', visible > 0);
+  const subjectColors: Record<string, string> = {
+    '수학': 'text-blue-500',
+    '영어': 'text-green-500',
+    '과학': 'text-orange-500',
+    '국어': 'text-brand',
+    '탐독': 'text-purple-500',
+  };
+
+  let allFaculty: any[] = [];
+  let currentSubject = '전체';
+
+  function renderCards(subject: string) {
+    currentSubject = subject;
+    const grid    = document.getElementById('faculty-grid')!;
+    const emptyEl = document.getElementById('empty-msg')!;
+
+    const filtered = subject === '전체'
+      ? allFaculty
+      : allFaculty.filter(f => f.subject === subject);
+
+    if (filtered.length === 0) {
+      grid.classList.add('hidden');
+      emptyEl.classList.remove('hidden');
+      return;
     }
 
+    emptyEl.classList.add('hidden');
+    grid.classList.remove('hidden');
+    grid.innerHTML = filtered.map(f => `
+      <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+        <div class="relative h-52 bg-gray-200">
+          <img
+            src="${esc(f.image_url || '')}"
+            alt="${esc(f.name)}"
+            class="w-full h-full object-cover object-top"
+            onerror="this.style.display='none'"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+        </div>
+        <div class="px-4 py-3">
+          <p class="text-xs font-semibold mb-0.5 ${subjectColors[f.subject] ?? 'text-gray-500'}">${esc(f.subject)}</p>
+          <p class="text-sm font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
+          <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function esc(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function init() {
+    const { data, error } = await supabase
+      .from('faculty')
+      .select('*')
+      .order('sort_order')
+      .order('id');
+
+    document.getElementById('loading')?.classList.add('hidden');
+
+    if (error || !data) {
+      document.getElementById('empty-msg')!.classList.remove('hidden');
+      return;
+    }
+
+    allFaculty = data;
+    renderCards('전체');
+
+    // 탭 이벤트
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.subject-tab');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
@@ -135,7 +124,7 @@ const subjectColors: Record<string, string> = {
         });
         tab.classList.add('border-gray-900', 'text-gray-900');
         tab.classList.remove('border-transparent', 'text-gray-500');
-        filter(tab.getAttribute('data-subject') ?? '전체');
+        renderCards(tab.dataset.subject ?? '전체');
       });
     });
   }

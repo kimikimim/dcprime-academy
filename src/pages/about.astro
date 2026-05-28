@@ -36,61 +36,63 @@ const sections = [
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
 
-      <!-- 인사말 -->
       <div id="panel-greeting" class="about-panel">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">인사말</h2>
-        <div class="bg-gray-50 rounded-2xl p-10 text-center text-gray-400 text-sm">
-          추후 업데이트 예정입니다.
+        <div id="content-greeting" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
         </div>
       </div>
 
-      <!-- 학원 연혁 -->
       <div id="panel-history" class="about-panel hidden">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">학원 연혁</h2>
-        <div class="bg-gray-50 rounded-2xl p-10 text-center text-gray-400 text-sm">
-          추후 업데이트 예정입니다.
+        <div id="content-history" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
         </div>
       </div>
 
-      <!-- 학원 특징 -->
       <div id="panel-features" class="about-panel hidden">
-        <h2 class="text-2xl font-bold text-gray-900 mb-10">학원 특징</h2>
-
-        <!-- 10원칙 -->
-        <h3 class="text-lg font-bold text-gray-900 mb-5">대치프라임 10가지 교육 원칙</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-14">
-          {[
-            ['01', '개념 우선', '암기보다 원리 이해를 먼저 다집니다.'],
-            ['02', '맞춤 지도', '학생 수준에 맞는 1:1 개별 관리.'],
-            ['03', '자기주도', '스스로 생각하는 힘을 길러줍니다.'],
-            ['04', '반복 훈련', '완성될 때까지 반복하고 점검합니다.'],
-            ['05', '오답 분석', '틀린 이유를 찾아야 진짜 실력이 됩니다.'],
-            ['06', '입시 전략', '목표 대학 역산 설계로 방향을 잡습니다.'],
-            ['07', '강사 전문성', '과목별 검증된 최고 강사진이 함께합니다.'],
-            ['08', '소수 정예', '집중력 있는 수업 환경을 보장합니다.'],
-            ['09', '밀착 관리', '학부모와의 소통으로 빈틈을 없앱니다.'],
-            ['10', '지속 성장', '매달 실력을 점검하고 성장을 확인합니다.'],
-          ].map(([no, title, desc]) => (
-            <div class="flex gap-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <span class="text-xl font-black text-brand opacity-30 leading-none mt-0.5 w-8 flex-shrink-0">{no}</span>
-              <div>
-                <p class="text-sm font-bold text-gray-900 mb-1">{title}</p>
-                <p class="text-xs text-gray-500 leading-relaxed">{desc}</p>
-              </div>
-            </div>
-          ))}
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">학원 특징</h2>
+        <div id="content-features" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
         </div>
-
-
       </div>
 
     </div>
   </div>
 </Layout>
 
+<style is:global>
+  .page-content-area p { margin-bottom: 0.75rem; line-height: 1.8; }
+  .page-content-area h1, .page-content-area h2, .page-content-area h3 {
+    font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.5rem; color: #111827;
+  }
+  .page-content-area h1 { font-size: 1.5rem; }
+  .page-content-area h2 { font-size: 1.25rem; }
+  .page-content-area h3 { font-size: 1.1rem; }
+  .page-content-area ul, .page-content-area ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+  .page-content-area li { margin-bottom: 0.25rem; }
+  .page-content-area img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+  .page-content-area strong { font-weight: 700; }
+  .page-content-area em { font-style: italic; }
+  .page-content-area a { color: var(--color-brand, #6B4EE6); text-decoration: underline; }
+</style>
+
 <script>
+  import { supabase } from '../lib/supabase';
+
+  async function loadContent(key: string, elId: string) {
+    const { data } = await supabase.from('page_content').select('value').eq('key', key).single();
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (data?.value && data.value.trim() !== '' && data.value !== '<p><br></p>') {
+      el.innerHTML = data.value;
+    } else {
+      el.innerHTML = '<p class="text-gray-400 text-sm text-center py-10">내용을 준비 중입니다.</p>';
+    }
+  }
+
   function init() {
-    const tabs = document.querySelectorAll<HTMLButtonElement>('.about-tab');
+    const tabs   = document.querySelectorAll<HTMLButtonElement>('.about-tab');
     const panels = document.querySelectorAll<HTMLElement>('.about-panel');
 
     tabs.forEach(tab => {
@@ -101,11 +103,15 @@ const sections = [
         });
         tab.classList.add('border-brand', 'text-brand');
         tab.classList.remove('border-transparent', 'text-gray-400');
-
         panels.forEach(p => p.classList.add('hidden'));
         document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('hidden');
       });
     });
+
+    // 콘텐츠 로드
+    loadContent('about_greeting', 'content-greeting');
+    loadContent('about_history',  'content-history');
+    loadContent('about_features', 'content-features');
   }
 
   document.addEventListener('astro:page-load', init);

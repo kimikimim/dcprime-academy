@@ -22,34 +22,34 @@ import Layout from '../components/layout/Layout.astro';
         <button id="logout-btn" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">로그아웃</button>
       </div>
 
-      <!-- 탭 -->
+      <!-- 메인 탭 -->
       <div class="bg-white border-b border-gray-200 px-6">
-        <div class="flex gap-6">
-          <button data-tab="notices" class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand">공지사항 관리</button>
-          <button data-tab="inquiries" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700">상담 신청 목록</button>
+        <div class="flex gap-6 overflow-x-auto scrollbar-hide">
+          <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">공지사항 관리</button>
+          <button data-tab="inquiries"  class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">상담 신청 목록</button>
+          <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">학원소개</button>
+          <button data-tab="curriculum" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">커리큘럼</button>
+          <button data-tab="faculty"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">강사소개</button>
+          <button data-tab="results"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">명예의 전당</button>
         </div>
       </div>
 
       <div class="max-w-4xl mx-auto px-4 py-8">
 
-        <!-- 공지사항 탭 -->
+        <!-- ── 공지사항 탭 ── -->
         <div id="panel-notices">
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <h2 id="form-title" class="text-base font-bold text-gray-900 mb-4">새 공지 작성</h2>
             <input id="notice-title-input" type="text" placeholder="제목" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
-
-            <!-- Quill 에디터 영역 -->
-            <div class="mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-editor"></div>
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-notices"></div>
             </div>
-
             <div class="flex items-center gap-3">
               <button id="submit-notice-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">등록</button>
               <button id="cancel-edit-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
               <p id="notice-msg" class="text-sm text-gray-500 hidden"></p>
             </div>
           </div>
-
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="text-base font-bold text-gray-900 mb-4">공지 목록</h2>
             <div id="notice-list" class="divide-y divide-gray-100">
@@ -58,11 +58,161 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
 
-        <!-- 상담 신청 탭 -->
+        <!-- ── 상담 신청 탭 ── -->
         <div id="panel-inquiries" class="hidden">
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <h2 class="text-base font-bold text-gray-900 mb-4">상담 신청 목록</h2>
             <div id="inquiry-list" class="divide-y divide-gray-100">
+              <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 학원소개 탭 ── -->
+        <div id="panel-about" class="hidden">
+          <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
+            <button data-about-sub="greeting" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">인사말</button>
+            <button data-about-sub="history"  class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">학원 연혁</button>
+            <button data-about-sub="features" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">학원 특징</button>
+          </div>
+
+          <div id="about-sub-greeting" class="bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-about-greeting"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="about_greeting" data-qid="quill-about-greeting" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_greeting" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+
+          <div id="about-sub-history" class="hidden bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-about-history"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="about_history" data-qid="quill-about-history" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_history" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+
+          <div id="about-sub-features" class="hidden bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-about-features"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="about_features" data-qid="quill-about-features" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_features" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 커리큘럼 탭 ── -->
+        <div id="panel-curriculum" class="hidden">
+          <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
+            <button data-cur-sub="elementary" class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">초등</button>
+            <button data-cur-sub="middle"     class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">중등</button>
+            <button data-cur-sub="high"       class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">고등</button>
+          </div>
+
+          <div id="cur-sub-elementary" class="bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-cur-elementary"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="curriculum_elementary" data-qid="quill-cur-elementary" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-curriculum_elementary" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+
+          <div id="cur-sub-middle" class="hidden bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-cur-middle"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="curriculum_middle" data-qid="quill-cur-middle" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-curriculum_middle" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+
+          <div id="cur-sub-high" class="hidden bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-cur-high"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="curriculum_high" data-qid="quill-cur-high" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-curriculum_high" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 강사소개 탭 ── -->
+        <div id="panel-faculty" class="hidden">
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 id="faculty-form-title" class="text-base font-bold text-gray-900 mb-4">강사 추가</h2>
+            <input type="hidden" id="faculty-edit-id" />
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <select id="faculty-subject-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="수학">수학</option>
+                <option value="영어">영어</option>
+                <option value="과학">과학</option>
+                <option value="국어">국어</option>
+                <option value="탐독">탐독</option>
+              </select>
+              <input id="faculty-name-input" type="text" placeholder="이름" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <input id="faculty-motto-input" type="text" placeholder="한마디" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <div class="mb-4">
+              <p class="text-xs text-gray-500 mb-2">프로필 사진</p>
+              <input type="file" id="faculty-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
+              <img id="faculty-image-preview" class="hidden mt-2 w-20 h-20 object-cover object-top rounded-lg border border-gray-200" />
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="submit-faculty-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+              <button id="cancel-faculty-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
+              <p id="faculty-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-4">강사 목록</h2>
+            <div id="faculty-list" class="divide-y divide-gray-100">
+              <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 명예의 전당 탭 ── -->
+        <div id="panel-results" class="hidden">
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 class="text-base font-bold text-gray-900 mb-4">합격자 추가</h2>
+            <div class="grid grid-cols-3 gap-3 mb-3">
+              <input id="result-year-input"     type="text" placeholder="연도 (예: 2026)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <select id="result-category-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="대입">대입</option>
+                <option value="고입">고입</option>
+              </select>
+              <input id="result-school-input"   type="text" placeholder="출신 학교" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <div class="grid grid-cols-3 gap-3 mb-4">
+              <input id="result-name-input"       type="text" placeholder="이름" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="result-university-input" type="text" placeholder="합격 대학/고교" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="result-dept-input"       type="text" placeholder="학과 (대입만)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="submit-result-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+              <p id="result-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold text-gray-900">합격자 목록</h2>
+              <select id="result-year-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
+                <option value="">전체 연도</option>
+              </select>
+            </div>
+            <div id="result-list" class="divide-y divide-gray-100">
               <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
             </div>
           </div>
@@ -75,58 +225,57 @@ import Layout from '../components/layout/Layout.astro';
 </Layout>
 
 <style is:global>
-  /* Quill 에디터 스타일 커스텀 */
-  #quill-editor .ql-editor {
-    min-height: 250px;
+  .quill-wrapper .ql-editor {
+    min-height: 220px;
     font-size: 0.9rem;
     line-height: 1.7;
   }
-  #quill-editor .ql-toolbar {
+  .quill-wrapper .ql-toolbar {
     border: none;
     border-bottom: 1px solid #e5e7eb;
     background: #f9fafb;
   }
-  #quill-editor .ql-container {
+  .quill-wrapper .ql-container {
     border: none;
   }
-  #quill-editor .ql-editor img {
+  .quill-wrapper .ql-editor img {
     max-width: 100%;
     border-radius: 8px;
     margin: 8px 0;
   }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
 <script>
   import { supabase } from '../lib/supabase';
 
   const SESSION_KEY = 'dcprime_admin';
-  let quill: any = null;
+  const ALL_TABS = ['notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results'];
+  const ABOUT_SUBS = ['greeting', 'history', 'features'];
+  const CUR_SUBS = ['elementary', 'middle', 'high'];
 
-  function isLoggedIn() {
-    return sessionStorage.getItem(SESSION_KEY) === 'ok';
+  const quills: Record<string, any> = {};
+  const tabInited = new Set<string>();
+
+  // ── 유틸 ──
+  function isLoggedIn() { return sessionStorage.getItem(SESSION_KEY) === 'ok'; }
+
+  function escHtml(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function showPanel() {
-    document.getElementById('login-screen')!.classList.add('hidden');
-    document.getElementById('admin-panel')!.classList.remove('hidden');
-    loadNotices();
-    loadInquiries();
+  function escAttr(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
 
-  function showLogin() {
-    document.getElementById('login-screen')!.classList.remove('hidden');
-    document.getElementById('admin-panel')!.classList.add('hidden');
-  }
-
-  // Quill 동적 로드
-  async function loadQuill() {
+  // ── Quill 로드 ──
+  async function loadQuillLib() {
     if ((window as any).Quill) return;
-
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css';
     document.head.appendChild(link);
-
     await new Promise<void>((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js';
@@ -136,38 +285,10 @@ import Layout from '../components/layout/Layout.astro';
     });
   }
 
-  // Quill 이미지 핸들러: Supabase Storage에 업로드 후 에디터에 삽입
-  function imageHandler() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file || !quill) return;
-
-      const ext = file.name.split('.').pop();
-      const path = `${Date.now()}.${ext}`;
-
-      const { data, error } = await supabase.storage
-        .from('notice-images')
-        .upload(path, file, { upsert: true });
-
-      if (!error && data) {
-        const { data: urlData } = supabase.storage.from('notice-images').getPublicUrl(path);
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', urlData.publicUrl);
-        quill.setSelection(range.index + 1);
-      }
-    };
-  }
-
-  // Quill 초기화
-  function initQuill() {
-    if (quill) return;
+  function createQuill(containerId: string, placeholder = '내용을 입력하세요.', bucket = 'notice-images') {
+    if (quills[containerId]) return quills[containerId];
     const Quill = (window as any).Quill;
-    quill = new Quill('#quill-editor', {
+    const q = new Quill(`#${containerId}`, {
       theme: 'snow',
       modules: {
         toolbar: {
@@ -179,67 +300,340 @@ import Layout from '../components/layout/Layout.astro';
             ['link', 'image'],
             ['clean'],
           ],
-          handlers: { image: imageHandler },
+          handlers: {
+            image: () => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = 'image/*';
+              input.click();
+              input.onchange = async () => {
+                const file = input.files?.[0];
+                if (!file) return;
+                const ext = file.name.split('.').pop();
+                const path = `${Date.now()}.${ext}`;
+                const { data, error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true });
+                if (!error && data) {
+                  const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(path);
+                  const range = q.getSelection(true);
+                  q.insertEmbed(range.index, 'image', urlData.publicUrl);
+                  q.setSelection(range.index + 1);
+                }
+              };
+            },
+          },
         },
       },
-      placeholder: '내용을 입력하세요. 이미지는 툴바의 🖼 버튼으로 원하는 위치에 삽입하세요.',
+      placeholder,
+    });
+    quills[containerId] = q;
+    return q;
+  }
+
+  // ── page_content 로드/저장 ──
+  async function loadPageContent(key: string, qid: string) {
+    const { data } = await supabase.from('page_content').select('value').eq('key', key).single();
+    const q = quills[qid];
+    if (q && data?.value) {
+      const delta = q.clipboard.convert({ html: data.value });
+      q.setContents(delta);
+    }
+  }
+
+  async function savePageContent(key: string, qid: string) {
+    const q = quills[qid];
+    if (!q) return;
+    const value = q.root.innerHTML;
+    const { error } = await supabase
+      .from('page_content')
+      .upsert({ key, value, updated_at: new Date().toISOString() });
+    const msgEl = document.getElementById(`msg-${key}`);
+    if (msgEl) {
+      msgEl.textContent = error ? '오류: ' + error.message : '저장되었습니다.';
+      msgEl.classList.remove('hidden');
+      setTimeout(() => msgEl.classList.add('hidden'), 3000);
+    }
+  }
+
+  // ── 메인 탭 ──
+  function switchMainTab(tab: string) {
+    document.querySelectorAll<HTMLButtonElement>('.admin-tab').forEach(t => {
+      const active = t.dataset.tab === tab;
+      t.classList.toggle('border-brand', active);
+      t.classList.toggle('text-brand', active);
+      t.classList.toggle('border-transparent', !active);
+      t.classList.toggle('text-gray-400', !active);
+    });
+    ALL_TABS.forEach(p => {
+      document.getElementById(`panel-${p}`)?.classList.toggle('hidden', p !== tab);
+    });
+    if (!tabInited.has(tab)) {
+      tabInited.add(tab);
+      if (tab === 'about')      initAboutTab();
+      if (tab === 'curriculum') initCurriculumTab();
+      if (tab === 'faculty')    loadFaculty();
+      if (tab === 'results')    loadResults();
+    }
+  }
+
+  // ── 학원소개 탭 ──
+  async function initAboutTab() {
+    createQuill('quill-about-greeting', '인사말을 입력하세요.');
+    createQuill('quill-about-history', '학원 연혁을 입력하세요.');
+    createQuill('quill-about-features', '학원 특징을 입력하세요.');
+    await Promise.all([
+      loadPageContent('about_greeting', 'quill-about-greeting'),
+      loadPageContent('about_history', 'quill-about-history'),
+      loadPageContent('about_features', 'quill-about-features'),
+    ]);
+  }
+
+  function switchAboutSub(sub: string) {
+    ABOUT_SUBS.forEach(s => {
+      document.getElementById(`about-sub-${s}`)?.classList.toggle('hidden', s !== sub);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.about-sub').forEach(b => {
+      const active = b.dataset.aboutSub === sub;
+      b.classList.toggle('bg-brand', active);
+      b.classList.toggle('text-white', active);
+      b.classList.toggle('text-gray-500', !active);
     });
   }
 
-  // 로그인
-  document.getElementById('login-btn')?.addEventListener('click', async () => {
-    const btn = document.getElementById('login-btn') as HTMLButtonElement;
-    const pw = (document.getElementById('admin-pw') as HTMLInputElement).value;
-    btn.disabled = true;
-    btn.textContent = '확인 중...';
+  // ── 커리큘럼 탭 ──
+  async function initCurriculumTab() {
+    createQuill('quill-cur-elementary', '초등 커리큘럼을 입력하세요.');
+    createQuill('quill-cur-middle', '중등 커리큘럼을 입력하세요.');
+    createQuill('quill-cur-high', '고등 커리큘럼을 입력하세요.');
+    await Promise.all([
+      loadPageContent('curriculum_elementary', 'quill-cur-elementary'),
+      loadPageContent('curriculum_middle', 'quill-cur-middle'),
+      loadPageContent('curriculum_high', 'quill-cur-high'),
+    ]);
+  }
 
-    const { data, error } = await supabase.rpc('verify_admin_password', { pw });
+  function switchCurSub(sub: string) {
+    CUR_SUBS.forEach(s => {
+      document.getElementById(`cur-sub-${s}`)?.classList.toggle('hidden', s !== sub);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.cur-sub').forEach(b => {
+      const active = b.dataset.curSub === sub;
+      b.classList.toggle('bg-brand', active);
+      b.classList.toggle('text-white', active);
+      b.classList.toggle('text-gray-500', !active);
+    });
+  }
+
+  // ── 강사소개 ──
+  let facultyEditId: number | null = null;
+
+  function resetFacultyForm() {
+    facultyEditId = null;
+    (document.getElementById('faculty-name-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-motto-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = '수학';
+    (document.getElementById('faculty-image-input') as HTMLInputElement).value = '';
+    const preview = document.getElementById('faculty-image-preview') as HTMLImageElement;
+    preview.src = '';
+    preview.classList.add('hidden');
+    document.getElementById('faculty-form-title')!.textContent = '강사 추가';
+    document.getElementById('submit-faculty-btn')!.textContent = '추가';
+    document.getElementById('cancel-faculty-btn')!.classList.add('hidden');
+  }
+
+  async function loadFaculty() {
+    const container = document.getElementById('faculty-list')!;
+    const { data, error } = await supabase.from('faculty').select('*').order('sort_order').order('id');
+    if (error || !data || data.length === 0) {
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">강사 정보가 없습니다.</p>';
+      return;
+    }
+    const colors: Record<string, string> = {
+      '수학': 'text-blue-500', '영어': 'text-green-500',
+      '과학': 'text-orange-500', '국어': 'text-brand', '탐독': 'text-purple-500',
+    };
+    container.innerHTML = data.map(f => `
+      <div class="py-3 flex items-center gap-4">
+        <img src="${escHtml(f.image_url || '')}" alt="${escHtml(f.name)}"
+          class="w-12 h-12 rounded-full object-cover object-top bg-gray-100 flex-shrink-0"
+          onerror="this.style.opacity='0.2'" />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900">
+            <span class="${colors[f.subject] ?? 'text-gray-500'} mr-1">${escHtml(f.subject)}</span>
+            ${escHtml(f.name)} 선생님
+          </p>
+          <p class="text-xs text-gray-400 truncate">${escHtml(f.motto ?? '')}</p>
+        </div>
+        <div class="flex gap-3 flex-shrink-0">
+          <button data-id="${f.id}" data-name="${escAttr(f.name)}" data-subject="${escAttr(f.subject)}"
+            data-motto="${escAttr(f.motto ?? '')}" data-image="${escAttr(f.image_url ?? '')}"
+            class="edit-faculty-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+          <button data-id="${f.id}" class="del-faculty-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll<HTMLButtonElement>('.edit-faculty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        facultyEditId = Number(btn.dataset.id);
+        (document.getElementById('faculty-name-input') as HTMLInputElement).value = btn.dataset.name ?? '';
+        (document.getElementById('faculty-motto-input') as HTMLInputElement).value = btn.dataset.motto ?? '';
+        (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = btn.dataset.subject ?? '수학';
+        const preview = document.getElementById('faculty-image-preview') as HTMLImageElement;
+        if (btn.dataset.image) { preview.src = btn.dataset.image; preview.classList.remove('hidden'); }
+        document.getElementById('faculty-form-title')!.textContent = '강사 수정';
+        document.getElementById('submit-faculty-btn')!.textContent = '수정 완료';
+        document.getElementById('cancel-faculty-btn')!.classList.remove('hidden');
+        document.getElementById('faculty-form-title')!.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>('.del-faculty-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 강사를 삭제할까요?')) return;
+        await supabase.from('faculty').delete().eq('id', btn.dataset.id!);
+        loadFaculty();
+      });
+    });
+  }
+
+  document.getElementById('faculty-image-input')?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const preview = document.getElementById('faculty-image-preview') as HTMLImageElement;
+      preview.src = ev.target?.result as string;
+      preview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('submit-faculty-btn')?.addEventListener('click', async () => {
+    const name    = (document.getElementById('faculty-name-input') as HTMLInputElement).value.trim();
+    const subject = (document.getElementById('faculty-subject-input') as HTMLSelectElement).value;
+    const motto   = (document.getElementById('faculty-motto-input') as HTMLInputElement).value.trim();
+    const fileInput = document.getElementById('faculty-image-input') as HTMLInputElement;
+    const file    = fileInput.files?.[0];
+    const msg     = document.getElementById('faculty-msg')!;
+
+    if (!name) {
+      msg.textContent = '이름을 입력하세요.'; msg.classList.remove('hidden'); return;
+    }
+    const btn = document.getElementById('submit-faculty-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '처리 중...';
+
+    let image_url: string | undefined;
+    if (file) {
+      const ext = file.name.split('.').pop();
+      const path = `${Date.now()}.${ext}`;
+      const { data: up, error: upErr } = await supabase.storage.from('faculty-images').upload(path, file, { upsert: true });
+      if (!upErr && up) {
+        const { data: urlData } = supabase.storage.from('faculty-images').getPublicUrl(path);
+        image_url = urlData.publicUrl;
+      }
+    }
+
+    let error;
+    if (facultyEditId) {
+      const updateData: any = { name, subject, motto };
+      if (image_url) updateData.image_url = image_url;
+      ({ error } = await supabase.from('faculty').update(updateData).eq('id', facultyEditId));
+    } else {
+      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, image_url: image_url ?? '' }));
+    }
 
     btn.disabled = false;
-    btn.textContent = '로그인';
+    btn.textContent = facultyEditId ? '수정 완료' : '추가';
 
-    if (!error && data === true) {
-      sessionStorage.setItem(SESSION_KEY, 'ok');
-      document.getElementById('login-error')!.classList.add('hidden');
-      showPanel();
-    } else {
-      document.getElementById('login-error')!.classList.remove('hidden');
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else { msg.textContent = facultyEditId ? '수정되었습니다.' : '추가되었습니다.'; resetFacultyForm(); loadFaculty(); }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
+  document.getElementById('cancel-faculty-btn')?.addEventListener('click', resetFacultyForm);
+
+  // ── 명예의 전당 ──
+  async function loadResults(yearFilter?: string) {
+    const container = document.getElementById('result-list')!;
+    let query = supabase.from('results').select('*').order('year', { ascending: false }).order('id', { ascending: false });
+    if (yearFilter) query = query.eq('year', yearFilter);
+    const { data, error } = await query.limit(300);
+
+    if (error || !data || data.length === 0) {
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">데이터가 없습니다.</p>';
+      return;
     }
-  });
 
-  document.getElementById('admin-pw')?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') (document.getElementById('login-btn') as HTMLButtonElement).click();
-  });
+    // 연도 필터 옵션 업데이트
+    const years = [...new Set(data.map((r: any) => r.year))].sort((a: any, b: any) => b.localeCompare(a));
+    const filterEl = document.getElementById('result-year-filter') as HTMLSelectElement;
+    const cur = filterEl.value;
+    filterEl.innerHTML = '<option value="">전체 연도</option>' +
+      years.map((y: any) => `<option value="${y}" ${y === cur ? 'selected' : ''}>${y}</option>`).join('');
 
-  // 로그아웃
-  document.getElementById('logout-btn')?.addEventListener('click', () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    showLogin();
-  });
+    container.innerHTML = data.map((r: any) => `
+      <div class="py-3 flex items-center gap-3">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm text-gray-900">
+            <span class="font-medium">${escHtml(r.year)} ${escHtml(r.category)}</span>
+            · ${escHtml(r.name)} · ${escHtml(r.university)}${r.dept ? ' ' + escHtml(r.dept) : ''}
+          </p>
+          ${r.school ? `<p class="text-xs text-gray-400">${escHtml(r.school)}</p>` : ''}
+        </div>
+        <button data-id="${r.id}" class="del-result-btn text-xs text-red-400 hover:text-red-600 flex-shrink-0 transition-colors">삭제</button>
+      </div>
+    `).join('');
 
-  // 탭
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.admin-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => {
-        t.classList.remove('border-brand', 'text-brand');
-        t.classList.add('border-transparent', 'text-gray-400');
+    container.querySelectorAll<HTMLButtonElement>('.del-result-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('삭제할까요?')) return;
+        await supabase.from('results').delete().eq('id', btn.dataset.id!);
+        loadResults((document.getElementById('result-year-filter') as HTMLSelectElement).value || undefined);
       });
-      tab.classList.add('border-brand', 'text-brand');
-      tab.classList.remove('border-transparent', 'text-gray-400');
-
-      document.getElementById('panel-notices')!.classList.add('hidden');
-      document.getElementById('panel-inquiries')!.classList.add('hidden');
-      document.getElementById(`panel-${tab.dataset.tab}`)!.classList.remove('hidden');
     });
+  }
+
+  document.getElementById('submit-result-btn')?.addEventListener('click', async () => {
+    const year       = (document.getElementById('result-year-input') as HTMLInputElement).value.trim();
+    const category   = (document.getElementById('result-category-input') as HTMLSelectElement).value;
+    const school     = (document.getElementById('result-school-input') as HTMLInputElement).value.trim();
+    const name       = (document.getElementById('result-name-input') as HTMLInputElement).value.trim();
+    const university = (document.getElementById('result-university-input') as HTMLInputElement).value.trim();
+    const dept       = (document.getElementById('result-dept-input') as HTMLInputElement).value.trim();
+    const msg        = document.getElementById('result-msg')!;
+
+    if (!year || !name || !university) {
+      msg.textContent = '연도, 이름, 대학(고교)은 필수입니다.'; msg.classList.remove('hidden'); return;
+    }
+    const btn = document.getElementById('submit-result-btn') as HTMLButtonElement;
+    btn.disabled = true;
+    const { error } = await supabase.from('results').insert({ year, category, school, name, university, dept: dept || null });
+    btn.disabled = false;
+
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else {
+      msg.textContent = '추가되었습니다.';
+      ['result-name-input','result-university-input','result-dept-input','result-school-input'].forEach(id => {
+        (document.getElementById(id) as HTMLInputElement).value = '';
+      });
+      loadResults((document.getElementById('result-year-filter') as HTMLSelectElement).value || undefined);
+    }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
   });
 
+  document.getElementById('result-year-filter')?.addEventListener('change', (e) => {
+    loadResults((e.target as HTMLSelectElement).value || undefined);
+  });
+
+  // ── 공지사항 ──
   let editingId: string | null = null;
 
-  function resetForm() {
+  function resetNoticeForm() {
     editingId = null;
     (document.getElementById('notice-title-input') as HTMLInputElement).value = '';
-    if (quill) quill.setContents([]);
+    quills['quill-notices']?.setContents([]);
     document.getElementById('form-title')!.textContent = '새 공지 작성';
     document.getElementById('submit-notice-btn')!.textContent = '등록';
     document.getElementById('cancel-edit-btn')!.classList.add('hidden');
@@ -248,34 +642,28 @@ import Layout from '../components/layout/Layout.astro';
   function startEdit(id: string, title: string, content: string) {
     editingId = id;
     (document.getElementById('notice-title-input') as HTMLInputElement).value = title;
-    if (quill) {
-      const delta = quill.clipboard.convert({ html: content });
-      quill.setContents(delta);
-    }
+    const q = quills['quill-notices'];
+    if (q) { q.setContents(q.clipboard.convert({ html: content })); }
     document.getElementById('form-title')!.textContent = '공지 수정';
     document.getElementById('submit-notice-btn')!.textContent = '수정 완료';
     document.getElementById('cancel-edit-btn')!.classList.remove('hidden');
     document.getElementById('notice-title-input')!.scrollIntoView({ behavior: 'smooth' });
   }
 
-  document.getElementById('cancel-edit-btn')?.addEventListener('click', resetForm);
+  document.getElementById('cancel-edit-btn')?.addEventListener('click', resetNoticeForm);
 
-  // 공지 등록 / 수정
   document.getElementById('submit-notice-btn')?.addEventListener('click', async () => {
-    const title = (document.getElementById('notice-title-input') as HTMLInputElement).value.trim();
-    const content = quill ? quill.root.innerHTML : '';
-    const isEmpty = !quill || quill.getText().trim() === '';
-    const msg = document.getElementById('notice-msg')!;
+    const title   = (document.getElementById('notice-title-input') as HTMLInputElement).value.trim();
+    const q       = quills['quill-notices'];
+    const content = q ? q.root.innerHTML : '';
+    const isEmpty = !q || q.getText().trim() === '';
+    const msg     = document.getElementById('notice-msg')!;
 
     if (!title || isEmpty) {
-      msg.textContent = '제목과 내용을 입력하세요.';
-      msg.classList.remove('hidden');
-      return;
+      msg.textContent = '제목과 내용을 입력하세요.'; msg.classList.remove('hidden'); return;
     }
-
     const btn = document.getElementById('submit-notice-btn') as HTMLButtonElement;
-    btn.disabled = true;
-    btn.textContent = '처리 중...';
+    btn.disabled = true; btn.textContent = '처리 중...';
 
     let error;
     if (editingId) {
@@ -283,28 +671,20 @@ import Layout from '../components/layout/Layout.astro';
     } else {
       ({ error } = await supabase.from('notices').insert({ title, content, views: 0 }));
     }
-
     btn.disabled = false;
     btn.textContent = editingId ? '수정 완료' : '등록';
 
-    if (error) {
-      msg.textContent = '오류: ' + error.message;
-    } else {
-      msg.textContent = editingId ? '수정되었습니다.' : '등록되었습니다.';
-      resetForm();
-      loadNotices();
-    }
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else { msg.textContent = editingId ? '수정되었습니다.' : '등록되었습니다.'; resetNoticeForm(); loadNotices(); }
     msg.classList.remove('hidden');
     setTimeout(() => msg.classList.add('hidden'), 3000);
   });
 
-  // 공지 목록 로드
   async function loadNotices() {
     const container = document.getElementById('notice-list')!;
     const { data, error } = await supabase.from('notices').select('*').order('created_at', { ascending: false }).limit(50);
     if (error || !data || data.length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">공지사항이 없습니다.</p>';
-      return;
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">공지사항이 없습니다.</p>'; return;
     }
     container.innerHTML = data.map(n => `
       <div class="py-4 flex items-start justify-between gap-4">
@@ -313,18 +693,16 @@ import Layout from '../components/layout/Layout.astro';
           <p class="text-xs text-gray-400 mt-1">${new Date(n.created_at).toLocaleDateString('ko-KR')} · 조회 ${(n.views ?? 0).toLocaleString()}</p>
         </div>
         <div class="flex items-center gap-3 flex-shrink-0">
-          <button data-id="${n.id}" data-title="${escAttr(n.title)}" data-content="${escAttr(n.content ?? '')}" class="edit-notice-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+          <button data-id="${n.id}" data-title="${escAttr(n.title)}" data-content="${escAttr(n.content ?? '')}"
+            class="edit-notice-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
           <button data-id="${n.id}" class="del-notice-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
         </div>
       </div>
     `).join('');
 
     container.querySelectorAll<HTMLButtonElement>('.edit-notice-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        startEdit(btn.dataset.id!, btn.dataset.title!, btn.dataset.content!);
-      });
+      btn.addEventListener('click', () => startEdit(btn.dataset.id!, btn.dataset.title!, btn.dataset.content!));
     });
-
     container.querySelectorAll<HTMLButtonElement>('.del-notice-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('이 공지를 삭제할까요?')) return;
@@ -334,13 +712,12 @@ import Layout from '../components/layout/Layout.astro';
     });
   }
 
-  // 상담 신청 목록 로드
+  // ── 상담 신청 ──
   async function loadInquiries() {
     const container = document.getElementById('inquiry-list')!;
     const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false }).limit(100);
     if (error || !data || data.length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">상담 신청이 없습니다.</p>';
-      return;
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">상담 신청이 없습니다.</p>'; return;
     }
     container.innerHTML = data.map(q => `
       <div class="py-4 ${q.contacted ? 'opacity-50' : ''}">
@@ -355,7 +732,7 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
         ${q.parent_name ? `<p class="text-xs text-gray-500 mb-1">학부모: ${escHtml(q.parent_name)} · ${escHtml(q.parent_phone ?? '')}</p>` : ''}
-        ${q.school ? `<p class="text-xs text-gray-500 mb-1">학교: ${escHtml(q.school)}</p>` : ''}
+        ${q.school_name ?? q.school ? `<p class="text-xs text-gray-500 mb-1">학교: ${escHtml(q.school_name ?? q.school)}</p>` : ''}
         ${(q.track || q.grade) ? `<p class="text-xs text-gray-500 mb-1">${q.track ? '계열: ' + escHtml(q.track) : ''} ${q.grade ? '학년: ' + escHtml(q.grade) : ''}</p>` : ''}
         ${q.branch?.length ? `<p class="text-xs text-gray-500 mb-1">분원: ${escHtml(Array.isArray(q.branch) ? q.branch.join(', ') : q.branch)}</p>` : ''}
         ${q.message ? `<p class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2 mt-2 whitespace-pre-wrap">${escHtml(q.message)}</p>` : ''}
@@ -370,20 +747,74 @@ import Layout from '../components/layout/Layout.astro';
     });
   }
 
-  function escHtml(str: string) {
-    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  // ── 로그인/로그아웃 ──
+  function showPanel() {
+    document.getElementById('login-screen')!.classList.add('hidden');
+    document.getElementById('admin-panel')!.classList.remove('hidden');
+    tabInited.add('notices');
+    tabInited.add('inquiries');
+    loadNotices();
+    loadInquiries();
   }
 
-  // data-* 속성에 HTML 내용을 안전하게 넣기 위한 인코딩
-  function escAttr(str: string) {
-    return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  function showLogin() {
+    document.getElementById('login-screen')!.classList.remove('hidden');
+    document.getElementById('admin-panel')!.classList.add('hidden');
   }
 
-  // 초기화
+  document.getElementById('login-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('login-btn') as HTMLButtonElement;
+    const pw  = (document.getElementById('admin-pw') as HTMLInputElement).value;
+    btn.disabled = true; btn.textContent = '확인 중...';
+    const { data, error } = await supabase.rpc('verify_admin_password', { pw });
+    btn.disabled = false; btn.textContent = '로그인';
+    if (!error && data === true) {
+      sessionStorage.setItem(SESSION_KEY, 'ok');
+      document.getElementById('login-error')!.classList.add('hidden');
+      showPanel();
+    } else {
+      document.getElementById('login-error')!.classList.remove('hidden');
+    }
+  });
+
+  document.getElementById('admin-pw')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') (document.getElementById('login-btn') as HTMLButtonElement).click();
+  });
+
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    sessionStorage.removeItem(SESSION_KEY); showLogin();
+  });
+
+  // ── 탭 이벤트 ──
+  document.querySelectorAll<HTMLButtonElement>('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchMainTab(tab.dataset.tab!));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.about-sub').forEach(btn => {
+    btn.addEventListener('click', () => switchAboutSub(btn.dataset.aboutSub!));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.cur-sub').forEach(btn => {
+    btn.addEventListener('click', () => switchCurSub(btn.dataset.curSub!));
+  });
+
+  // save-content-btn 이벤트 (이벤트 위임)
+  document.querySelector('.max-w-4xl')?.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.save-content-btn');
+    if (!btn) return;
+    const key = btn.dataset.key!;
+    const qid = btn.dataset.qid!;
+    const orig = btn.textContent;
+    btn.disabled = true; btn.textContent = '저장 중...';
+    await savePageContent(key, qid);
+    btn.disabled = false; btn.textContent = orig ?? '저장';
+  });
+
+  // ── 초기화 ──
   document.addEventListener('astro:page-load', async () => {
     if (!document.getElementById('login-screen')) return;
-    await loadQuill();
-    initQuill();
+    await loadQuillLib();
+    createQuill('quill-notices', '내용을 입력하세요. 이미지는 툴바의 🖼 버튼으로 삽입하세요.');
     if (isLoggedIn()) showPanel();
     else showLogin();
   });
