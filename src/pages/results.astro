@@ -27,6 +27,9 @@ import Layout from '../components/layout/Layout.astro';
       .select('*')
       .order('id', { ascending: true });
 
+    // 페이지가 이미 바뀐 경우 중단
+    if (!document.getElementById('loading')) return;
+
     document.getElementById('loading')?.classList.add('hidden');
 
     if (error || !data || data.length === 0) {
