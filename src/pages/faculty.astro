@@ -80,7 +80,7 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
             src="${esc(f.image_url || '')}"
             alt="${esc(f.name)}"
             class="w-full h-full object-cover object-top"
-            onerror="this.style.display='none'"
+            onerror="this.src='/images/faculty-placeholder-1.jpg'"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
         </div>
@@ -103,6 +103,9 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
       .select('*')
       .order('sort_order')
       .order('id');
+
+    // 페이지가 이미 바뀐 경우 중단
+    if (!document.getElementById('loading')) return;
 
     document.getElementById('loading')?.classList.add('hidden');
 
