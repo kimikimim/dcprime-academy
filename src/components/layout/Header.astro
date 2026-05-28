@@ -112,7 +112,7 @@
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => { clickCount = 0; }, 2000);
 
-      if (clickCount >= 10) {
+      if (clickCount >= 5) {
         clickCount = 0;
         e.preventDefault();
         launchConfetti();
