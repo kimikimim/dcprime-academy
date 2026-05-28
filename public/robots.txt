@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /adminssh
 
-Sitemap: https://dcprime.vercel.app/sitemap.xml
+Sitemap: https://dcprime.co.kr/sitemap-index.xml

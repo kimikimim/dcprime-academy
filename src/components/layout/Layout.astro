@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, 'https://dcprime.co.kr').href;
 ---
 
 <!doctype html>
@@ -21,6 +22,21 @@ const { title, description } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- OG (카카오/SNS 공유 미리보기) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="대치프라임학원" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content="https://dcprime.co.kr/images/hero-bg.jpg" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- 네이버/구글 -->
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="대치프라임, 시흥학원, 능곡학원, 수학학원, 영어학원, 대입, 고입" />
+
     <ClientRouter />
   </head>
   <body class="font-sans text-gray-800 bg-white">
