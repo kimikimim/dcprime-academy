@@ -10,13 +10,13 @@ import SectionTitle from '../ui/SectionTitle.astro';
     />
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 text-center">
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
-        <p class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
+        <p id="stat-daip" class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
         <p class="text-sm font-semibold text-gray-800">2026 대입 합격</p>
         <p class="text-xs text-gray-400 mt-1">SKY·의치한 포함</p>
       </div>
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
-        <p class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
-        <p class="text-sm font-semibold text-gray-800">고입 합격</p>
+        <p id="stat-goip" class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
+        <p class="text-sm font-semibold text-gray-800">2026 고입 합격</p>
         <p class="text-xs text-gray-400 mt-1">외고·자사고·특목고</p>
       </div>
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
@@ -37,3 +37,28 @@ import SectionTitle from '../ui/SectionTitle.astro';
     </div>
   </div>
 </section>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  async function loadStats() {
+    const daipEl = document.getElementById('stat-daip');
+    const goipEl = document.getElementById('stat-goip');
+    if (!daipEl || !goipEl) return;
+
+    const { data } = await supabase
+      .from('results')
+      .select('category')
+      .eq('year', '2026');
+
+    if (!data) return;
+
+    const daip = data.filter(r => r.category === '대입').length;
+    const goip = data.filter(r => r.category === '고입').length;
+
+    if (daip > 0) daipEl.textContent = `${daip}명`;
+    if (goip > 0) goipEl.textContent = `${goip}명`;
+  }
+
+  document.addEventListener('astro:page-load', loadStats);
+</script>
