@@ -6,52 +6,64 @@ const supabase = createClient(
   import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
+const TOTAL_STEPS = 4;
+
 const qDict = {
   gpa: {
     id: 'gpa',
-    title: "현재 학교 내신 성적은 어느 구간에 속합니까?",
+    step: 1,
+    label: '내신 등급',
+    title: "현재 학교 내신 성적은\n어느 구간에 속합니까?",
     subtitle: "수시 지원의 기준점이 되는 가장 중요한 1차 지표입니다.",
     options: [
-      { label: "1.0 ~ 2.5 (인서울 및 수도권 상위 교과 사정권)", value: 'high' },
-      { label: "2.6 ~ 4.5 (수도권 교과 및 지거국, 약술논술 주력 구간)", value: 'mid' },
-      { label: "4.6 이상 (내신 실질 반영률이 낮은 특화 전형 타겟)", value: 'low' },
+      { label: "1.0 ~ 2.5등급", sub: "인서울 및 수도권 상위 교과 사정권", value: 'high' },
+      { label: "2.6 ~ 4.5등급", sub: "수도권 교과 및 지거국, 약술논술 주력 구간", value: 'mid' },
+      { label: "4.6등급 이상", sub: "내신 실질 반영률이 낮은 특화 전형 타겟", value: 'low' },
     ],
   },
   mock: {
     id: 'mock',
-    title: "현재 모의고사 성적을 객관적으로 판단한다면?",
+    step: 2,
+    label: '모의고사',
+    title: "현재 모의고사 성적을\n객관적으로 판단한다면?",
     subtitle: "수능은 수시를 뚫어내는 무기이거나, 극상위권의 정시 카드입니다.",
     options: [
-      { label: "내신보다 모의고사가 압도적으로 높다 (전과목 평균 1~2등급대)", value: 'unicorn' },
-      { label: "특정 1~2과목에 집중하면 수능 최저(2합 6 또는 1개 3)는 맞출 수 있다", value: 'choijeo' },
-      { label: "현재 수능/모의고사는 전과목 4등급 이하로 최저 달성이 벅차다", value: 'none' },
+      { label: "내신 대비 모의고사 압도적 우위", sub: "전 과목 평균 1~2등급대", value: 'unicorn' },
+      { label: "1~2과목 집중 시 최저 달성 가능", sub: "2합 6 또는 1개 3등급 목표", value: 'choijeo' },
+      { label: "전 과목 4등급 이하", sub: "수능 최저 달성이 현실적으로 어려운 상태", value: 'none' },
     ],
   },
   record: {
     id: 'record',
-    title: "학교생활기록부(세특, 진로활동 등)의 완성도는 어떠합니까?",
+    step: 3,
+    label: '학생부',
+    title: "학교생활기록부(세특, 진로활동)의\n완성도는 어떠합니까?",
     subtitle: "단순 활동 나열이 아닌, 전공에 대한 깊이 있는 탐구 여부를 묻습니다.",
     options: [
-      { label: "희망 전공이 뚜렷하고, 교과와 연계된 깊이 있는 탐구 기록이 있다", value: 'strong' },
-      { label: "진로가 불명확하거나, 학교 기본 프로그램 위주의 평이한 기록이다", value: 'weak' },
+      { label: "전공 연계 탐구 기록 완성", sub: "희망 전공이 뚜렷하고 교과와 연계된 세특이 있다", value: 'strong' },
+      { label: "기본 프로그램 위주의 평이한 기록", sub: "진로 불명확 또는 활동 나열 수준", value: 'weak' },
     ],
   },
   interview: {
     id: 'interview',
-    title: "[학종 세부 진단] 본인의 생각을 표현하는 방식 중 어느 쪽이 편합니까?",
-    subtitle: "우수한 생기부를 면접형으로 풀 것인지, 서류형으로 굳힐 것인지 결정합니다.",
+    step: 4,
+    label: '표현 방식',
+    title: "본인의 생각을 표현하는\n방식은 어느 쪽입니까?",
+    subtitle: "생기부를 면접형으로 풀 것인지, 서류형으로 굳힐 것인지 결정합니다.",
     options: [
-      { label: "구두로 논리정연하게 설명하고 압박 질문을 방어하는 데 자신 있다", value: 'yes' },
-      { label: "말하기보다는 글이나 서류 자체의 완성도로 증명하는 것이 좋다", value: 'no' },
+      { label: "말로 논리정연하게 설명하는 편", sub: "압박 질문 방어에 자신 있다", value: 'yes' },
+      { label: "글과 서류 완성도로 증명하는 편", sub: "면접보다 서면 표현이 강점이다", value: 'no' },
     ],
   },
   yaksul_subject: {
     id: 'yaksul_subject',
-    title: "[약술 세부 진단] 국어와 수학 중, 학습 거부감이 덜한 과목은 무엇입니까?",
-    subtitle: "약술논술 지원 시 대학별 문항 수 비율과 유불리를 결정하는 기준입니다.",
+    step: 4,
+    label: '강점 과목',
+    title: "국어와 수학 중\n학습 거부감이 덜한 과목은?",
+    subtitle: "약술논술 지원 시 대학별 문항 비율과 유불리를 결정하는 기준입니다.",
     options: [
-      { label: "수학 (수식 전개와 단답/서술형 논리 풀이에 강점)", value: 'math' },
-      { label: "국어 (EBS 연계 문학/독서 지문 분석 및 암기에 강점)", value: 'korean' },
+      { label: "수학", sub: "수식 전개와 단답·서술형 논리 풀이에 강점", value: 'math' },
+      { label: "국어", sub: "EBS 연계 문학·독서 지문 분석 및 암기에 강점", value: 'korean' },
     ],
   },
 };
@@ -110,40 +122,32 @@ async function saveDiagnosisLog(answers, history, resultTag) {
 
 function getNextStep(qId, value, answers) {
   if (qId === 'gpa') return 'mock';
-
   if (qId === 'mock') {
     if (value === 'unicorn') return 'result';
     return 'record';
   }
-
   if (qId === 'record') {
     if (value === 'strong') return 'interview';
     if (answers.gpa === 'high') return 'result';
     return 'yaksul_subject';
   }
-
   if (qId === 'interview') return 'result';
   if (qId === 'yaksul_subject') return 'result';
-
   return 'result';
 }
 
 function computeResult(finalAnswers) {
   const { gpa, mock, record, interview } = finalAnswers;
-
   if (mock === 'unicorn') return results.jeongsi_fighter;
-
   if (gpa === 'high') {
     if (record === 'strong') return interview === 'yes' ? results.hakjong_interview : results.susi_top;
     return results.susi_top;
   }
-
   if (gpa === 'mid' || gpa === 'low') {
     if (record === 'strong') return interview === 'yes' ? results.hakjong_interview : results.hakjong_doc;
     if (mock === 'choijeo') return results.yaksul_choijeo;
     if (mock === 'none') return results.yaksul_nochoijeo;
   }
-
   return results.yaksul_nochoijeo;
 }
 
@@ -155,6 +159,7 @@ export default function Diagnosis() {
 
   const currentQId = history[history.length - 1];
   const currentQ = qDict[currentQId];
+  const currentStep = currentQ?.step ?? 1;
 
   const handleAnswer = (value) => {
     const newAnswers = { ...answers, [currentQId]: value };
@@ -168,7 +173,7 @@ export default function Diagnosis() {
         setIsAnalyzing(false);
         setFinalResult(result);
         saveDiagnosisLog(newAnswers, [...history, currentQId], result.tag);
-      }, 1500);
+      }, 1800);
     } else {
       setHistory([...history, nextStep]);
     }
@@ -189,90 +194,223 @@ export default function Diagnosis() {
     setFinalResult(null);
   };
 
+  // ── 결과 화면 ──
   if (finalResult) {
     return (
-      <div className="fade-in bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 w-full">
-        <div className="bg-slate-900 px-6 py-10 text-center">
-          <span className="inline-block py-1 px-4 rounded-full bg-slate-800 border border-slate-700 text-blue-400 text-xs font-bold mb-4">
+      <div
+        className="w-full animate-in"
+        style={{ animation: 'fadeUp 0.5s ease-out forwards' }}
+      >
+        {/* 상단 헤더 */}
+        <div
+          className="rounded-t-2xl px-8 py-10 text-center"
+          style={{ background: 'linear-gradient(135deg, #2e3250 0%, #474e7a 100%)' }}
+        >
+          <p className="text-xs tracking-[0.2em] mb-3" style={{ color: '#a8adc8' }}>
+            DC PRIME · 전략 진단 결과
+          </p>
+          <span
+            className="inline-block text-xs font-semibold px-4 py-1.5 rounded-full mb-5"
+            style={{ background: 'rgba(116,123,162,0.3)', color: '#c8ccdf', border: '1px solid rgba(116,123,162,0.4)' }}
+          >
             {finalResult.tag}
           </span>
-          <h2 className="text-2xl font-extrabold text-white leading-tight break-keep">{finalResult.title}</h2>
+          <h2
+            className="text-[22px] sm:text-2xl font-bold leading-snug break-keep"
+            style={{ fontFamily: '"Noto Serif KR", serif', color: '#ffffff' }}
+          >
+            {finalResult.title}
+          </h2>
         </div>
 
-        <div className="p-8">
-          <p className="text-slate-600 leading-relaxed mb-8 text-[15px] text-justify break-keep">
+        {/* 본문 */}
+        <div className="bg-white rounded-b-2xl shadow-xl px-8 py-8">
+          <p
+            className="leading-[1.9] text-[15px] text-justify break-keep mb-8"
+            style={{ color: '#4a4f6b' }}
+          >
             {finalResult.desc}
           </p>
 
-          <div className="border-t border-slate-100 pt-6">
-            <h4 className="text-sm font-bold text-slate-800 mb-4">대치프라임 제안 솔루션</h4>
-            <div className="space-y-3">
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                <div className="font-bold text-blue-800 text-base">{finalResult.action1}</div>
-                <div className="text-blue-600 text-xs mt-1">{finalResult.action1_desc}</div>
-              </div>
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                <div className="font-bold text-slate-800 text-base">{finalResult.action2}</div>
-                <div className="text-slate-600 text-xs mt-1">{finalResult.action2_desc}</div>
-              </div>
-            </div>
+          {/* 솔루션 */}
+          <div
+            className="rounded-xl px-5 py-4 mb-3"
+            style={{ background: '#f0f1f7', border: '1px solid #d8daea' }}
+          >
+            <p className="text-[10px] tracking-widest font-semibold mb-2" style={{ color: '#747ba2' }}>
+              추천 프로그램 01
+            </p>
+            <p className="font-bold text-base mb-1" style={{ color: '#2e3250' }}>{finalResult.action1}</p>
+            <p className="text-xs leading-relaxed" style={{ color: '#6b7194' }}>{finalResult.action1_desc}</p>
           </div>
 
+          <div
+            className="rounded-xl px-5 py-4 mb-8"
+            style={{ background: '#fafafa', border: '1px solid #e8eaf0' }}
+          >
+            <p className="text-[10px] tracking-widest font-semibold mb-2" style={{ color: '#9ca3af' }}>
+              추천 프로그램 02
+            </p>
+            <p className="font-bold text-base mb-1" style={{ color: '#2e3250' }}>{finalResult.action2}</p>
+            <p className="text-xs leading-relaxed" style={{ color: '#6b7194' }}>{finalResult.action2_desc}</p>
+          </div>
+
+          {/* CTA */}
+          <a
+            href="/inquiry"
+            className="block w-full text-center py-4 rounded-xl text-white font-bold text-sm tracking-wide transition-all duration-200 hover:opacity-90 mb-3"
+            style={{ background: 'linear-gradient(135deg, #2e3250 0%, #747ba2 100%)' }}
+          >
+            무료 상담 신청하기
+          </a>
           <button
             onClick={restart}
-            className="mt-8 w-full py-3 rounded-xl bg-slate-100 text-slate-600 text-sm font-bold hover:bg-slate-200 transition-colors"
+            className="w-full py-3 text-sm font-medium rounded-xl transition-colors"
+            style={{ color: '#9ca3b8', background: 'transparent' }}
           >
-            초기화 후 다시 진단하기
+            다시 진단하기
           </button>
         </div>
       </div>
     );
   }
 
+  // ── 분석 중 ──
   if (isAnalyzing) {
     return (
-      <div className="fade-in bg-white rounded-2xl shadow-xl p-12 text-center border border-slate-200 w-full min-h-[400px] flex flex-col justify-center items-center">
-        <div className="w-12 h-12 border-4 border-slate-100 border-t-slate-800 rounded-full animate-spin mb-6"></div>
-        <h3 className="text-lg font-bold text-slate-800 mb-2">입시 아키텍처 설계 중...</h3>
-        <p className="text-slate-500 text-sm">입력된 조건에 맞춰 최적의 솔루션을 계산하고 있습니다.</p>
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full flex flex-col items-center justify-center text-center px-8"
+        style={{ minHeight: '420px', animation: 'fadeUp 0.4s ease-out forwards' }}
+      >
+        <div
+          className="w-14 h-14 rounded-full mb-8 flex items-center justify-center"
+          style={{ background: '#f0f1f7' }}
+        >
+          <div
+            className="w-8 h-8 rounded-full border-[3px] animate-spin"
+            style={{ borderColor: '#d8daea', borderTopColor: '#2e3250' }}
+          />
+        </div>
+        <p className="text-xs tracking-[0.2em] mb-3" style={{ color: '#747ba2' }}>ANALYZING</p>
+        <h3
+          className="text-xl font-bold mb-2 break-keep"
+          style={{ fontFamily: '"Noto Serif KR", serif', color: '#2e3250' }}
+        >
+          입시 전략을 설계하고 있습니다
+        </h3>
+        <p className="text-sm" style={{ color: '#9ca3b8' }}>
+          입력하신 조건에 맞는 최적의 솔루션을 분석 중입니다.
+        </p>
       </div>
     );
   }
 
+  // ── 질문 화면 ──
   return (
-    <div className="fade-in bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 w-full">
-      <div className="bg-slate-900 px-6 py-5">
-        <span className="text-blue-400 font-bold text-xs tracking-widest">STEP {history.length}</span>
+    <div
+      className="bg-white rounded-2xl shadow-xl overflow-hidden w-full"
+      style={{ animation: 'fadeUp 0.4s ease-out forwards' }}
+    >
+      {/* 진행 바 */}
+      <div style={{ background: '#f0f1f7', height: '3px' }}>
+        <div
+          className="h-full transition-all duration-500"
+          style={{
+            width: `${(currentStep / TOTAL_STEPS) * 100}%`,
+            background: 'linear-gradient(90deg, #2e3250, #747ba2)',
+          }}
+        />
       </div>
 
-      <div className="p-6 sm:p-8">
-        <h2 className="text-xl font-bold text-slate-800 mb-2 leading-snug break-keep">
-          {currentQ.title}
-        </h2>
-        <p className="text-slate-500 text-sm mb-6 break-keep">
-          {currentQ.subtitle}
-        </p>
-
-        <div className="space-y-3">
-          {currentQ.options.map((opt, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleAnswer(opt.value)}
-              className="w-full text-left px-5 py-4 rounded-xl border border-slate-200 hover:border-slate-800 hover:bg-slate-50 transition-all duration-200 group flex items-center justify-between"
-            >
-              <span className="font-semibold text-slate-700 group-hover:text-slate-900 text-[15px]">{opt.label}</span>
-              <svg className="w-4 h-4 text-slate-300 group-hover:text-slate-800 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          ))}
+      {/* 스텝 헤더 */}
+      <div className="px-8 pt-8 pb-6" style={{ borderBottom: '1px solid #f0f1f7' }}>
+        <div className="flex items-center gap-3 mb-5">
+          <span
+            className="text-[10px] tracking-[0.2em] font-semibold"
+            style={{ color: '#747ba2' }}
+          >
+            STEP {currentStep} / {TOTAL_STEPS}
+          </span>
+          <span
+            className="text-[10px] px-2.5 py-1 rounded-full font-medium"
+            style={{ background: '#f0f1f7', color: '#747ba2' }}
+          >
+            {currentQ.label}
+          </span>
         </div>
 
-        {history.length > 1 && (
-          <button onClick={goBack} className="mt-6 text-sm text-slate-400 hover:text-slate-600 underline underline-offset-2">
-            이전 단계로
+        <h2
+          className="text-xl sm:text-2xl font-bold leading-snug break-keep mb-2 whitespace-pre-line"
+          style={{ fontFamily: '"Noto Serif KR", serif', color: '#2e3250' }}
+        >
+          {currentQ.title}
+        </h2>
+        <p className="text-sm leading-relaxed break-keep" style={{ color: '#9ca3b8' }}>
+          {currentQ.subtitle}
+        </p>
+      </div>
+
+      {/* 선택지 */}
+      <div className="px-8 py-6 space-y-3">
+        {currentQ.options.map((opt, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleAnswer(opt.value)}
+            className="w-full text-left rounded-xl transition-all duration-200 group"
+            style={{
+              padding: '16px 20px',
+              border: '1.5px solid #e8eaf0',
+              background: '#fafafa',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = '#747ba2';
+              e.currentTarget.style.background = '#f0f1f7';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = '#e8eaf0';
+              e.currentTarget.style.background = '#fafafa';
+            }}
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="font-semibold text-[15px] mb-0.5 break-keep" style={{ color: '#2e3250' }}>
+                  {opt.label}
+                </p>
+                {opt.sub && (
+                  <p className="text-xs break-keep" style={{ color: '#9ca3b8' }}>{opt.sub}</p>
+                )}
+              </div>
+              <svg
+                className="shrink-0 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                style={{ color: '#c8ccdf' }}
+                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </button>
-        )}
+        ))}
+      </div>
+
+      {/* 하단 */}
+      <div className="px-8 pb-7 flex items-center justify-between">
+        {history.length > 1 ? (
+          <button
+            onClick={goBack}
+            className="text-sm flex items-center gap-1.5 transition-colors"
+            style={{ color: '#c8ccdf' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#747ba2'}
+            onMouseLeave={e => e.currentTarget.style.color = '#c8ccdf'}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            이전 단계
+          </button>
+        ) : <span />}
+        <span className="text-xs" style={{ color: '#d1d5db' }}>
+          대치프라임 입시 진단
+        </span>
       </div>
     </div>
   );
