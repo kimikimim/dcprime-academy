@@ -158,10 +158,23 @@ import Layout from '../components/layout/Layout.astro';
                 <option value="과학">과학</option>
                 <option value="국어">국어</option>
                 <option value="탐독">탐독</option>
+                <option value="원장">원장</option>
+                <option value="부원장">부원장</option>
+                <option value="연구원">연구원</option>
               </select>
               <input id="faculty-name-input" type="text" placeholder="이름" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
             </div>
             <input id="faculty-motto-input" type="text" placeholder="한마디" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <div class="mb-3">
+              <p class="text-xs text-gray-500 mb-2">소속 학부 (중복 선택 가능)</p>
+              <div class="flex gap-4">
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="초등부" /> 초등부</label>
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="중등부" /> 중등부</label>
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="고등부" /> 고등부</label>
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="입시와대치" /> 입시와대치</label>
+              </div>
+            </div>
+            <input id="faculty-role-input" type="text" placeholder="직책 (입시와대치만 해당: 원장/부원장/연구원)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
             <div class="mb-4">
               <p class="text-xs text-gray-500 mb-2">프로필 사진</p>
               <input type="file" id="faculty-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
@@ -430,8 +443,10 @@ import Layout from '../components/layout/Layout.astro';
     facultyEditId = null;
     (document.getElementById('faculty-name-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-motto-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-role-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = '수학';
     (document.getElementById('faculty-image-input') as HTMLInputElement).value = '';
+    document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => cb.checked = false);
     const preview = document.getElementById('faculty-image-preview') as HTMLImageElement;
     preview.src = '';
     preview.classList.add('hidden');
@@ -461,11 +476,16 @@ import Layout from '../components/layout/Layout.astro';
             <span class="${colors[f.subject] ?? 'text-gray-500'} mr-1">${escHtml(f.subject)}</span>
             ${escHtml(f.name)} 선생님
           </p>
-          <p class="text-xs text-gray-400 truncate">${escHtml(f.motto ?? '')}</p>
+          <p class="text-xs text-gray-400 truncate">
+            ${Array.isArray(f.divisions) && f.divisions.length ? f.divisions.join(' · ') : '소속 없음'}
+            ${f.role ? ' · ' + escHtml(f.role) : ''}
+          </p>
         </div>
         <div class="flex gap-3 flex-shrink-0">
           <button data-id="${f.id}" data-name="${escAttr(f.name)}" data-subject="${escAttr(f.subject)}"
             data-motto="${escAttr(f.motto ?? '')}" data-image="${escAttr(f.image_url ?? '')}"
+            data-divisions="${escAttr(JSON.stringify(f.divisions ?? []))}"
+            data-role="${escAttr(f.role ?? '')}"
             class="edit-faculty-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
           <button data-id="${f.id}" class="del-faculty-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
         </div>
@@ -477,7 +497,12 @@ import Layout from '../components/layout/Layout.astro';
         facultyEditId = Number(btn.dataset.id);
         (document.getElementById('faculty-name-input') as HTMLInputElement).value = btn.dataset.name ?? '';
         (document.getElementById('faculty-motto-input') as HTMLInputElement).value = btn.dataset.motto ?? '';
+        (document.getElementById('faculty-role-input') as HTMLInputElement).value = btn.dataset.role ?? '';
         (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = btn.dataset.subject ?? '수학';
+        const divs: string[] = JSON.parse(btn.dataset.divisions ?? '[]');
+        document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => {
+          cb.checked = divs.includes(cb.value);
+        });
         const preview = document.getElementById('faculty-image-preview') as HTMLImageElement;
         if (btn.dataset.image) { preview.src = btn.dataset.image; preview.classList.remove('hidden'); }
         document.getElementById('faculty-form-title')!.textContent = '강사 수정';
@@ -512,6 +537,8 @@ import Layout from '../components/layout/Layout.astro';
     const name    = (document.getElementById('faculty-name-input') as HTMLInputElement).value.trim();
     const subject = (document.getElementById('faculty-subject-input') as HTMLSelectElement).value;
     const motto   = (document.getElementById('faculty-motto-input') as HTMLInputElement).value.trim();
+    const role    = (document.getElementById('faculty-role-input') as HTMLInputElement).value.trim();
+    const divisions = Array.from(document.querySelectorAll<HTMLInputElement>('.faculty-div-check:checked')).map(cb => cb.value);
     const fileInput = document.getElementById('faculty-image-input') as HTMLInputElement;
     const file    = fileInput.files?.[0];
     const msg     = document.getElementById('faculty-msg')!;
@@ -535,11 +562,11 @@ import Layout from '../components/layout/Layout.astro';
 
     let error;
     if (facultyEditId) {
-      const updateData: any = { name, subject, motto };
+      const updateData: any = { name, subject, motto, role, divisions };
       if (image_url) updateData.image_url = image_url;
       ({ error } = await supabase.from('faculty').update(updateData).eq('id', facultyEditId));
     } else {
-      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, image_url: image_url ?? '' }));
+      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, role, divisions, image_url: image_url ?? '' }));
     }
 
     btn.disabled = false;

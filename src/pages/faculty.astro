@@ -1,7 +1,7 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
-const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
+const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
 ---
 
 <Layout title="강사소개 - 대치프라임" description="대치프라임 강사진을 소개합니다.">
@@ -14,19 +14,19 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
       </div>
     </div>
 
-    <!-- 과목 탭 -->
+    <!-- 학부 탭 -->
     <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
       <div class="container mx-auto px-4">
-        <div class="flex overflow-x-auto scrollbar-hide" id="subject-tabs">
-          {subjects.map((s) => (
+        <div class="flex overflow-x-auto scrollbar-hide" id="division-tabs">
+          {divisions.map((d, i) => (
             <button
-              data-subject={s}
-              class={`subject-tab flex-shrink-0 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
-                ${s === '전체'
+              data-division={d}
+              class={`division-tab flex-shrink-0 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
+                ${i === 0
                   ? 'border-gray-900 text-gray-900'
                   : 'border-transparent text-gray-500 hover:text-gray-800'}`}
             >
-              {s}
+              {d}
             </button>
           ))}
         </div>
@@ -36,7 +36,7 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
     <div class="container mx-auto px-4 py-10">
       <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
       <div id="faculty-grid" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"></div>
-      <div id="empty-msg" class="hidden text-center py-20 text-gray-400 text-sm">해당 과목 강사 정보를 준비 중입니다.</div>
+      <div id="empty-msg" class="hidden text-center py-20 text-gray-400 text-sm">해당 학부 강사 정보를 준비 중입니다.</div>
     </div>
 
   </div>
@@ -51,19 +51,26 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
     '과학': 'text-orange-500',
     '국어': 'text-brand',
     '탐독': 'text-purple-500',
+    '원장': 'text-gray-900',
+    '부원장': 'text-gray-700',
+    '연구원': 'text-gray-500',
   };
 
   let allFaculty: any[] = [];
-  let currentSubject = '전체';
+  let currentDivision = '초등부';
 
-  function renderCards(subject: string) {
-    currentSubject = subject;
+  function koreanSort(a: any, b: any) {
+    return a.name.localeCompare(b.name, 'ko');
+  }
+
+  function renderCards(division: string) {
+    currentDivision = division;
     const grid    = document.getElementById('faculty-grid')!;
     const emptyEl = document.getElementById('empty-msg')!;
 
-    const filtered = subject === '전체'
-      ? allFaculty
-      : allFaculty.filter(f => f.subject === subject);
+    const filtered = allFaculty
+      .filter(f => Array.isArray(f.divisions) && f.divisions.includes(division))
+      .sort(division === '입시와대치' ? roleSort : koreanSort);
 
     if (filtered.length === 0) {
       grid.classList.add('hidden');
@@ -73,24 +80,37 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
 
     emptyEl.classList.add('hidden');
     grid.classList.remove('hidden');
-    grid.innerHTML = filtered.map(f => `
-      <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-        <div class="relative h-52 bg-gray-200">
-          <img
-            src="${esc(f.image_url || '')}"
-            alt="${esc(f.name)}"
-            class="w-full h-full object-cover object-top"
-            onerror="this.src='/images/faculty-placeholder-1.jpg'"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+    grid.innerHTML = filtered.map(f => {
+      const label = (division === '입시와대치' && f.role) ? f.role : f.subject;
+      const color = subjectColors[label] ?? 'text-gray-500';
+      return `
+        <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+          <div class="relative h-52 bg-gray-200">
+            <img
+              src="${esc(f.image_url || '')}"
+              alt="${esc(f.name)}"
+              class="w-full h-full object-cover object-top"
+              onerror="this.src='/images/faculty-placeholder-1.jpg'"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+          </div>
+          <div class="px-4 py-3">
+            <p class="text-xs font-semibold mb-0.5 ${color}">${esc(label)}</p>
+            <p class="text-sm font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
+            <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
+          </div>
         </div>
-        <div class="px-4 py-3">
-          <p class="text-xs font-semibold mb-0.5 ${subjectColors[f.subject] ?? 'text-gray-500'}">${esc(f.subject)}</p>
-          <p class="text-sm font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
-          <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
+  }
+
+  // 입시와대치는 원장 > 부원장 > 연구원 순
+  const roleOrder: Record<string, number> = { '원장': 0, '부원장': 1, '연구원': 2 };
+  function roleSort(a: any, b: any) {
+    const ra = roleOrder[a.role] ?? 9;
+    const rb = roleOrder[b.role] ?? 9;
+    if (ra !== rb) return ra - rb;
+    return a.name.localeCompare(b.name, 'ko');
   }
 
   function esc(str: string) {
@@ -104,9 +124,7 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
       .order('sort_order')
       .order('id');
 
-    // 페이지가 이미 바뀐 경우 중단
     if (!document.getElementById('loading')) return;
-
     document.getElementById('loading')?.classList.add('hidden');
 
     if (error || !data) {
@@ -115,10 +133,10 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
     }
 
     allFaculty = data;
-    renderCards('전체');
+    renderCards('초등부');
 
     // 탭 이벤트
-    const tabs = document.querySelectorAll<HTMLButtonElement>('.subject-tab');
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.division-tab');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
@@ -127,7 +145,7 @@ const subjects = ['전체', '수학', '영어', '과학', '국어', '탐독'];
         });
         tab.classList.add('border-gray-900', 'text-gray-900');
         tab.classList.remove('border-transparent', 'text-gray-500');
-        renderCards(tab.dataset.subject ?? '전체');
+        renderCards(tab.dataset.division ?? '초등부');
       });
     });
   }
