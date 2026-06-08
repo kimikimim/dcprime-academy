@@ -6,6 +6,10 @@
 -- ────────────────────────────────────────────
 -- 1. notices 테이블 추가 정책 (이미 테이블 있음)
 -- ────────────────────────────────────────────
+DROP POLICY IF EXISTS "anon insert notices" ON notices;
+DROP POLICY IF EXISTS "anon update notices" ON notices;
+DROP POLICY IF EXISTS "anon delete notices" ON notices;
+
 CREATE POLICY "anon insert notices" ON notices
   FOR INSERT TO anon WITH CHECK (true);
 
@@ -30,6 +34,9 @@ ALTER TABLE inquiries
   ADD COLUMN IF NOT EXISTS agree_privacy boolean DEFAULT false,
   ADD COLUMN IF NOT EXISTS agree_marketing boolean DEFAULT false;
 
+DROP POLICY IF EXISTS "anon select inquiries" ON inquiries;
+DROP POLICY IF EXISTS "anon insert inquiries" ON inquiries;
+
 CREATE POLICY "anon select inquiries" ON inquiries
   FOR SELECT TO anon USING (true);
 
@@ -39,14 +46,15 @@ CREATE POLICY "anon insert inquiries" ON inquiries
 -- ────────────────────────────────────────────
 -- 3. 관리자 설정 테이블 + 비밀번호 검증 함수
 -- ────────────────────────────────────────────
-CREATE TABLE admin_config (
+CREATE TABLE IF NOT EXISTS admin_config (
   key text PRIMARY KEY,
   value text NOT NULL
 );
 ALTER TABLE admin_config ENABLE ROW LEVEL SECURITY;
 -- 정책 없음 = anon 직접 조회 불가
 
-INSERT INTO admin_config (key, value) VALUES ('admin_password', 'Prime0979!');
+INSERT INTO admin_config (key, value) VALUES ('admin_password', 'Prime0979!')
+ON CONFLICT (key) DO NOTHING;
 
 CREATE OR REPLACE FUNCTION verify_admin_password(pw text)
 RETURNS boolean
@@ -66,7 +74,7 @@ GRANT EXECUTE ON FUNCTION verify_admin_password(text) TO anon;
 -- ────────────────────────────────────────────
 -- 4. results 테이블 생성 + RLS
 -- ────────────────────────────────────────────
-CREATE TABLE results (
+CREATE TABLE IF NOT EXISTS results (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   year text NOT NULL,
   category text NOT NULL, -- '대입' or '고입'
@@ -77,6 +85,11 @@ CREATE TABLE results (
   created_at timestamptz DEFAULT now()
 );
 ALTER TABLE results ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "anon select results" ON results;
+DROP POLICY IF EXISTS "anon insert results" ON results;
+DROP POLICY IF EXISTS "anon delete results" ON results;
+
 CREATE POLICY "anon select results" ON results FOR SELECT TO anon USING (true);
 CREATE POLICY "anon insert results" ON results FOR INSERT TO anon WITH CHECK (true);
 CREATE POLICY "anon delete results" ON results FOR DELETE TO anon USING (true);
@@ -278,6 +291,8 @@ CREATE TABLE IF NOT EXISTS diagnosis_logs (
 );
 
 ALTER TABLE diagnosis_logs ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "allow_anon_insert" ON diagnosis_logs;
 
 -- 비로그인 사용자도 INSERT 가능 (식별 정보 없음)
 CREATE POLICY "allow_anon_insert" ON diagnosis_logs
