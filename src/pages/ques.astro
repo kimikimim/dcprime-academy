@@ -1,0 +1,23 @@
+---
+import Diagnosis from '../components/Diagnosis.jsx';
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>대입 전략 아키텍처 진단 | 대치프라임</title>
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+      body { font-family: 'Pretendard', sans-serif; }
+      .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800 flex items-center justify-center min-h-screen p-4 sm:p-6">
+    <div class="w-full max-w-2xl">
+      <Diagnosis client:load />
+    </div>
+  </body>
+</html>

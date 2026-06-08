@@ -12,11 +12,14 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^10.0.5",
     "@supabase/supabase-js": "^2.104.0",
     "@tailwindcss/vite": "^4.2.4",
-    "astro": "^6.1.8"
+    "astro": "^6.1.8",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.0",
