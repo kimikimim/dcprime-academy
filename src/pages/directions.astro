@@ -154,13 +154,18 @@ const branches = [
     const id = t.dataset.tab!;
     history.pushState(null, '', `#${id}`);
     activate(id);
+    // 숨겨진 상태에서 초기화된 지도 크기 재계산
+    setTimeout(() => {
+      if (mapInstances[id]) mapInstances[id].relayout();
+    }, 50);
   }));
 
   const hash = location.hash.replace('#', '');
   if (hash) activate(hash);
 
   // ── 카카오맵 초기화 ──
-  // PUBLIC_KAKAO_MAP_KEY 가 .env에 있을 때만 실행
+  const mapInstances: Record<string, any> = {};
+
   function initKakaoMaps() {
     const win = window as any;
     if (!win.kakao?.maps) return;
@@ -170,14 +175,15 @@ const branches = [
         const lat = parseFloat(el.dataset.lat!);
         const lng = parseFloat(el.dataset.lng!);
         const name = el.dataset.name!;
+        const id = el.id.replace('map-', '');
 
-        // 폴백 아이콘 숨기기
         el.querySelector('.kakao-fallback')?.remove();
 
         const map = new win.kakao.maps.Map(el, {
           center: new win.kakao.maps.LatLng(lat, lng),
           level: 4,
         });
+        mapInstances[id] = map;
 
         const marker = new win.kakao.maps.Marker({
           map,
