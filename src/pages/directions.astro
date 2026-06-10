@@ -1,6 +1,8 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
+const KAKAO_KEY = import.meta.env.PUBLIC_KAKAO_MAP_KEY;
+
 const branches = [
   {
     id: 'neunggok',
@@ -9,9 +11,8 @@ const branches = [
     subjects: '초등고학년 ~ 고3 | 수학·영어·과학·국어',
     address: '경기 시흥시 장현능곡로 178',
     phone: '031-313-0979',
-    mapUrl: 'https://naver.me/Grexh0o5',
-    tmapUrl: 'tmap://route?goalname=대치프라임능곡관&goalx=126.8099174&goaly=37.3695611',
-    tmapWebUrl: 'https://tmap.life/route?goalname=대치프라임능곡관&goalx=126.8099174&goaly=37.3695611',
+    lat: 37.3695611,
+    lng: 126.8099174,
   },
   {
     id: 'janggok',
@@ -20,14 +21,22 @@ const branches = [
     subjects: '초등고학년 ~ 고3 | 수학·영어·과학·국어',
     address: '경기 시흥시 장곡1로 11 4층 401, 402호',
     phone: '031-804-2495',
-    mapUrl: 'https://naver.me/FvQJ6L7k',
-    tmapUrl: 'tmap://route?goalname=대치프라임장곡관&goalx=126.7846255&goaly=37.3795718',
-    tmapWebUrl: 'https://tmap.life/route?goalname=대치프라임장곡관&goalx=126.7846255&goaly=37.3795718',
+    lat: 37.3795718,
+    lng: 126.7846255,
   },
 ];
 ---
 
 <Layout title="찾아오시는길 - 대치프라임" description="대치프라임 능곡관·장곡관 위치 안내입니다.">
+
+  <!-- 카카오맵 SDK (키 발급 후 .env에 PUBLIC_KAKAO_MAP_KEY 추가) -->
+  {KAKAO_KEY && (
+    <script
+      src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_KEY}&autoload=false`}
+      is:inline
+    />
+  )}
+
   <div class="min-h-screen bg-white">
 
     <div class="border-b border-gray-200">
@@ -57,22 +66,25 @@ const branches = [
     {branches.map((b, i) => (
       <div id={`panel-${b.id}`} class={`tab-panel ${i !== 0 ? 'hidden' : ''}`}>
 
-        <!-- 지도 영역 (카카오맵 API 연동 전 플레이스홀더) -->
+        <!-- 지도 영역 -->
         <div
           id={`map-${b.id}`}
-          class="w-full bg-gray-100 flex items-center justify-center"
+          class="w-full bg-gray-100"
           style="height: 420px;"
           data-lat={b.lat}
           data-lng={b.lng}
-          data-name={b.name}
+          data-name={b.fullName}
         >
-          <div class="text-center text-gray-400">
-            <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-            <p class="text-sm">지도 준비 중</p>
+          <!-- 카카오맵 키 없을 때 폴백 -->
+          <div class="kakao-fallback w-full h-full flex items-center justify-center">
+            <div class="text-center text-gray-400">
+              <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <p class="text-sm">지도 준비 중</p>
+            </div>
           </div>
         </div>
 
@@ -87,7 +99,7 @@ const branches = [
 
         <!-- 주소 / 전화 카드 -->
         <div class="container mx-auto px-4 pb-10 max-w-4xl">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             <div class="border border-gray-200 rounded-2xl p-6 flex flex-col items-center text-center gap-3">
               <div class="w-14 h-14 rounded-full bg-brand-light flex items-center justify-center">
@@ -113,7 +125,6 @@ const branches = [
             </div>
 
           </div>
-
         </div>
 
       </div>
@@ -123,27 +134,64 @@ const branches = [
 </Layout>
 
 <script>
+  // ── 탭 전환 ──
   const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
   const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
   function activate(id: string) {
     tabs.forEach(t => {
-      const isTarget = t.dataset.tab === id;
-      t.classList.toggle('border-brand', isTarget);
-      t.classList.toggle('text-brand', isTarget);
-      t.classList.toggle('border-transparent', !isTarget);
-      t.classList.toggle('text-gray-400', !isTarget);
+      const on = t.dataset.tab === id;
+      t.classList.toggle('border-brand', on);
+      t.classList.toggle('text-brand', on);
+      t.classList.toggle('border-transparent', !on);
+      t.classList.toggle('text-gray-400', !on);
     });
     panels.forEach(p => p.classList.add('hidden'));
     document.getElementById(`panel-${id}`)?.classList.remove('hidden');
   }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => activate(tab.dataset.tab!));
-  });
+  tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.tab!)));
 
-  // URL 해시로 탭 선택
   const hash = location.hash.replace('#', '');
   if (hash) activate(hash);
 
+  // ── 카카오맵 초기화 ──
+  // PUBLIC_KAKAO_MAP_KEY 가 .env에 있을 때만 실행
+  function initKakaoMaps() {
+    const win = window as any;
+    if (!win.kakao?.maps) return;
+
+    win.kakao.maps.load(() => {
+      document.querySelectorAll<HTMLElement>('[id^="map-"]').forEach(el => {
+        const lat = parseFloat(el.dataset.lat!);
+        const lng = parseFloat(el.dataset.lng!);
+        const name = el.dataset.name!;
+
+        // 폴백 아이콘 숨기기
+        el.querySelector('.kakao-fallback')?.remove();
+
+        const map = new win.kakao.maps.Map(el, {
+          center: new win.kakao.maps.LatLng(lat, lng),
+          level: 4,
+        });
+
+        const marker = new win.kakao.maps.Marker({
+          map,
+          position: new win.kakao.maps.LatLng(lat, lng),
+        });
+
+        const infoWindow = new win.kakao.maps.InfoWindow({
+          content: `<div style="padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;">${name}</div>`,
+        });
+        infoWindow.open(map, marker);
+      });
+    });
+  }
+
+  // SDK 스크립트 로드 완료 후 실행
+  if ((window as any).kakao) {
+    initKakaoMaps();
+  } else {
+    window.addEventListener('load', initKakaoMaps);
+  }
 </script>
