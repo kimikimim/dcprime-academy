@@ -150,7 +150,11 @@ const branches = [
     document.getElementById(`panel-${id}`)?.classList.remove('hidden');
   }
 
-  tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.tab!)));
+  tabs.forEach(t => t.addEventListener('click', () => {
+    const id = t.dataset.tab!;
+    history.pushState(null, '', `#${id}`);
+    activate(id);
+  }));
 
   const hash = location.hash.replace('#', '');
   if (hash) activate(hash);
