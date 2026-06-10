@@ -154,9 +154,17 @@ const branches = [
     const id = t.dataset.tab!;
     history.pushState(null, '', `#${id}`);
     activate(id);
-    // 숨겨진 상태에서 초기화된 지도 크기 재계산
+    // 숨겨진 상태에서 초기화된 지도 크기 재계산 + 중심 재설정
     setTimeout(() => {
-      if (mapInstances[id]) mapInstances[id].relayout();
+      const m = mapInstances[id];
+      if (!m) return;
+      m.relayout();
+      const el = document.getElementById(`map-${id}`);
+      if (el) {
+        const lat = parseFloat(el.dataset.lat!);
+        const lng = parseFloat(el.dataset.lng!);
+        m.setCenter(new (window as any).kakao.maps.LatLng(lat, lng));
+      }
     }, 50);
   }));
 
