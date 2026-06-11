@@ -60,8 +60,52 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 상담 신청 탭 ── -->
         <div id="panel-inquiries" class="hidden">
+
+          <!-- 필터 바 -->
+          <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="inq-filter-status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand">
+                <option value="">상태 전체</option>
+                <option value="new">신규</option>
+                <option value="contacted">연락완료</option>
+                <option value="consulting">상담중</option>
+                <option value="enrolled">등록완료</option>
+                <option value="closed">종결</option>
+              </select>
+              <select id="inq-filter-branch" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand">
+                <option value="">분원 전체</option>
+                <option value="능곡관">능곡관</option>
+                <option value="장곡관">장곡관</option>
+              </select>
+              <select id="inq-filter-grade" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand">
+                <option value="">학년 전체</option>
+                <option>초4</option><option>초5</option><option>초6</option>
+                <option>중1</option><option>중2</option><option>중3</option>
+                <option>고1</option><option>고2</option><option>고3</option>
+              </select>
+              <select id="inq-filter-subject" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand">
+                <option value="">과목 전체</option>
+                <option>국어</option><option>영어</option><option>수학</option><option>과학</option>
+                <option value="탐독">탐독 ⭐</option>
+                <option value="입시컨설팅">입시컨설팅 ⭐</option>
+                <option value="일반상담">일반상담</option>
+                <option value="기타">기타</option>
+              </select>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer ml-1">
+                <input type="checkbox" id="inq-filter-highvalue" class="w-4 h-4 accent-brand" />
+                <span class="font-medium text-purple-600">고가치만 ⭐</span>
+              </label>
+              <input id="inq-filter-search" type="text" placeholder="이름·전화·학교 검색"
+                class="flex-1 min-w-[140px] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <div class="flex items-center justify-between mt-3 text-xs text-gray-400">
+              <span id="inq-count">—</span>
+              <button id="inq-reset" class="text-gray-400 hover:text-gray-700 transition-colors">필터 초기화</button>
+            </div>
+          </div>
+
+          <!-- 목록 -->
           <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-base font-bold text-gray-900 mb-4">상담 신청 목록</h2>
             <div id="inquiry-list" class="divide-y divide-gray-100">
               <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
             </div>
@@ -740,38 +784,153 @@ import Layout from '../components/layout/Layout.astro';
   }
 
   // ── 상담 신청 ──
-  async function loadInquiries() {
-    const container = document.getElementById('inquiry-list')!;
-    const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false }).limit(100);
-    if (error || !data || data.length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">상담 신청이 없습니다.</p>'; return;
-    }
-    container.innerHTML = data.map(q => `
-      <div class="py-4 ${q.contacted ? 'opacity-50' : ''}">
-        <div class="flex items-center justify-between mb-1">
-          <p class="text-sm font-medium text-gray-900">${escHtml(q.student_name ?? q.name ?? '')} · ${escHtml(q.student_phone ?? q.phone ?? '')}</p>
-          <div class="flex items-center gap-3">
-            <label class="flex items-center gap-1.5 cursor-pointer select-none">
-              <input type="checkbox" data-id="${q.id}" class="contacted-check w-4 h-4 accent-brand" ${q.contacted ? 'checked' : ''} />
-              <span class="text-xs ${q.contacted ? 'text-brand font-medium' : 'text-gray-400'}">연락 완료</span>
-            </label>
-            <p class="text-xs text-gray-400">${new Date(q.created_at).toLocaleDateString('ko-KR')}</p>
-          </div>
-        </div>
-        ${q.parent_name ? `<p class="text-xs text-gray-500 mb-1">학부모: ${escHtml(q.parent_name)} · ${escHtml(q.parent_phone ?? '')}</p>` : ''}
-        ${q.school_name ?? q.school ? `<p class="text-xs text-gray-500 mb-1">학교: ${escHtml(q.school_name ?? q.school)}</p>` : ''}
-        ${(q.track || q.grade) ? `<p class="text-xs text-gray-500 mb-1">${q.track ? '계열: ' + escHtml(q.track) : ''} ${q.grade ? '학년: ' + escHtml(q.grade) : ''}</p>` : ''}
-        ${q.branch?.length ? `<p class="text-xs text-gray-500 mb-1">분원: ${escHtml(Array.isArray(q.branch) ? q.branch.join(', ') : q.branch)}</p>` : ''}
-        ${q.message ? `<p class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2 mt-2 whitespace-pre-wrap">${escHtml(q.message)}</p>` : ''}
-      </div>
-    `).join('');
+  const HIGH_VALUE = ['탐독', '입시컨설팅'];
+  const STATUS_LABEL: Record<string, string> = {
+    new: '신규', contacted: '연락완료', consulting: '상담중', enrolled: '등록완료', closed: '종결',
+  };
+  const STATUS_STYLE: Record<string, string> = {
+    new: 'bg-red-50 text-red-500', contacted: 'bg-amber-50 text-amber-600',
+    consulting: 'bg-blue-50 text-blue-600', enrolled: 'bg-green-50 text-green-600',
+    closed: 'bg-gray-100 text-gray-400',
+  };
 
-    container.querySelectorAll<HTMLInputElement>('.contacted-check').forEach(cb => {
-      cb.addEventListener('change', async () => {
-        await supabase.from('inquiries').update({ contacted: cb.checked }).eq('id', cb.dataset.id!);
-        loadInquiries();
+  let allInquiries: any[] = [];
+
+  function asArray(v: any): string[] {
+    if (Array.isArray(v)) return v;
+    if (typeof v === 'string' && v) return [v];
+    return [];
+  }
+
+  function filteredInquiries() {
+    const status   = (document.getElementById('inq-filter-status') as HTMLSelectElement).value;
+    const branch   = (document.getElementById('inq-filter-branch') as HTMLSelectElement).value;
+    const grade    = (document.getElementById('inq-filter-grade') as HTMLSelectElement).value;
+    const subject  = (document.getElementById('inq-filter-subject') as HTMLSelectElement).value;
+    const highOnly = (document.getElementById('inq-filter-highvalue') as HTMLInputElement).checked;
+    const search   = (document.getElementById('inq-filter-search') as HTMLInputElement).value.trim().toLowerCase();
+
+    return allInquiries.filter(q => {
+      const subjects = asArray(q.subjects);
+      const branches = asArray(q.branch);
+      if (status && (q.status ?? 'new') !== status) return false;
+      if (branch && !branches.includes(branch)) return false;
+      if (grade && q.grade !== grade) return false;
+      if (subject && !subjects.includes(subject)) return false;
+      if (highOnly && !subjects.some(s => HIGH_VALUE.includes(s))) return false;
+      if (search) {
+        const hay = [q.student_name, q.parent_name, q.student_phone, q.parent_phone, q.school, q.school_name]
+          .filter(Boolean).join(' ').toLowerCase();
+        if (!hay.includes(search)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderInquiries() {
+    const container = document.getElementById('inquiry-list')!;
+    const rows = filteredInquiries();
+    const countEl = document.getElementById('inq-count')!;
+    countEl.textContent = `총 ${rows.length}건 (전체 ${allInquiries.length}건)`;
+
+    if (rows.length === 0) {
+      container.innerHTML = '<p class="text-sm text-gray-400 py-8 text-center">조건에 맞는 신청이 없습니다.</p>';
+      return;
+    }
+
+    container.innerHTML = rows.map(q => {
+      const subjects = asArray(q.subjects);
+      const branches = asArray(q.branch);
+      const status = q.status ?? 'new';
+      const isHigh = subjects.some(s => HIGH_VALUE.includes(s));
+
+      const subjectTags = subjects.map(s => {
+        const hi = HIGH_VALUE.includes(s);
+        return `<span class="inline-block text-xs px-2 py-0.5 rounded-full ${hi ? 'bg-purple-100 text-purple-700 font-semibold' : 'bg-gray-100 text-gray-500'}">${hi ? '⭐ ' : ''}${escHtml(s)}</span>`;
+      }).join(' ');
+
+      const statusOptions = Object.keys(STATUS_LABEL).map(k =>
+        `<option value="${k}" ${k === status ? 'selected' : ''}>${STATUS_LABEL[k]}</option>`).join('');
+
+      return `
+      <div class="py-4 ${isHigh ? 'bg-purple-50/40 -mx-6 px-6 border-l-2 border-purple-300' : ''}">
+        <div class="flex items-center justify-between gap-2 mb-1.5">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_STYLE[status]}">${STATUS_LABEL[status]}</span>
+            <p class="text-sm font-semibold text-gray-900 truncate">
+              ${escHtml(q.student_name ?? '')} ${q.grade ? `<span class="text-gray-400 font-normal">· ${escHtml(q.grade)}</span>` : ''}
+            </p>
+          </div>
+          <p class="text-xs text-gray-400 flex-shrink-0">${new Date(q.created_at).toLocaleDateString('ko-KR')}</p>
+        </div>
+
+        <div class="text-xs text-gray-500 space-y-0.5 mb-2">
+          <p>📱 학생 ${escHtml(q.student_phone ?? '-')}${q.parent_name ? ` · 학부모 ${escHtml(q.parent_name)} ${escHtml(q.parent_phone ?? '')}` : ''}</p>
+          ${(q.school ?? q.school_name) ? `<p>🏫 ${escHtml(q.school ?? q.school_name)}${q.track ? ` · ${escHtml(q.track)}` : ''}</p>` : ''}
+          ${branches.length ? `<p>📍 ${escHtml(branches.join(', '))}</p>` : ''}
+        </div>
+
+        ${subjects.length ? `<div class="flex flex-wrap gap-1 mb-2">${subjectTags}</div>` : ''}
+        ${q.other_detail ? `<p class="text-sm text-gray-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mb-2 whitespace-pre-wrap"><span class="text-xs font-semibold text-amber-600">기타 문의</span><br/>${escHtml(q.other_detail)}</p>` : ''}
+
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+          <select data-id="${q.id}" class="inq-status-select border border-gray-200 rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-brand">${statusOptions}</select>
+          <input data-id="${q.id}" type="text" value="${escAttr(q.assigned_to ?? '')}" placeholder="담당자"
+            class="inq-assigned-input border border-gray-200 rounded-lg px-2 py-1 text-xs w-24 focus:outline-none focus:border-brand" />
+          <input data-id="${q.id}" type="text" value="${escAttr(q.admin_note ?? '')}" placeholder="내부 메모"
+            class="inq-note-input flex-1 min-w-[120px] border border-gray-200 rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-brand" />
+          <button data-id="${q.id}" class="inq-del-btn text-xs text-red-400 hover:text-red-600 transition-colors flex-shrink-0">삭제</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // 상태 변경 (즉시 반영)
+    container.querySelectorAll<HTMLSelectElement>('.inq-status-select').forEach(sel => {
+      sel.addEventListener('change', async () => {
+        const patch: any = { status: sel.value };
+        if (sel.value === 'contacted') patch.contacted_at = new Date().toISOString();
+        await supabase.from('inquiries').update(patch).eq('id', sel.dataset.id!);
+        const row = allInquiries.find(x => x.id == sel.dataset.id);
+        if (row) row.status = sel.value;
+        renderInquiries();
       });
     });
+
+    // 담당자 / 메모 (blur 시 저장)
+    container.querySelectorAll<HTMLInputElement>('.inq-assigned-input').forEach(inp => {
+      inp.addEventListener('blur', async () => {
+        await supabase.from('inquiries').update({ assigned_to: inp.value.trim() || null }).eq('id', inp.dataset.id!);
+        const row = allInquiries.find(x => x.id == inp.dataset.id);
+        if (row) row.assigned_to = inp.value.trim();
+      });
+    });
+    container.querySelectorAll<HTMLInputElement>('.inq-note-input').forEach(inp => {
+      inp.addEventListener('blur', async () => {
+        await supabase.from('inquiries').update({ admin_note: inp.value.trim() || null }).eq('id', inp.dataset.id!);
+        const row = allInquiries.find(x => x.id == inp.dataset.id);
+        if (row) row.admin_note = inp.value.trim();
+      });
+    });
+
+    // 삭제
+    container.querySelectorAll<HTMLButtonElement>('.inq-del-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 상담 신청을 삭제할까요?')) return;
+        await supabase.from('inquiries').delete().eq('id', btn.dataset.id!);
+        allInquiries = allInquiries.filter(x => x.id != btn.dataset.id);
+        renderInquiries();
+      });
+    });
+  }
+
+  async function loadInquiries() {
+    const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false }).limit(300);
+    if (error) {
+      document.getElementById('inquiry-list')!.innerHTML = `<p class="text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
+      return;
+    }
+    allInquiries = data ?? [];
+    renderInquiries();
   }
 
   // ── 로그인/로그아웃 ──
@@ -810,6 +969,22 @@ import Layout from '../components/layout/Layout.astro';
 
   document.getElementById('logout-btn')?.addEventListener('click', () => {
     sessionStorage.removeItem(SESSION_KEY); showLogin();
+  });
+
+  // ── 상담 신청 필터 이벤트 ──
+  ['inq-filter-status', 'inq-filter-branch', 'inq-filter-grade', 'inq-filter-subject'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', renderInquiries);
+  });
+  document.getElementById('inq-filter-highvalue')?.addEventListener('change', renderInquiries);
+  document.getElementById('inq-filter-search')?.addEventListener('input', renderInquiries);
+  document.getElementById('inq-reset')?.addEventListener('click', () => {
+    (document.getElementById('inq-filter-status') as HTMLSelectElement).value = '';
+    (document.getElementById('inq-filter-branch') as HTMLSelectElement).value = '';
+    (document.getElementById('inq-filter-grade') as HTMLSelectElement).value = '';
+    (document.getElementById('inq-filter-subject') as HTMLSelectElement).value = '';
+    (document.getElementById('inq-filter-highvalue') as HTMLInputElement).checked = false;
+    (document.getElementById('inq-filter-search') as HTMLInputElement).value = '';
+    renderInquiries();
   });
 
   // ── 탭 이벤트 ──
