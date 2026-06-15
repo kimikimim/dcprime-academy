@@ -85,7 +85,7 @@ const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
       const color = subjectColors[label] ?? 'text-gray-500';
       return `
         <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-          <div class="relative h-52 bg-gray-200">
+          <div class="relative aspect-[3/4] bg-gray-200">
             <img
               src="${esc(f.image_url || '')}"
               alt="${esc(f.name)}"

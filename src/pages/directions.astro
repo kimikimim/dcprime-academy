@@ -29,13 +29,8 @@ const branches = [
 
 <Layout title="찾아오시는길 - 대치프라임" description="대치프라임 능곡관·장곡관 위치 안내입니다.">
 
-  <!-- 카카오맵 SDK (키 발급 후 .env에 PUBLIC_KAKAO_MAP_KEY 추가) -->
-  {KAKAO_KEY && (
-    <script
-      src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_KEY}&autoload=false`}
-      is:inline
-    />
-  )}
+  <!-- 카카오맵 키를 DOM에 저장 (View Transitions 대응) -->
+  {KAKAO_KEY && <div id="kakao-key" data-key={KAKAO_KEY} class="hidden" />}
 
   <div class="min-h-screen bg-white">
 
@@ -134,56 +129,34 @@ const branches = [
 </Layout>
 
 <script>
-  // ── 탭 전환 ──
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
-  const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
-
-  function activate(id: string) {
-    tabs.forEach(t => {
-      const on = t.dataset.tab === id;
-      t.classList.toggle('border-brand', on);
-      t.classList.toggle('text-brand', on);
-      t.classList.toggle('border-transparent', !on);
-      t.classList.toggle('text-gray-400', !on);
-    });
-    panels.forEach(p => p.classList.add('hidden'));
-    document.getElementById(`panel-${id}`)?.classList.remove('hidden');
-  }
-
-  tabs.forEach(t => t.addEventListener('click', () => {
-    const id = t.dataset.tab!;
-    history.pushState(null, '', `#${id}`);
-    activate(id);
-    // 숨겨진 상태에서 초기화된 지도 크기 재계산 + 중심 재설정
-    setTimeout(() => {
-      const m = mapInstances[id];
-      if (!m) return;
-      m.relayout();
-      const el = document.getElementById(`map-${id}`);
-      if (el) {
-        const lat = parseFloat(el.dataset.lat!);
-        const lng = parseFloat(el.dataset.lng!);
-        m.setCenter(new (window as any).kakao.maps.LatLng(lat, lng));
-      }
-    }, 50);
-  }));
-
-  const hash = location.hash.replace('#', '');
-  if (hash) activate(hash);
-
-  // ── 카카오맵 초기화 ──
   const mapInstances: Record<string, any> = {};
 
-  function initKakaoMaps() {
-    const win = window as any;
-    if (!win.kakao?.maps) return;
+  function loadSDK(key: string): Promise<void> {
+    return new Promise(resolve => {
+      const win = window as any;
+      if (win.kakao?.maps) { resolve(); return; }
+      // 이미 삽입된 스크립트가 있으면 load 이벤트 대기
+      const existing = document.querySelector<HTMLScriptElement>('script[src*="dapi.kakao.com"]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(), { once: true });
+        return;
+      }
+      const s = document.createElement('script');
+      s.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&autoload=false`;
+      s.onload = () => resolve();
+      document.head.appendChild(s);
+    });
+  }
 
+  function initMaps() {
+    const win = window as any;
     win.kakao.maps.load(() => {
       document.querySelectorAll<HTMLElement>('[id^="map-"]').forEach(el => {
+        const id = el.id.replace('map-', '');
+        if (mapInstances[id]) return; // 이미 초기화됨
         const lat = parseFloat(el.dataset.lat!);
         const lng = parseFloat(el.dataset.lng!);
         const name = el.dataset.name!;
-        const id = el.id.replace('map-', '');
 
         el.querySelector('.kakao-fallback')?.remove();
 
@@ -197,19 +170,64 @@ const branches = [
           map,
           position: new win.kakao.maps.LatLng(lat, lng),
         });
-
         const infoWindow = new win.kakao.maps.InfoWindow({
           content: `<div style="padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;">${name}</div>`,
         });
         infoWindow.open(map, marker);
       });
+
+      // 현재 보이는 탭 지도 즉시 relayout
+      const hash = location.hash.replace('#', '');
+      if (hash && mapInstances[hash]) {
+        mapInstances[hash].relayout();
+      }
     });
   }
 
-  // SDK 스크립트 로드 완료 후 실행
-  if ((window as any).kakao) {
-    initKakaoMaps();
-  } else {
-    window.addEventListener('load', initKakaoMaps);
+  function activate(id: string) {
+    document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(t => {
+      const on = t.dataset.tab === id;
+      t.classList.toggle('border-brand', on);
+      t.classList.toggle('text-brand', on);
+      t.classList.toggle('border-transparent', !on);
+      t.classList.toggle('text-gray-400', !on);
+    });
+    document.querySelectorAll<HTMLElement>('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById(`panel-${id}`)?.classList.remove('hidden');
   }
+
+  document.addEventListener('astro:page-load', async () => {
+    const key = (document.getElementById('kakao-key') as HTMLElement | null)?.dataset.key;
+    if (!key) return;
+
+    // DOM이 교체됐으므로 이전 인스턴스 초기화
+    Object.keys(mapInstances).forEach(k => delete mapInstances[k]);
+
+    // 탭 이벤트
+    document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(t => {
+      t.addEventListener('click', () => {
+        const id = t.dataset.tab!;
+        history.pushState(null, '', `#${id}`);
+        activate(id);
+        setTimeout(() => {
+          const m = mapInstances[id];
+          if (!m) return;
+          m.relayout();
+          const el = document.getElementById(`map-${id}`);
+          if (el) {
+            m.setCenter(new (window as any).kakao.maps.LatLng(
+              parseFloat(el.dataset.lat!),
+              parseFloat(el.dataset.lng!)
+            ));
+          }
+        }, 50);
+      });
+    });
+
+    const hash = location.hash.replace('#', '');
+    if (hash) activate(hash);
+
+    await loadSDK(key);
+    initMaps();
+  });
 </script>

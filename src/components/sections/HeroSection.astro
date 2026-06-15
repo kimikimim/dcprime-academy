@@ -16,7 +16,7 @@ const slides = [
       data-index={i}
     >
       <img src={s.image} alt="대치프라임" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/55"></div>
+      <div class="absolute inset-0 bg-black/40"></div>
       <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
         <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">DC PRIME ACADEMY</p>
         <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">대치프라임</h1>
@@ -29,61 +29,73 @@ const slides = [
     </div>
   ))}
 
-  <!-- 좌우 화살표 -->
-  <button id="hero-prev" class="absolute left-5 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="이전">
-    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-    </svg>
-  </button>
-  <button id="hero-next" class="absolute right-5 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="다음">
-    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-    </svg>
-  </button>
+  <!-- 좌우 화살표 (슬라이드 2장 이상일 때만) -->
+  {slides.length > 1 && (
+    <>
+      <button id="hero-prev" class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="이전">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button id="hero-next" class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="다음">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
 
-  <!-- 닷 네비게이션 -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
-    {slides.map((_, i) => (
-      <button
-        class={`dot w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-white scale-125' : 'bg-white/40'}`}
-        data-dot={i}
-        aria-label={`슬라이드 ${i + 1}`}
-      />
-    ))}
-  </div>
+      <!-- 닷 네비게이션 -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
+        {slides.map((_, i) => (
+          <button
+            class={`dot w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-white scale-125' : 'bg-white/40'}`}
+            data-dot={i}
+            aria-label={`슬라이드 ${i + 1}`}
+          />
+        ))}
+      </div>
+    </>
+  )}
 
 </section>
 
 <script>
-  const slides = document.querySelectorAll<HTMLElement>('.slide');
-  const dots = document.querySelectorAll<HTMLButtonElement>('.dot');
-  let current = 0;
-  let timer: ReturnType<typeof setInterval>;
+  function initHero() {
+    const slides = document.querySelectorAll<HTMLElement>('.slide');
+    const dots = document.querySelectorAll<HTMLButtonElement>('.dot');
 
-  function goTo(index: number) {
-    slides[current].classList.replace('opacity-100', 'opacity-0');
-    dots[current].classList.remove('bg-white', 'scale-125');
-    dots[current].classList.add('bg-white/40');
-    current = index;
-    slides[current].classList.replace('opacity-0', 'opacity-100');
-    dots[current].classList.add('bg-white', 'scale-125');
-    dots[current].classList.remove('bg-white/40');
-  }
+    // 슬라이드가 1장 이하면 캐러셀 동작 불필요
+    if (slides.length <= 1) return;
 
-  function next() { goTo((current + 1) % slides.length); }
-  function prev() { goTo((current - 1 + slides.length) % slides.length); }
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
 
-  function resetTimer() {
-    clearInterval(timer);
+    function goTo(index: number) {
+      slides[current].classList.replace('opacity-100', 'opacity-0');
+      dots[current]?.classList.remove('bg-white', 'scale-125');
+      dots[current]?.classList.add('bg-white/40');
+      current = index;
+      slides[current].classList.replace('opacity-0', 'opacity-100');
+      dots[current]?.classList.add('bg-white', 'scale-125');
+      dots[current]?.classList.remove('bg-white/40');
+    }
+
+    function next() { goTo((current + 1) % slides.length); }
+    function prev() { goTo((current - 1 + slides.length) % slides.length); }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(next, 5000);
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => { goTo(Number(dot.dataset.dot)); resetTimer(); });
+    });
+
+    document.getElementById('hero-prev')?.addEventListener('click', () => { prev(); resetTimer(); });
+    document.getElementById('hero-next')?.addEventListener('click', () => { next(); resetTimer(); });
+
     timer = setInterval(next, 5000);
   }
 
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => { goTo(Number(dot.dataset.dot)); resetTimer(); });
-  });
-
-  document.getElementById('hero-prev')?.addEventListener('click', () => { prev(); resetTimer(); });
-  document.getElementById('hero-next')?.addEventListener('click', () => { next(); resetTimer(); });
-
-  timer = setInterval(next, 5000);
+  document.addEventListener('astro:page-load', initHero);
 </script>
