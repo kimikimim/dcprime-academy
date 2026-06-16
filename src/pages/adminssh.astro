@@ -427,9 +427,19 @@ import Layout from '../components/layout/Layout.astro';
         ['결과 태그', r => r.result_tag],
       ],
     },
-    // 향후 추가 예시:
-    // { key:'seminar', label:'설명회 신청', table:'seminar_bookings', order:'created_at',
-    //   columns:[ ['신청일시', r=>fmtDateTime(r.created_at)], ['이름', r=>r.name], ['연락처', r=>r.phone], ... ] },
+    {
+      key: 'seminar', label: '설명회 신청', table: 'seminar_bookings', order: 'created_at',
+      columns: [
+        ['신청일시', r => fmtDateTime(r.created_at)],
+        ['캠퍼스', r => r.campus],
+        ['이름', r => r.name],
+        ['학년', r => r.grade],
+        ['연락처', r => r.phone],
+        ['문의사항', r => r.memo],
+        ['개인정보 동의', r => (r.agree_privacy ? 'Y' : 'N')],
+        ['상태', r => r.status],
+      ],
+    },
   ];
   const ABOUT_SUBS = ['greeting', 'history', 'features'];
   const CUR_SUBS = ['elementary', 'middle', 'high'];
