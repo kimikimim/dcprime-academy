@@ -24,7 +24,12 @@ import Layout from '../components/layout/Layout.astro';
 
       <!-- 메인 탭 -->
       <div class="bg-white border-b border-gray-200 px-6">
-        <div class="flex gap-6 overflow-x-auto scrollbar-hide">
+        <div class="flex gap-6 overflow-x-auto scrollbar-hide items-center">
+          <button id="download-btn" class="py-3 text-sm font-semibold text-brand whitespace-nowrap flex items-center gap-1.5 hover:opacity-80 transition-opacity">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+            신청 목록 다운받기
+          </button>
+          <span class="w-px h-4 bg-gray-200 flex-shrink-0"></span>
           <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">공지사항 관리</button>
           <button data-tab="inquiries"  class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">상담 신청 목록</button>
           <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">학원소개</button>
@@ -304,11 +309,68 @@ import Layout from '../components/layout/Layout.astro';
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
+<!-- 신청 목록 다운로드 모달 -->
+<div id="download-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
+    <h3 class="text-lg font-bold text-gray-900 mb-1">신청 목록 다운로드</h3>
+    <p class="text-sm text-gray-500 mb-5">다운로드할 프로그램을 선택하세요. (엑셀 .xlsx)</p>
+    <div id="download-source-list" class="space-y-2"></div>
+    <button id="download-close" class="mt-5 w-full py-2.5 rounded-lg bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors">닫기</button>
+  </div>
+</div>
+
+<!-- SheetJS (엑셀 생성, 관리자 페이지에서만 로드) -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" is:inline></script>
+
 <script>
   import { supabase } from '../lib/supabase';
 
   const SESSION_KEY = 'dcprime_admin';
   const ALL_TABS = ['notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results'];
+
+  // ── 신청 목록 다운로드 소스 레지스트리 ──
+  // 새 프로그램 추가 시 아래 배열에 1개 항목만 추가하면 됩니다.
+  //   table: Supabase 테이블명 / columns: [엑셀헤더, 행→값 함수]
+  const fmtDateTime = (v: string) => {
+    if (!v) return '';
+    const d = new Date(v);
+    const p = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  };
+
+  const DOWNLOAD_SOURCES: {
+    key: string; label: string; table: string; order: string;
+    columns: [string, (r: any) => any][];
+  }[] = [
+    {
+      key: 'high3', label: '고3 상담 신청', table: 'high3_consults', order: 'created_at',
+      columns: [
+        ['신청일시', r => fmtDateTime(r.created_at)],
+        ['이름', r => r.name],
+        ['연락처', r => r.phone],
+        ['학교/유형', r => r.school],
+        ['관심 프로그램', r => r.interest_program],
+        ['진단 결과', r => r.diagnostic_result],
+        ['문의사항', r => r.memo],
+        ['개인정보 동의', r => (r.agree_privacy ? 'Y' : 'N')],
+        ['상태', r => r.status],
+      ],
+    },
+    {
+      key: 'ques', label: '대입 전략 진단', table: 'diagnosis_logs', order: 'created_at',
+      columns: [
+        ['일시', r => fmtDateTime(r.created_at)],
+        ['내신등급', r => r.path?.answers?.gpa],
+        ['모의등급', r => r.path?.answers?.mock],
+        ['생기부', r => r.path?.answers?.record],
+        ['약술과목', r => r.path?.answers?.yaksul_subject],
+        ['결과 태그', r => r.result_tag],
+      ],
+    },
+    // 향후 추가 예시:
+    // { key:'seminar', label:'설명회 신청', table:'seminar_bookings', order:'created_at',
+    //   columns:[ ['신청일시', r=>fmtDateTime(r.created_at)], ['이름', r=>r.name], ['연락처', r=>r.phone], ... ] },
+  ];
   const ABOUT_SUBS = ['greeting', 'history', 'features'];
   const CUR_SUBS = ['elementary', 'middle', 'high'];
 
@@ -985,6 +1047,69 @@ import Layout from '../components/layout/Layout.astro';
     (document.getElementById('inq-filter-highvalue') as HTMLInputElement).checked = false;
     (document.getElementById('inq-filter-search') as HTMLInputElement).value = '';
     renderInquiries();
+  });
+
+  // ── 신청 목록 다운로드 ──
+  function openDownloadModal() {
+    const list = document.getElementById('download-source-list');
+    if (list) {
+      list.innerHTML = DOWNLOAD_SOURCES.map(s => `
+        <button data-dl="${s.key}" class="dl-source w-full flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 hover:border-brand hover:bg-brand-light text-left transition-colors">
+          <span class="text-sm font-semibold text-gray-800">${s.label}</span>
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+        </button>`).join('');
+    }
+    const modal = document.getElementById('download-modal');
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+  }
+
+  function closeDownloadModal() {
+    const modal = document.getElementById('download-modal');
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+  }
+
+  async function downloadSource(key: string, btn?: HTMLButtonElement) {
+    const source = DOWNLOAD_SOURCES.find(s => s.key === key);
+    if (!source) return;
+    const XLSX = (window as any).XLSX;
+    if (!XLSX) { alert('엑셀 라이브러리를 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.'); return; }
+
+    const orig = btn?.innerHTML;
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="text-sm text-gray-400">불러오는 중...</span>'; }
+
+    const { data, error } = await supabase
+      .from(source.table)
+      .select('*')
+      .order(source.order, { ascending: false });
+
+    if (btn && orig) { btn.disabled = false; btn.innerHTML = orig; }
+
+    if (error) { alert('데이터를 불러오지 못했습니다: ' + error.message); return; }
+    if (!data || data.length === 0) { alert(`'${source.label}' 신청 내역이 아직 없습니다.`); return; }
+
+    const rows = data.map(r => {
+      const o: Record<string, any> = {};
+      source.columns.forEach(([header, get]) => { o[header] = get(r) ?? ''; });
+      return o;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows, { header: source.columns.map(c => c[0]) });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, source.label.slice(0, 28));
+    const today = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(wb, `${source.label}_${today}.xlsx`);
+  }
+
+  document.getElementById('download-btn')?.addEventListener('click', openDownloadModal);
+  document.getElementById('download-close')?.addEventListener('click', closeDownloadModal);
+  document.getElementById('download-modal')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('download-modal')) closeDownloadModal();
+  });
+  document.getElementById('download-source-list')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.dl-source');
+    if (btn) downloadSource(btn.dataset.dl!, btn);
   });
 
   // ── 탭 이벤트 ──

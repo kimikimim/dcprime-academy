@@ -1,9 +1,21 @@
 ---
+// 슬라이드마다 사진·문구·버튼(글씨/링크)을 따로 지정할 수 있습니다.
+// eyebrow / title 은 생략하면 기본값(DC PRIME ACADEMY / 대치프라임)이 들어갑니다.
 const slides = [
-  { image: '/images/hero-bg.jpg', subtitle: '교육과 미래를 디자인하는' },
-  // 이미지 추가 시 아래 주석 해제
-  // { image: '/images/hero-bg-2.jpg', subtitle: '최고의 강사진과 함께하는' },
-  // { image: '/images/hero-bg-3.jpg', subtitle: '능곡관 · 장곡관' },
+  {
+    image: '/images/hero-bg.jpg',
+    subtitle: '교육과 미래를 디자인하는',
+    ctaText: '상담 신청',
+    ctaLink: '/inquiry',
+  },
+  {
+    image: '/images/hero-seminar.jpg',
+    eyebrow: '고3 마지막 골든타임',
+    title: '입시는 끝까지',
+    subtitle: '나의 입시 방향 1분 진단 + 7월 입시 로드맵',
+    ctaText: '고3 입시 진단하기',
+    ctaLink: '/high3',
+  },
 ];
 ---
 
@@ -18,12 +30,12 @@ const slides = [
       <img src={s.image} alt="대치프라임" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/40"></div>
       <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-        <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">DC PRIME ACADEMY</p>
-        <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">대치프라임</h1>
+        <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">{s.eyebrow ?? 'DC PRIME ACADEMY'}</p>
+        <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">{s.title ?? '대치프라임'}</h1>
         <p class="text-base md:text-xl text-gray-200 mb-8">{s.subtitle}</p>
-        <a href="/inquiry"
+        <a href={s.ctaLink ?? '/inquiry'}
           class="inline-block border-2 border-white text-white text-sm md:text-base font-semibold px-8 md:px-10 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300">
-          상담 신청
+          {s.ctaText ?? '상담 신청'}
         </a>
       </div>
     </div>
