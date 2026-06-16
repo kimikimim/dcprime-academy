@@ -1,9 +1,11 @@
 ---
-// 슬라이드마다 사진·문구·버튼(글씨/링크)을 따로 지정할 수 있습니다.
-// eyebrow / title 은 생략하면 기본값(DC PRIME ACADEMY / 대치프라임)이 들어갑니다.
+// 기본 슬라이드 (관리자에서 등록한 게 없을 때의 fallback).
+// 빌드에 박혀서 즉시 렌더 → 첫 화면 깜빡임 방지. DB에 슬라이드가 있으면 그걸로 교체됨.
 const slides = [
   {
     image: '/images/hero-bg.jpg',
+    eyebrow: 'DC PRIME ACADEMY',
+    title: '대치프라임',
     subtitle: '교육과 미래를 디자인하는',
     ctaText: '상담 신청',
     ctaLink: '/inquiry',
@@ -21,65 +23,108 @@ const slides = [
 
 <section class="relative h-screen overflow-hidden">
 
-  <!-- 슬라이드 -->
-  {slides.map((s, i) => (
-    <div
-      class={`slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
-      data-index={i}
-    >
-      <img src={s.image} alt="대치프라임" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-        <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">{s.eyebrow ?? 'DC PRIME ACADEMY'}</p>
-        <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">{s.title ?? '대치프라임'}</h1>
-        <p class="text-base md:text-xl text-gray-200 mb-8">{s.subtitle}</p>
-        <a href={s.ctaLink ?? '/inquiry'}
-          class="inline-block border-2 border-white text-white text-sm md:text-base font-semibold px-8 md:px-10 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300">
-          {s.ctaText ?? '상담 신청'}
-        </a>
+  <!-- 슬라이드 (기본값으로 즉시 렌더, JS가 DB값으로 교체) -->
+  <div id="hero-slides">
+    {slides.map((s, i) => (
+      <div
+        class={`slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+        data-index={i}
+      >
+        <img src={s.image} alt="대치프라임" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
+          <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">{s.eyebrow}</p>
+          <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">{s.title}</h1>
+          <p class="text-base md:text-xl text-gray-200 mb-8">{s.subtitle}</p>
+          <a href={s.ctaLink}
+            class="inline-block border-2 border-white text-white text-sm md:text-base font-semibold px-8 md:px-10 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300">
+            {s.ctaText}
+          </a>
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
 
-  <!-- 좌우 화살표 (슬라이드 2장 이상일 때만) -->
-  {slides.length > 1 && (
-    <>
-      <button id="hero-prev" class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="이전">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      <button id="hero-next" class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center transition-colors" aria-label="다음">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
+  <!-- 좌우 화살표 (슬라이드 2장 이상일 때만 JS가 표시) -->
+  <button id="hero-prev" class="hidden absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 items-center justify-center transition-colors" aria-label="이전">
+    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+  </button>
+  <button id="hero-next" class="hidden absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 hover:bg-black/60 items-center justify-center transition-colors" aria-label="다음">
+    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
 
-      <!-- 닷 네비게이션 -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
-        {slides.map((_, i) => (
-          <button
-            class={`dot w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-white scale-125' : 'bg-white/40'}`}
-            data-dot={i}
-            aria-label={`슬라이드 ${i + 1}`}
-          />
-        ))}
-      </div>
-    </>
-  )}
+  <!-- 닷 네비게이션 (JS가 생성) -->
+  <div id="hero-dots" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10"></div>
+
+  <!-- 기본 슬라이드 데이터 (DB 없을 때 fallback) -->
+  <script type="application/json" id="hero-defaults" set:html={JSON.stringify(slides)}></script>
 
 </section>
 
 <script>
-  function initHero() {
+  import { supabase } from '../../lib/supabase';
+
+  type Slide = { image: string; eyebrow: string; title: string; subtitle: string; ctaText: string; ctaLink: string; };
+
+  let carouselTimer: ReturnType<typeof setInterval> | undefined;
+
+  const esc = (s: string) =>
+    String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  function slideMarkup(s: Slide, i: number) {
+    return `
+      <div class="slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}" data-index="${i}">
+        <img src="${esc(s.image)}" alt="대치프라임" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
+          <p class="text-sm md:text-lg tracking-widest mb-4 text-gray-300">${esc(s.eyebrow)}</p>
+          <h1 class="text-3xl md:text-6xl font-bold mb-4 leading-tight">${esc(s.title)}</h1>
+          <p class="text-base md:text-xl text-gray-200 mb-8">${esc(s.subtitle)}</p>
+          <a href="${esc(s.ctaLink)}" class="inline-block border-2 border-white text-white text-sm md:text-base font-semibold px-8 md:px-10 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300">${esc(s.ctaText)}</a>
+        </div>
+      </div>`;
+  }
+
+  function renderSlides(slides: Slide[]) {
+    const cont = document.getElementById('hero-slides');
+    if (cont) cont.innerHTML = slides.map((s, i) => slideMarkup(s, i)).join('');
+
+    const dotsWrap = document.getElementById('hero-dots');
+    if (dotsWrap) {
+      dotsWrap.innerHTML = slides.length > 1
+        ? slides.map((_, i) => `<button class="dot w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-white scale-125' : 'bg-white/40'}" data-dot="${i}" aria-label="슬라이드 ${i + 1}"></button>`).join('')
+        : '';
+    }
+
+    const showNav = slides.length > 1;
+    document.getElementById('hero-prev')?.classList.toggle('hidden', !showNav);
+    document.getElementById('hero-prev')?.classList.toggle('flex', showNav);
+    document.getElementById('hero-next')?.classList.toggle('hidden', !showNav);
+    document.getElementById('hero-next')?.classList.toggle('flex', showNav);
+  }
+
+  function mapRow(r: any): Slide {
+    return {
+      image: r.image_url,
+      eyebrow: r.eyebrow || 'DC PRIME ACADEMY',
+      title: r.title || '대치프라임',
+      subtitle: r.subtitle || '',
+      ctaText: r.cta_text || '상담 신청',
+      ctaLink: r.cta_link || '/inquiry',
+    };
+  }
+
+  function initCarousel() {
     const slides = document.querySelectorAll<HTMLElement>('.slide');
     const dots = document.querySelectorAll<HTMLButtonElement>('.dot');
-
-    // 슬라이드가 1장 이하면 캐러셀 동작 불필요
+    clearInterval(carouselTimer);
     if (slides.length <= 1) return;
 
     let current = 0;
-    let timer: ReturnType<typeof setInterval>;
 
     function goTo(index: number) {
       slides[current].classList.replace('opacity-100', 'opacity-0');
@@ -90,24 +135,40 @@ const slides = [
       dots[current]?.classList.add('bg-white', 'scale-125');
       dots[current]?.classList.remove('bg-white/40');
     }
+    const next = () => goTo((current + 1) % slides.length);
+    const prev = () => goTo((current - 1 + slides.length) % slides.length);
+    const resetTimer = () => { clearInterval(carouselTimer); carouselTimer = setInterval(next, 5000); };
 
-    function next() { goTo((current + 1) % slides.length); }
-    function prev() { goTo((current - 1 + slides.length) % slides.length); }
+    dots.forEach(dot => dot.addEventListener('click', () => { goTo(Number(dot.dataset.dot)); resetTimer(); }));
+    const prevBtn = document.getElementById('hero-prev');
+    const nextBtn = document.getElementById('hero-next');
+    if (prevBtn) prevBtn.onclick = () => { prev(); resetTimer(); };
+    if (nextBtn) nextBtn.onclick = () => { next(); resetTimer(); };
 
-    function resetTimer() {
-      clearInterval(timer);
-      timer = setInterval(next, 5000);
-    }
-
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => { goTo(Number(dot.dataset.dot)); resetTimer(); });
-    });
-
-    document.getElementById('hero-prev')?.addEventListener('click', () => { prev(); resetTimer(); });
-    document.getElementById('hero-next')?.addEventListener('click', () => { next(); resetTimer(); });
-
-    timer = setInterval(next, 5000);
+    carouselTimer = setInterval(next, 5000);
   }
 
-  document.addEventListener('astro:page-load', initHero);
+  async function loadHero() {
+    if (!document.getElementById('hero-slides')) return;
+
+    let slides: Slide[] | null = null;
+    try {
+      const { data } = await supabase
+        .from('hero_slides')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+      if (data && data.length) slides = data.map(mapRow);
+    } catch { /* DB 실패 시 기본값 유지 */ }
+
+    if (!slides) {
+      const el = document.getElementById('hero-defaults');
+      try { slides = el ? JSON.parse(el.textContent || '[]') : []; } catch { slides = []; }
+    }
+
+    if (slides && slides.length) renderSlides(slides);
+    initCarousel();
+  }
+
+  document.addEventListener('astro:page-load', loadHero);
 </script>

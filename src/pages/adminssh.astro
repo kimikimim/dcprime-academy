@@ -30,6 +30,7 @@ import Layout from '../components/layout/Layout.astro';
             신청 목록 다운받기
           </button>
           <span class="w-px h-4 bg-gray-200 flex-shrink-0"></span>
+          <button data-tab="hero"       class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">메인페이지 관리</button>
           <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">공지사항 관리</button>
           <button data-tab="inquiries"  class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">상담 신청 목록</button>
           <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">학원소개</button>
@@ -40,6 +41,65 @@ import Layout from '../components/layout/Layout.astro';
       </div>
 
       <div class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- ── 메인페이지(히어로) 관리 탭 ── -->
+        <div id="panel-hero" class="hidden">
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 id="hero-form-title" class="text-base font-bold text-gray-900 mb-1">슬라이드 추가</h2>
+            <p class="text-xs text-gray-400 mb-4">메인 화면 상단 배너입니다. 순서가 작을수록 먼저 나오고, 끄면(비활성) 화면에서 숨겨집니다.</p>
+            <input type="hidden" id="hero-edit-id" />
+            <div class="mb-3">
+              <p class="text-xs text-gray-500 mb-2">배너 이미지 (가로로 넓은 사진 권장)</p>
+              <input type="file" id="hero-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
+              <img id="hero-image-preview" class="hidden mt-2 w-full max-w-xs aspect-video object-cover rounded-lg border border-gray-200" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">윗줄 (작은 글씨)</label>
+                <input id="hero-eyebrow-input" type="text" placeholder="DC PRIME ACADEMY" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">제목 (큰 글씨)</label>
+                <input id="hero-title-input" type="text" placeholder="대치프라임" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="block text-xs text-gray-500 mb-1">부제 (가운데 한 줄)</label>
+              <input id="hero-subtitle-input" type="text" placeholder="교육과 미래를 디자인하는" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">버튼 글씨</label>
+                <input id="hero-cta-text-input" type="text" placeholder="상담 신청" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">버튼 링크 (예: /inquiry, /high3)</label>
+                <input id="hero-cta-link-input" type="text" placeholder="/inquiry" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">순서 (숫자)</label>
+                <input id="hero-sort-input" type="number" value="0" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+              <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer mt-6">
+                <input type="checkbox" id="hero-active-input" class="accent-brand" checked /> 활성 (화면에 표시)
+              </label>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="submit-hero-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+              <button id="cancel-hero-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
+              <p id="hero-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-4">슬라이드 목록</h2>
+            <div id="hero-list" class="divide-y divide-gray-100">
+              <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+            </div>
+          </div>
+        </div>
 
         <!-- ── 공지사항 탭 ── -->
         <div id="panel-notices">
@@ -326,7 +386,7 @@ import Layout from '../components/layout/Layout.astro';
   import { supabase } from '../lib/supabase';
 
   const SESSION_KEY = 'dcprime_admin';
-  const ALL_TABS = ['notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results'];
+  const ALL_TABS = ['hero', 'notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results'];
 
   // ── 신청 목록 다운로드 소스 레지스트리 ──
   // 새 프로그램 추가 시 아래 배열에 1개 항목만 추가하면 됩니다.
@@ -489,6 +549,7 @@ import Layout from '../components/layout/Layout.astro';
       tabInited.add(tab);
       if (tab === 'about')      initAboutTab();
       if (tab === 'curriculum') initCurriculumTab();
+      if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
     }
@@ -560,6 +621,162 @@ import Layout from '../components/layout/Layout.astro';
     document.getElementById('submit-faculty-btn')!.textContent = '추가';
     document.getElementById('cancel-faculty-btn')!.classList.add('hidden');
   }
+
+  // ── 메인페이지(히어로) 관리 ──
+  let heroEditId: string | null = null;
+
+  function resetHeroForm() {
+    heroEditId = null;
+    (document.getElementById('hero-edit-id') as HTMLInputElement).value = '';
+    (document.getElementById('hero-eyebrow-input') as HTMLInputElement).value = '';
+    (document.getElementById('hero-title-input') as HTMLInputElement).value = '';
+    (document.getElementById('hero-subtitle-input') as HTMLInputElement).value = '';
+    (document.getElementById('hero-cta-text-input') as HTMLInputElement).value = '';
+    (document.getElementById('hero-cta-link-input') as HTMLInputElement).value = '';
+    (document.getElementById('hero-sort-input') as HTMLInputElement).value = '0';
+    (document.getElementById('hero-active-input') as HTMLInputElement).checked = true;
+    (document.getElementById('hero-image-input') as HTMLInputElement).value = '';
+    const preview = document.getElementById('hero-image-preview') as HTMLImageElement;
+    preview.src = ''; preview.classList.add('hidden');
+    document.getElementById('hero-form-title')!.textContent = '슬라이드 추가';
+    document.getElementById('submit-hero-btn')!.textContent = '추가';
+    document.getElementById('cancel-hero-btn')!.classList.add('hidden');
+  }
+
+  async function loadHeroSlides() {
+    const container = document.getElementById('hero-list')!;
+    const { data, error } = await supabase.from('hero_slides').select('*').order('sort_order').order('created_at');
+    if (error) {
+      container.innerHTML = `<p class="text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
+      return;
+    }
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">등록된 슬라이드가 없습니다. 위에서 추가하세요. (없으면 기본 배너가 표시됩니다)</p>';
+      return;
+    }
+    container.innerHTML = data.map(h => `
+      <div class="py-3 flex items-center gap-4">
+        <img src="${escHtml(h.image_url || '')}" alt="배너" class="w-24 h-14 rounded-lg object-cover bg-gray-100 flex-shrink-0" onerror="this.style.opacity='0.2'" />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">
+            ${escHtml(h.title || '대치프라임')}
+            ${h.is_active ? '' : '<span class="ml-1 text-xs text-gray-400 font-normal">(숨김)</span>'}
+          </p>
+          <p class="text-xs text-gray-400 truncate">${escHtml(h.subtitle || '')} · 버튼: ${escHtml(h.cta_text || '')} → ${escHtml(h.cta_link || '')} · 순서 ${h.sort_order}</p>
+        </div>
+        <div class="flex gap-3 flex-shrink-0">
+          <button data-id="${h.id}"
+            data-image="${escAttr(h.image_url ?? '')}" data-eyebrow="${escAttr(h.eyebrow ?? '')}"
+            data-title="${escAttr(h.title ?? '')}" data-subtitle="${escAttr(h.subtitle ?? '')}"
+            data-ctatext="${escAttr(h.cta_text ?? '')}" data-ctalink="${escAttr(h.cta_link ?? '')}"
+            data-sort="${h.sort_order}" data-active="${h.is_active ? '1' : '0'}"
+            class="edit-hero-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+          <button data-id="${h.id}" class="del-hero-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll<HTMLButtonElement>('.edit-hero-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        heroEditId = btn.dataset.id!;
+        (document.getElementById('hero-eyebrow-input') as HTMLInputElement).value = btn.dataset.eyebrow ?? '';
+        (document.getElementById('hero-title-input') as HTMLInputElement).value = btn.dataset.title ?? '';
+        (document.getElementById('hero-subtitle-input') as HTMLInputElement).value = btn.dataset.subtitle ?? '';
+        (document.getElementById('hero-cta-text-input') as HTMLInputElement).value = btn.dataset.ctatext ?? '';
+        (document.getElementById('hero-cta-link-input') as HTMLInputElement).value = btn.dataset.ctalink ?? '';
+        (document.getElementById('hero-sort-input') as HTMLInputElement).value = btn.dataset.sort ?? '0';
+        (document.getElementById('hero-active-input') as HTMLInputElement).checked = btn.dataset.active === '1';
+        const preview = document.getElementById('hero-image-preview') as HTMLImageElement;
+        if (btn.dataset.image) { preview.src = btn.dataset.image; preview.classList.remove('hidden'); }
+        document.getElementById('hero-form-title')!.textContent = '슬라이드 수정';
+        document.getElementById('submit-hero-btn')!.textContent = '수정 완료';
+        document.getElementById('cancel-hero-btn')!.classList.remove('hidden');
+        document.getElementById('hero-form-title')!.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>('.del-hero-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 슬라이드를 삭제할까요?')) return;
+        await supabase.from('hero_slides').delete().eq('id', btn.dataset.id!);
+        loadHeroSlides();
+      });
+    });
+  }
+
+  document.getElementById('hero-image-input')?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const preview = document.getElementById('hero-image-preview') as HTMLImageElement;
+      preview.src = ev.target?.result as string;
+      preview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('submit-hero-btn')?.addEventListener('click', async () => {
+    const eyebrow  = (document.getElementById('hero-eyebrow-input') as HTMLInputElement).value.trim();
+    const title    = (document.getElementById('hero-title-input') as HTMLInputElement).value.trim();
+    const subtitle = (document.getElementById('hero-subtitle-input') as HTMLInputElement).value.trim();
+    const ctaText  = (document.getElementById('hero-cta-text-input') as HTMLInputElement).value.trim();
+    const ctaLink  = (document.getElementById('hero-cta-link-input') as HTMLInputElement).value.trim();
+    const sortOrder = parseInt((document.getElementById('hero-sort-input') as HTMLInputElement).value, 10) || 0;
+    const isActive = (document.getElementById('hero-active-input') as HTMLInputElement).checked;
+    const fileInput = document.getElementById('hero-image-input') as HTMLInputElement;
+    const file = fileInput.files?.[0];
+    const msg = document.getElementById('hero-msg')!;
+
+    if (!heroEditId && !file) {
+      msg.textContent = '배너 이미지를 선택하세요.'; msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+      return;
+    }
+
+    const btn = document.getElementById('submit-hero-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '처리 중...';
+
+    let image_url: string | undefined;
+    if (file) {
+      const ext = file.name.split('.').pop();
+      const path = `hero-${Date.now()}.${ext}`;
+      const { data: up, error: upErr } = await supabase.storage.from('hero-images').upload(path, file, { upsert: true });
+      if (upErr) {
+        msg.textContent = '이미지 업로드 실패: ' + upErr.message; msg.classList.remove('hidden');
+        btn.disabled = false; btn.textContent = heroEditId ? '수정 완료' : '추가';
+        return;
+      }
+      if (up) {
+        const { data: urlData } = supabase.storage.from('hero-images').getPublicUrl(path);
+        image_url = urlData.publicUrl;
+      }
+    }
+
+    const payload: any = {
+      eyebrow: eyebrow || null, title: title || null, subtitle: subtitle || null,
+      cta_text: ctaText || null, cta_link: ctaLink || null,
+      sort_order: sortOrder, is_active: isActive,
+    };
+    if (image_url) payload.image_url = image_url;
+
+    let error;
+    if (heroEditId) {
+      ({ error } = await supabase.from('hero_slides').update(payload).eq('id', heroEditId));
+    } else {
+      ({ error } = await supabase.from('hero_slides').insert(payload));
+    }
+
+    btn.disabled = false;
+    btn.textContent = heroEditId ? '수정 완료' : '추가';
+
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else { msg.textContent = heroEditId ? '수정되었습니다.' : '추가되었습니다.'; resetHeroForm(); loadHeroSlides(); }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
+  document.getElementById('cancel-hero-btn')?.addEventListener('click', resetHeroForm);
 
   async function loadFaculty() {
     const container = document.getElementById('faculty-list')!;
