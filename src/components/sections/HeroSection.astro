@@ -35,7 +35,7 @@ const slides = [
   <div id="hero-slides">
     {slides.map((s, i) => (
       <div
-        class={`slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+        class={`slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         data-index={i}
       >
         <img src={s.image} alt="대치프라임" class="w-full h-full object-cover" />
@@ -85,7 +85,7 @@ const slides = [
 
   function slideMarkup(s: Slide, i: number) {
     return `
-      <div class="slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0'}" data-index="${i}">
+      <div class="slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}" data-index="${i}">
         <img src="${esc(s.image)}" alt="대치프라임" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
@@ -136,10 +136,14 @@ const slides = [
 
     function goTo(index: number) {
       slides[current].classList.replace('opacity-100', 'opacity-0');
+      slides[current].classList.add('pointer-events-none');
+      slides[current].classList.remove('pointer-events-auto');
       dots[current]?.classList.remove('bg-white', 'scale-125');
       dots[current]?.classList.add('bg-white/40');
       current = index;
       slides[current].classList.replace('opacity-0', 'opacity-100');
+      slides[current].classList.add('pointer-events-auto');
+      slides[current].classList.remove('pointer-events-none');
       dots[current]?.classList.add('bg-white', 'scale-125');
       dots[current]?.classList.remove('bg-white/40');
     }
