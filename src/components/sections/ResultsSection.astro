@@ -20,9 +20,9 @@ import SectionTitle from '../ui/SectionTitle.astro';
         <p class="text-xs text-gray-400 mt-1">외고·자사고·특목고</p>
       </div>
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
-        <p class="text-2xl md:text-3xl font-bold text-brand mb-1">-점</p>
-        <p class="text-sm font-semibold text-gray-800">평균 성적 향상</p>
-        <p class="text-xs text-gray-400 mt-1">6개월 재원 기준</p>
+        <p id="stat-total" class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
+        <p class="text-sm font-semibold text-gray-800">누적 대입 합격</p>
+        <p class="text-xs text-gray-400 mt-1">개원 이래 전체 기준</p>
       </div>
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
         <p class="text-2xl md:text-3xl font-bold text-brand mb-1">98%</p>
@@ -44,6 +44,7 @@ import SectionTitle from '../ui/SectionTitle.astro';
   async function loadStats() {
     const daipEl = document.getElementById('stat-daip');
     const goipEl = document.getElementById('stat-goip');
+    const totalEl = document.getElementById('stat-total');
     const daipLabelEl = document.getElementById('stat-daip-label');
     const goipLabelEl = document.getElementById('stat-goip-label');
     if (!daipEl || !goipEl) return;
@@ -58,20 +59,29 @@ import SectionTitle from '../ui/SectionTitle.astro';
     if (!years || years.length === 0) return;
     const latestYear = years[0].year;
 
+    // 최신 연도 합격 수 (대입·고입)
     const { data } = await supabase
       .from('results')
       .select('category')
       .eq('year', latestYear);
 
-    if (!data) return;
+    if (data) {
+      const daip = data.filter(r => r.category === '대입').length;
+      const goip = data.filter(r => r.category === '고입').length;
+      if (daip > 0) daipEl.textContent = `${daip}명`;
+      if (goip > 0) goipEl.textContent = `${goip}명`;
+      if (daipLabelEl) daipLabelEl.textContent = `${latestYear} 대입 합격`;
+      if (goipLabelEl) goipLabelEl.textContent = `${latestYear} 고입 합격`;
+    }
 
-    const daip = data.filter(r => r.category === '대입').length;
-    const goip = data.filter(r => r.category === '고입').length;
-
-    if (daip > 0) daipEl.textContent = `${daip}명`;
-    if (goip > 0) goipEl.textContent = `${goip}명`;
-    if (daipLabelEl) daipLabelEl.textContent = `${latestYear} 대입 합격`;
-    if (goipLabelEl) goipLabelEl.textContent = `${latestYear} 고입 합격`;
+    // 누적 대입 합격자 수 (전체 연도)
+    if (totalEl) {
+      const { count } = await supabase
+        .from('results')
+        .select('*', { count: 'exact', head: true })
+        .eq('category', '대입');
+      if (count != null && count > 0) totalEl.textContent = `${count}명`;
+    }
   }
 
   document.addEventListener('astro:page-load', loadStats);
