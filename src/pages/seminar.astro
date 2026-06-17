@@ -1,237 +1,415 @@
 ---
-import '../styles/global.css';
-const pageTitle = "대치프라임 | 여름방학 전략 설명회 (초4~중2)";
+const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
 ---
 
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
-    <meta name="description" content="초4~중2 대상 대치프라임 여름방학 전략 설명회. 능곡관 7/3 · 장곡관 7/10, 선착순 마감." />
+    <meta name="description" content="초4~중2 대상 대치프라임 여름방학 전략 설명회. 능곡관 7/10 · 장곡관 7/17, 선착순 마감." />
     <link rel="icon" type="image/png" href="/favicon-circle.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  </head>
-  <body class="bg-gray-50 text-gray-900 font-sans break-keep relative" style="word-break: keep-all;">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com" is:inline></script>
+    <!-- 폰트: 프리텐다드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style is:inline>
+        body { font-family: 'Pretendard', sans-serif; }
+        .bg-hero { background-color: #0f172a; }
+        .text-accent { color: #f59e0b; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 tracking-tight antialiased">
 
-    <header class="bg-slate-900 text-white py-6">
-      <div class="max-w-4xl mx-auto px-6 flex justify-between items-center">
-        <a href="/" class="text-xl font-bold tracking-tight">대치프라임학원</a>
-        <span class="text-sm text-slate-300">입시와 대치</span>
-      </div>
+    <!-- 상단 헤더 -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 id="logo-home" class="text-2xl font-extrabold text-blue-900 tracking-tighter cursor-pointer">대치프라임학원</h1>
+            <a href="#reservation" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm hover:shadow-md active:scale-95">예약하기</a>
+        </div>
     </header>
 
-    <section class="bg-slate-900 text-white py-20">
-      <div class="max-w-4xl mx-auto px-6 text-center">
-        <span class="inline-block py-1 px-3 rounded-full bg-blue-600 text-sm font-semibold mb-4">
-          초4 ~ 중2 대상
-        </span>
-        <h2 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
-          초4부터 중2,<br />골든타임을 지배하다
-        </h2>
-        <p class="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
-          밤새워 문제집만 푸는 시대는 끝났습니다.<br />
-          특목·자사고부터 일반고 최상위권 진학까지, 입시를 관통하는 진짜 체력은 올바른 공부 습관에서 완성됩니다.
-        </p>
-      </div>
+    <!-- 1. Hero Section -->
+    <section class="bg-hero text-white text-center py-24 px-4 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-10">
+            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full border-4 border-blue-400"></div>
+            <div class="absolute top-1/2 -right-12 w-64 h-64 rounded-full border-4 border-yellow-400"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto relative z-10 animate-fade-in">
+            <span class="inline-block py-1.5 px-4 rounded-full bg-blue-900/50 text-blue-200 text-sm font-semibold mb-6 border border-blue-700/50 backdrop-blur-sm shadow-inner">
+                초4 ~ 중2 학부모 초청 설명회
+            </span>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight break-keep">
+                여름학기 개강 설명회,<br>
+                <span class="text-accent">여름방학이 '진짜 상위권'을 만듭니다.</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-10 break-keep font-light">
+                변화하는 교육환경 속에서 흔들리지 않는 학습 로드맵을 제시합니다.
+            </p>
+            <a href="#reservation" class="inline-flex items-center justify-center bg-yellow-500 hover:bg-yellow-400 text-gray-900 text-lg font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]">
+                설명회 사전 예약하기
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+        </div>
     </section>
 
-    <section class="py-16 -mt-10">
-      <div class="max-w-4xl mx-auto px-6 grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-600">
-          <h3 class="text-2xl font-bold text-slate-900 mb-2">능곡관 설명회</h3>
-          <p class="text-blue-600 font-semibold text-lg mb-4">7월 3일 (금) PM 7:00</p>
-          <p class="text-gray-600 text-sm">
-            능곡 캠퍼스 대강의실<br />* 한정 인원 선착순 마감
-          </p>
-        </div>
-        <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-slate-600">
-          <h3 class="text-2xl font-bold text-slate-900 mb-2">장곡관 설명회</h3>
-          <p class="text-slate-700 font-semibold text-lg mb-4">7월 10일 (금) PM 7:00</p>
-          <p class="text-gray-600 text-sm">
-            장곡 캠퍼스 대강의실<br />* 한정 인원 선착순 마감
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-white">
-      <div class="max-w-4xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center mb-12">설명회 핵심 내용</h2>
-
-        <div class="space-y-8">
-          <div class="flex flex-col md:flex-row gap-6 items-start">
-            <div class="flex-shrink-0 bg-slate-100 text-slate-900 font-bold text-xl w-12 h-12 flex items-center justify-center rounded-full">1</div>
-            <div>
-              <h3 class="text-xl font-bold mb-2">특목자사 ~ 일반고 진학 로드맵</h3>
-              <p class="text-gray-600">
-                고교학점제 시대, 중등 저학년이 반드시 세워야 할 입시의 뼈대. 맹목적인 선행이 아닌 목표 지향적 학습 방향을 제시합니다.
-              </p>
+    <!-- 2. Hook / 문제 제기 -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-2xl md:text-4xl font-bold text-center mb-12 text-gray-900 break-keep leading-snug">
+                학원에 오래 앉아있는데,<br class="hidden md:block">왜 우리 아이 성적은 제자리일까요?
+            </h3>
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="text-5xl mb-6">📱</div>
+                    <p class="font-semibold text-gray-800 break-keep">책상에 앉아 스마트폰만<br>만지작거리는 아이</p>
+                </div>
+                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="text-5xl mb-6">🤷‍♂️</div>
+                    <p class="font-semibold text-gray-800 break-keep">안다고 착각하지만 막상<br>설명해보라면 말문이 막히는 아이</p>
+                </div>
+                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="text-5xl mb-6">🥱</div>
+                    <p class="font-semibold text-gray-800 break-keep">자유학기제라는 이유로<br>긴장감이 완전히 풀려버린 아이</p>
+                </div>
             </div>
-          </div>
-
-          <div class="flex flex-col md:flex-row gap-6 items-start">
-            <div class="flex-shrink-0 bg-blue-100 text-blue-600 font-bold text-xl w-12 h-12 flex items-center justify-center rounded-full">2</div>
-            <div>
-              <h3 class="text-xl font-bold mb-2">대치프라임 과목별 프로그램 및 관리방향</h3>
-              <p class="text-gray-600">
-                국·영·수 학업 밸런스 구축 및 고유 프로그램 <strong>'탐독(탐독 주니어)'</strong>을 통한 자기주도력 완성. 단순 지식 주입을 넘어선 완전 학습 매니지먼트를 공개합니다.
-              </p>
+            <div class="mt-12 p-6 bg-blue-50 rounded-xl text-center">
+                <p class="text-gray-700 text-lg md:text-xl break-keep">
+                    단순히 지식을 주입하는 것만으로는 고등학교에서 무너집니다.<br class="hidden md:block">
+                    이번 설명회에서 <strong class="text-blue-700">'스스로 공부하는 힘'</strong>을 길러주는 명확한 해답을 제시합니다.
+                </p>
             </div>
-          </div>
         </div>
-      </div>
     </section>
 
-    <section class="bg-slate-50 py-16">
-      <div class="max-w-3xl mx-auto px-6 text-center">
-        <h2 class="text-2xl font-bold mb-4">지금 바로 예약하세요</h2>
-        <p class="text-gray-600 mb-8">
-          좌석이 한정되어 있어 조기 마감될 수 있습니다.<br />
-          <span class="text-red-500 font-semibold mt-2 inline-block">
-            ※ 입학 및 심층 상담 시 학생이 평소 작성하던 노트와 문제집을 반드시 지참해 주시기 바랍니다.
-          </span>
-        </p>
-        <button id="open-modal-btn" class="inline-block bg-blue-600 text-white font-bold text-lg py-4 px-12 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
-          설명회 예약하기
-        </button>
-      </div>
+    <!-- 3. 현장사진 / 후기 -->
+    <section class="py-20 px-4 bg-gray-100">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">대치프라임의 로드맵은 결과로 증명합니다</h3>
+                <p class="text-gray-600 text-lg">지난 설명회 현장 및 재원생들의 생생한 변화</p>
+            </div>
+
+            <!-- 사진 영역 -->
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <div class="group relative h-72 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/images/seminar-live-1.jpg" alt="설명회 현장" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <span class="text-white font-semibold">📸 열기 가득했던 지난 설명회 현장</span>
+                    </div>
+                </div>
+                <div class="group relative h-72 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="/images/seminar-live-2.jpg" alt="설명회 현장" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <span class="text-white font-semibold">📸 학부모님들의 뜨거운 관심</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 텍스트 후기 -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
+                    <div class="text-blue-500 mb-4">
+                        <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    </div>
+                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"단순한 선행이 아니라, 아이의 메타인지를 깨워주는 시스템과 '탐독(耽讀)' 프로그램이 정말 인상 깊었습니다."</p>
+                    <p class="text-right text-sm font-bold text-gray-900">- 초5 재원생 학부모</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
+                    <div class="text-blue-500 mb-4">
+                         <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    </div>
+                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"학원 내 스마트폰 전면 통제 덕분에 아이의 공부 집중력과 태도가 눈에 띄게 달라졌습니다. 원장님 원칙에 감사드립니다."</p>
+                    <p class="text-right text-sm font-bold text-gray-900">- 중2 재원생 학부모</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
+                    <div class="text-blue-500 mb-4">
+                         <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    </div>
+                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"막연했던 초중등 학습 방향이 완벽하게 잡혔어요. 당장 무엇을 해야 할지 명확해졌습니다."</p>
+                    <p class="text-right text-sm font-bold text-gray-900">- 중1 재원생 학부모</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
-      <p>&copy; 2026 대치프라임학원. All rights reserved.</p>
+    <!-- 4. 프로그램 소개 -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">설명회 프로그램 안내</h3>
+
+            <div class="space-y-6">
+                <!-- 1부 -->
+                <div class="flex flex-col md:flex-row bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-8 hover:shadow-md transition">
+                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
+                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold text-xl mr-4 md:mr-0">1</span>
+                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
+                    </div>
+                    <div class="md:w-3/4">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">변화하는 교육환경과 초4~중2가 지금 당장 잡아야 할 것</h4>
+                        <p class="text-gray-600 leading-relaxed break-keep">고교학점제와 2022 개정 교육과정의 핵심을 꿰뚫습니다. 당장의 내신을 넘어 흔들림 없는 기초 체력과 문해력을 어떻게 다져야 하는지 실질적인 방향을 제시합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 2부 -->
+                <div class="flex flex-col md:flex-row bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-8 hover:shadow-md transition">
+                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
+                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold text-xl mr-4 md:mr-0">2</span>
+                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
+                    </div>
+                    <div class="md:w-3/4">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">무너지지 않는 상위권의 비밀: 올바른 공부 습관과 메타인지</h4>
+                        <p class="text-gray-600 leading-relaxed break-keep">'공부하는 척'하는 아이를 '진짜 공부'하는 아이로 바꾸는 비결. 아는 것과 모르는 것을 정확히 구분하는 메타인지 훈련법과 최상위권의 절대적인 학습 습관을 공개합니다.</p>
+                    </div>
+                </div>
+
+                <!-- 3부 (강조) -->
+                <div class="flex flex-col md:flex-row bg-blue-50 border-2 border-blue-200 shadow-md rounded-2xl p-6 md:p-8 relative overflow-hidden transform md:scale-105 z-10 my-8">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-sm font-bold px-4 py-1.5 rounded-bl-xl shadow-sm">설명회 핵심</div>
+                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start pt-2">
+                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold text-xl mr-4 md:mr-0 shadow-sm">3</span>
+                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
+                    </div>
+                    <div class="md:w-3/4 pt-2">
+                        <h4 class="text-xl font-bold text-blue-900 mb-3 break-keep">대치프라임만의 초·중등 확장형 커리큘럼 및 밀착 관리 시스템</h4>
+                        <p class="text-gray-700 mb-4 break-keep">초등부터 고등 대입까지 직결되는 대치프라임만의 연계 로드맵입니다.</p>
+                        <ul class="space-y-3 bg-white/60 p-4 rounded-xl border border-blue-100">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-gray-800 text-sm md:text-base font-medium break-keep">학업매니지먼트 프로그램'탐독' 및 <strong class="text-blue-700">수학/영어/국어/과학</strong> 시스템</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="text-gray-800 text-sm md:text-base font-medium break-keep">원내 <strong class="text-red-600">스마트폰 사용 전면 통제</strong> 등 으로 나타나는 대치프라임의 관리시스템</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4부 -->
+                <div class="flex flex-col md:flex-row bg-gray-50 border border-gray-200 shadow-sm rounded-2xl p-6 md:p-8">
+                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
+                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 text-gray-600 font-bold text-xl mr-4 md:mr-0">4</span>
+                        <span class="md:hidden font-bold text-gray-600 text-xl">부</span>
+                    </div>
+                    <div class="md:w-3/4">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">질의응답 및 현장 예약 안내</h4>
+                        <p class="text-gray-600 leading-relaxed break-keep">평소 궁금했던 학습 고민을 해소하는 Q&A 및 진단 테스트 등 참석자 특별 혜택 안내</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 일정 및 예약 폼 -->
+    <section id="reservation" class="py-20 px-4 bg-gray-900 text-white relative">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+            <!-- 좌측: 일정 안내 -->
+            <div class="lg:sticky lg:top-24">
+                <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-white break-keep">
+                    한정된 좌석으로<br>
+                    <span class="text-yellow-400">조기 마감</span>될 수 있습니다.
+                </h3>
+
+                <div class="space-y-4 mb-10">
+                    <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xl font-bold text-white flex items-center">
+                                <span class="text-2xl mr-2">📍</span> 능곡관
+                            </h4>
+                            <span class="bg-blue-600/20 text-blue-400 text-xs px-2 py-1 rounded font-bold border border-blue-500/30">마감 임박</span>
+                        </div>
+                        <p class="text-gray-300 text-lg ml-8">7월 10일 (금) 오후 7:00</p>
+                    </div>
+                    <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
+                        <h4 class="text-xl font-bold text-white flex items-center mb-2">
+                            <span class="text-2xl mr-2">📍</span> 장곡관
+                        </h4>
+                        <p class="text-gray-300 text-lg ml-8">7월 17일 (금) 오후 2:00 <span class="text-sm text-gray-400 ml-1">(제헌절 휴일)</span></p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-900/80 to-blue-800/50 p-8 rounded-2xl border border-blue-700/50 shadow-inner">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-400 text-gray-900 rounded-full w-10 h-10 flex items-center justify-center font-bold text-xl mr-3 shadow-sm">🎁</div>
+                        <h4 class="font-bold text-xl text-yellow-400">참석자 전원 특별 혜택</h4>
+                    </div>
+                    <ul class="text-blue-100 space-y-3 font-medium">
+                        <li class="flex items-start">
+                            <span class="mr-2 text-yellow-400">✓</span>
+                            <span class="break-keep">'우리 아이 현재 위치 파악' 정밀 진단 테스트 무료 응시권</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-yellow-400">✓</span>
+                            <span class="break-keep">진단 결과 기반 1:1 맞춤형 학습 로드맵 컨설팅 제공</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 우측: 예약 폼 -->
+            <div class="bg-white text-gray-900 p-8 md:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-yellow-400"></div>
+                <h3 class="text-2xl font-bold mb-8 text-center">설명회 사전 예약 신청</h3>
+
+                <form id="bookingForm" class="space-y-6">
+                    <div>
+                        <label for="studentName" class="block text-sm font-bold text-gray-700 mb-2">학생 이름 <span class="text-red-500">*</span></label>
+                        <input type="text" id="studentName" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 홍길동">
+                    </div>
+                    <div>
+                        <label for="schoolGrade" class="block text-sm font-bold text-gray-700 mb-2">학교 / 학년 <span class="text-red-500">*</span></label>
+                        <input type="text" id="schoolGrade" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 대치중학교 2학년">
+                    </div>
+                    <div>
+                        <label for="parentPhone" class="block text-sm font-bold text-gray-700 mb-2">학부모 연락처 <span class="text-red-500">*</span></label>
+                        <input type="tel" id="parentPhone" required pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="010-0000-0000">
+                    </div>
+                    <div>
+                        <label for="branchSelect" class="block text-sm font-bold text-gray-700 mb-2">참석 희망 지점 <span class="text-red-500">*</span></label>
+                        <select id="branchSelect" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition appearance-none">
+                            <option value="">지점을 선택해주세요</option>
+                            <option value="능곡관 (7/10)">능곡관 (7월 10일 금요일 오후 7시)</option>
+                            <option value="장곡관 (7/17)">장곡관 (7월 17일 금요일 오후 2시)</option>
+                        </select>
+                    </div>
+
+                    <p id="formError" class="text-sm text-red-500 hidden"></p>
+
+                    <div class="pt-4">
+                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-lg flex justify-center items-center disabled:opacity-50">
+                            <span>신청 완료하기</span>
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 text-center flex items-center justify-center mt-4">
+                        <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        입력하신 정보는 상담 및 예약 확인 목적으로만 사용됩니다.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="bg-gray-100 text-center py-10 text-gray-500 text-sm border-t border-gray-200">
+        <div class="max-w-5xl mx-auto px-4">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">대치프라임학원</h2>
+            <p class="mb-4">능곡관: 경기도 시흥시 장현능곡로 178 5층 전체 | 장곡관: 경기도 시흥시 장곡1로 11 4층 일부</p>
+            <p>© 2026 대치프라임. All rights reserved.</p>
+        </div>
     </footer>
 
-    <!-- 예약 모달 -->
-    <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
-      <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
-        <button class="close-modal-btn absolute top-4 right-4 text-gray-400 hover:text-gray-900" aria-label="닫기">
-          <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-
-        <h3 class="text-2xl font-bold text-slate-900 mb-1 text-center">설명회 예약</h3>
-        <p class="text-gray-500 mb-6 text-center text-sm">정보를 남겨주시면 순차적으로 안내드립니다.</p>
-
-        <form id="booking-form" class="space-y-4 text-left">
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">참석 캠퍼스 <span class="text-red-500">*</span></label>
-            <div class="grid grid-cols-2 gap-2">
-              <label class="cursor-pointer border rounded-lg py-3 px-2 text-center text-sm font-medium has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 has-[:checked]:text-blue-700 transition">
-                <input type="radio" name="campus" value="능곡관 (7/3)" class="sr-only" required />
-                능곡관<br /><span class="text-xs text-gray-500">7/3 (금)</span>
-              </label>
-              <label class="cursor-pointer border rounded-lg py-3 px-2 text-center text-sm font-medium has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 has-[:checked]:text-blue-700 transition">
-                <input type="radio" name="campus" value="장곡관 (7/10)" class="sr-only" required />
-                장곡관<br /><span class="text-xs text-gray-500">7/10 (금)</span>
-              </label>
+    <!-- 예약 완료 모달 -->
+    <div id="successModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden bg-black/60 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform" id="modalContent">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+                    <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">예약이 완료되었습니다!</h3>
+                <p class="text-gray-600 mb-6">
+                    담당 데스크에서 입력하신 연락처로 곧 안내드리겠습니다. 설명회에서 뵙겠습니다.
+                </p>
+                <button id="modalCloseBtn" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-3 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                    확인
+                </button>
             </div>
-          </div>
-
-          <div>
-            <label for="bk-name" class="block text-sm font-semibold text-gray-700 mb-1">학생 이름 <span class="text-red-500">*</span></label>
-            <input id="bk-name" name="name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-blue-600" placeholder="홍길동" />
-          </div>
-
-          <div>
-            <label for="bk-grade" class="block text-sm font-semibold text-gray-700 mb-1">학년</label>
-            <select id="bk-grade" name="grade" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-blue-600 bg-white">
-              <option value="">선택</option>
-              <option value="초4">초4</option>
-              <option value="초5">초5</option>
-              <option value="초6">초6</option>
-              <option value="중1">중1</option>
-              <option value="중2">중2</option>
-              <option value="기타">기타</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="bk-phone" class="block text-sm font-semibold text-gray-700 mb-1">연락처 <span class="text-red-500">*</span></label>
-            <input id="bk-phone" name="phone" type="tel" required inputmode="numeric" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-blue-600" placeholder="010-1234-5678" />
-          </div>
-
-          <div>
-            <label for="bk-memo" class="block text-sm font-semibold text-gray-700 mb-1">문의사항 (선택)</label>
-            <textarea id="bk-memo" name="memo" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-blue-600 resize-none" placeholder="궁금한 점을 적어주세요"></textarea>
-          </div>
-
-          <label class="flex items-start gap-2 text-xs text-gray-600">
-            <input type="checkbox" name="agree_privacy" required class="mt-0.5" />
-            <span>개인정보 수집·이용에 동의합니다. (설명회 안내 목적으로만 사용)</span>
-          </label>
-
-          <p id="bk-error" class="text-sm text-red-500 hidden"></p>
-
-          <button type="submit" id="bk-submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
-            예약 신청하기
-          </button>
-        </form>
-
-        <div id="booking-done" class="hidden text-center py-6">
-          <div class="text-5xl mb-4">✅</div>
-          <h4 class="text-xl font-bold text-slate-900 mb-2">예약이 접수되었습니다!</h4>
-          <p class="text-gray-600 text-sm mb-6">담당 데스크에서 곧 연락드리겠습니다.</p>
-          <button class="close-modal-btn bg-slate-100 text-slate-700 font-semibold py-2.5 px-8 rounded-lg hover:bg-slate-200 transition">닫기</button>
         </div>
-
-        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500 text-center">
-          문의: 대치프라임학원 데스크
-        </div>
-      </div>
     </div>
 
+    <!-- 로직 + Supabase 저장 -->
     <script>
-      import { supabase } from '../lib/supabase';
+        import { supabase } from '../lib/supabase';
 
-      const openBtn   = document.getElementById('open-modal-btn');
-      const modal     = document.getElementById('booking-modal');
-      const closeBtns = document.querySelectorAll('.close-modal-btn');
-      const form      = document.getElementById('booking-form') as HTMLFormElement | null;
-      const doneEl    = document.getElementById('booking-done');
-      const errorEl   = document.getElementById('bk-error');
-      const submitBtn = document.getElementById('bk-submit') as HTMLButtonElement | null;
+        const form = document.getElementById('bookingForm') as HTMLFormElement | null;
+        const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+        const errorEl = document.getElementById('formError');
+        const modal = document.getElementById('successModal');
+        const modalContent = document.getElementById('modalContent');
 
-      const openModal  = () => { modal?.classList.remove('hidden'); modal?.classList.add('flex'); };
-      const closeModal = () => { modal?.classList.add('hidden'); modal?.classList.remove('flex'); };
-      const showError  = (msg: string) => { if (errorEl) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); } };
+        document.getElementById('logo-home')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-      openBtn?.addEventListener('click', openModal);
-      closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-      modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-      form?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        errorEl?.classList.add('hidden');
-
-        const fd = new FormData(form);
-        const payload = {
-          campus: fd.get('campus') as string,
-          name: (fd.get('name') as string)?.trim(),
-          grade: (fd.get('grade') as string) || null,
-          phone: (fd.get('phone') as string)?.trim(),
-          memo: (fd.get('memo') as string)?.trim() || null,
-          agree_privacy: fd.get('agree_privacy') === 'on',
+        const showError = (msg: string) => {
+            if (!errorEl) return;
+            errorEl.textContent = msg;
+            errorEl.classList.remove('hidden');
         };
 
-        if (!payload.campus || !payload.name || !payload.phone) { showError('필수 항목을 모두 입력해주세요.'); return; }
-        if (!payload.agree_privacy) { showError('개인정보 수집·이용에 동의해주세요.'); return; }
-
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '접수 중...'; }
-        const { error } = await supabase.from('seminar_bookings').insert(payload);
-        if (error) {
-          showError('접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '예약 신청하기'; }
-          return;
+        function openModal() {
+            modal?.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent?.classList.remove('scale-95');
+                modalContent?.classList.add('scale-100');
+            }, 10);
         }
-        form.classList.add('hidden');
-        doneEl?.classList.remove('hidden');
-      });
-    </script>
 
-  </body>
+        function closeModal() {
+            modalContent?.classList.remove('scale-100');
+            modalContent?.classList.add('scale-95');
+            setTimeout(() => {
+                modal?.classList.add('hidden');
+                form?.reset();
+            }, 200);
+        }
+
+        document.getElementById('modalCloseBtn')?.addEventListener('click', closeModal);
+
+        // 전화번호 자동 하이픈
+        document.getElementById('parentPhone')?.addEventListener('input', function (this: HTMLInputElement) {
+            const val = this.value.replace(/[^0-9]/g, '');
+            let res = '';
+            if (val.length < 4) res = val;
+            else if (val.length < 7) res = val.substr(0, 3) + '-' + val.substr(3);
+            else if (val.length < 11) res = val.substr(0, 3) + '-' + val.substr(3, 3) + '-' + val.substr(6);
+            else res = val.substr(0, 3) + '-' + val.substr(3, 4) + '-' + val.substr(7);
+            this.value = res;
+        });
+
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorEl?.classList.add('hidden');
+
+            const name = (document.getElementById('studentName') as HTMLInputElement).value.trim();
+            const grade = (document.getElementById('schoolGrade') as HTMLInputElement).value.trim();
+            const phone = (document.getElementById('parentPhone') as HTMLInputElement).value.trim();
+            const campus = (document.getElementById('branchSelect') as HTMLSelectElement).value;
+
+            if (!name || !grade || !phone || !campus) {
+                showError('필수 항목을 모두 입력해주세요.');
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+
+            const { error } = await supabase.from('seminar_bookings').insert({
+                campus,
+                name,
+                grade,
+                phone,
+                memo: null,
+                agree_privacy: true,
+            });
+
+            if (error) {
+                if (submitBtn) submitBtn.disabled = false;
+                showError('접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = false;
+            openModal();
+        });
+    </script>
+</body>
 </html>
