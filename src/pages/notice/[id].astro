@@ -71,7 +71,9 @@ const { id } = Astro.params;
   import { supabase } from '../../lib/supabase';
 
   async function load() {
-    const id = location.pathname.replace(/\/$/, '').split('/').pop();
+    const path = location.pathname.replace(/\/$/, '');
+    if (!path.startsWith('/notice/')) return;
+    const id = path.split('/').pop();
 
     const { data, error } = await supabase
       .from('notices')

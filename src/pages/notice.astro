@@ -33,6 +33,8 @@ import Layout from '../components/layout/Layout.astro';
   import { supabase } from '../lib/supabase';
 
   async function load() {
+    if (!document.getElementById('notice-list')) return;
+
     const { data, error } = await supabase
       .from('notices')
       .select('id, title, created_at, views')
