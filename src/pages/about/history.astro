@@ -1,19 +1,19 @@
 ---
-import Layout from '../components/layout/Layout.astro';
+import Layout from '../../components/layout/Layout.astro';
 ---
 
-<Layout title="학원특징 - 대치프라임" description="대치프라임학원의 특징을 소개합니다.">
+<Layout title="HISTORY - 대치프라임" description="대치프라임학원의 연혁을 소개합니다.">
   <div class="min-h-screen bg-white">
 
     <div class="border-b border-gray-200">
       <div class="container mx-auto px-4 py-8">
         <p class="text-xs text-gray-400 mb-1">대치프라임</p>
-        <h1 class="text-2xl font-bold text-gray-900">학원특징</h1>
+        <h1 class="text-2xl font-bold text-gray-900">HISTORY</h1>
       </div>
     </div>
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
-      <div id="content-features" class="page-content-area text-gray-700 leading-relaxed">
+      <div id="content-history" class="page-content-area text-gray-700 leading-relaxed">
         <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
       </div>
     </div>
@@ -37,12 +37,12 @@ import Layout from '../components/layout/Layout.astro';
 </style>
 
 <script>
-  import { supabase } from '../lib/supabase';
+  import { supabase } from '../../lib/supabase';
 
   async function load() {
-    if (!document.getElementById('content-features')) return;
-    const { data } = await supabase.from('page_content').select('value').eq('key', 'about_features').single();
-    const el = document.getElementById('content-features')!;
+    if (!document.getElementById('content-history')) return;
+    const { data } = await supabase.from('page_content').select('value').eq('key', 'about_history').single();
+    const el = document.getElementById('content-history')!;
     if (data?.value && data.value.trim() !== '' && data.value !== '<p><br></p>') {
       el.innerHTML = data.value;
     } else {

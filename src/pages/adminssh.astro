@@ -33,7 +33,7 @@ import Layout from '../components/layout/Layout.astro';
           <button data-tab="hero"       class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">메인페이지 관리</button>
           <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">공지사항 관리</button>
           <button data-tab="inquiries"  class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">상담 신청 목록</button>
-          <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">학원소개</button>
+          <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">대치프라임</button>
           <button data-tab="curriculum" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">커리큘럼</button>
           <button data-tab="faculty"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">강사소개</button>
           <button data-tab="results"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">명예의 전당</button>
@@ -177,21 +177,21 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
 
-        <!-- ── 학원소개 탭 ── -->
+        <!-- ── 대치프라임 탭 ── -->
         <div id="panel-about" class="hidden">
           <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
-            <button data-about-sub="greeting" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">인사말</button>
-            <button data-about-sub="history"  class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">학원 연혁</button>
-            <button data-about-sub="features" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">학원 특징</button>
+            <button data-about-sub="features" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">학원특징</button>
+            <button data-about-sub="history"  class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">HISTORY</button>
+            <button data-about-sub="space"    class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">SPACE</button>
           </div>
 
-          <div id="about-sub-greeting" class="bg-white rounded-2xl shadow-sm p-6">
+          <div id="about-sub-features" class="bg-white rounded-2xl shadow-sm p-6">
             <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-about-greeting"></div>
+              <div id="quill-about-features"></div>
             </div>
             <div class="flex items-center gap-3">
-              <button data-key="about_greeting" data-qid="quill-about-greeting" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-about_greeting" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+              <button data-key="about_features" data-qid="quill-about-features" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_features" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
             </div>
           </div>
 
@@ -205,13 +205,13 @@ import Layout from '../components/layout/Layout.astro';
             </div>
           </div>
 
-          <div id="about-sub-features" class="hidden bg-white rounded-2xl shadow-sm p-6">
+          <div id="about-sub-space" class="hidden bg-white rounded-2xl shadow-sm p-6">
             <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-about-features"></div>
+              <div id="quill-about-space"></div>
             </div>
             <div class="flex items-center gap-3">
-              <button data-key="about_features" data-qid="quill-about-features" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-about_features" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+              <button data-key="about_space" data-qid="quill-about-space" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_space" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
             </div>
           </div>
         </div>
@@ -441,7 +441,7 @@ import Layout from '../components/layout/Layout.astro';
       ],
     },
   ];
-  const ABOUT_SUBS = ['greeting', 'history', 'features'];
+  const ABOUT_SUBS = ['features', 'history', 'space'];
   const CUR_SUBS = ['elementary', 'middle', 'high'];
 
   const quills: Record<string, any> = {};
@@ -565,15 +565,15 @@ import Layout from '../components/layout/Layout.astro';
     }
   }
 
-  // ── 학원소개 탭 ──
+  // ── 대치프라임 탭 ──
   async function initAboutTab() {
-    createQuill('quill-about-greeting', '인사말을 입력하세요.');
-    createQuill('quill-about-history', '학원 연혁을 입력하세요.');
     createQuill('quill-about-features', '학원 특징을 입력하세요.');
+    createQuill('quill-about-history', '학원 연혁을 입력하세요.');
+    createQuill('quill-about-space', 'SPACE 내용을 입력하세요.');
     await Promise.all([
-      loadPageContent('about_greeting', 'quill-about-greeting'),
-      loadPageContent('about_history', 'quill-about-history'),
       loadPageContent('about_features', 'quill-about-features'),
+      loadPageContent('about_history', 'quill-about-history'),
+      loadPageContent('about_space', 'quill-about-space'),
     ]);
   }
 
