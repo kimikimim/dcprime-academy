@@ -205,13 +205,46 @@ import Layout from '../components/layout/Layout.astro';
             </div>
           </div>
 
-          <div id="about-sub-space" class="hidden bg-white rounded-2xl shadow-sm p-6">
-            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-about-space"></div>
+          <div id="about-sub-space" class="hidden">
+            <!-- 사진 추가/수정 폼 -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+              <h3 id="space-form-title" class="text-base font-bold text-gray-900 mb-4">교육환경 사진 추가</h3>
+              <input type="hidden" id="space-edit-id" />
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <select id="space-campus-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                  <option value="neunggok">능곡관</option>
+                  <option value="janggok">장곡관</option>
+                </select>
+                <input id="space-sort-input" type="number" placeholder="순서 (0)" value="0" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+              <input id="space-caption-input" type="text" placeholder="캡션 (예: 강의실, 종기리스터디카페)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+              <div class="mb-4">
+                <p class="text-xs text-gray-500 mb-2">사진</p>
+                <input type="file" id="space-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
+                <img id="space-image-preview" class="hidden mt-2 w-28 h-20 object-cover rounded-lg border border-gray-200" />
+              </div>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer mb-4">
+                <input type="checkbox" id="space-active-input" class="accent-brand" checked /> 노출
+              </label>
+              <div class="flex items-center gap-3">
+                <button id="submit-space-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+                <button id="cancel-space-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
+                <p id="space-msg" class="text-sm text-gray-500 hidden"></p>
+              </div>
             </div>
-            <div class="flex items-center gap-3">
-              <button data-key="about_space" data-qid="quill-about-space" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-about_space" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+
+            <!-- 사진 목록 (캠퍼스 필터) -->
+            <div class="bg-white rounded-2xl shadow-sm p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-bold text-gray-900">교육환경 사진 목록</h3>
+                <select id="space-list-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
+                  <option value="neunggok">능곡관</option>
+                  <option value="janggok">장곡관</option>
+                </select>
+              </div>
+              <div id="space-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <p class="col-span-full text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -569,13 +602,166 @@ import Layout from '../components/layout/Layout.astro';
   async function initAboutTab() {
     createQuill('quill-about-features', '학원 특징을 입력하세요.');
     createQuill('quill-about-history', '학원 연혁을 입력하세요.');
-    createQuill('quill-about-space', 'SPACE 내용을 입력하세요.');
     await Promise.all([
       loadPageContent('about_features', 'quill-about-features'),
       loadPageContent('about_history', 'quill-about-history'),
-      loadPageContent('about_space', 'quill-about-space'),
     ]);
+    loadSpacePhotos('neunggok');
   }
+
+  // ── SPACE 교육환경 사진 관리 ──
+  let spaceEditId: string | null = null;
+
+  function resetSpaceForm() {
+    spaceEditId = null;
+    (document.getElementById('space-edit-id') as HTMLInputElement).value = '';
+    (document.getElementById('space-caption-input') as HTMLInputElement).value = '';
+    (document.getElementById('space-sort-input') as HTMLInputElement).value = '0';
+    (document.getElementById('space-active-input') as HTMLInputElement).checked = true;
+    (document.getElementById('space-image-input') as HTMLInputElement).value = '';
+    const preview = document.getElementById('space-image-preview') as HTMLImageElement;
+    preview.src = ''; preview.classList.add('hidden');
+    document.getElementById('space-form-title')!.textContent = '교육환경 사진 추가';
+    document.getElementById('submit-space-btn')!.textContent = '추가';
+    document.getElementById('cancel-space-btn')!.classList.add('hidden');
+  }
+
+  async function loadSpacePhotos(campus: string) {
+    const container = document.getElementById('space-list');
+    if (!container) return;
+    const { data, error } = await supabase
+      .from('space_photos')
+      .select('*')
+      .eq('campus', campus)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) {
+      container.innerHTML = `<p class="col-span-full text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
+      return;
+    }
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p class="col-span-full text-sm text-gray-400 py-4 text-center">등록된 사진이 없습니다.</p>';
+      return;
+    }
+    container.innerHTML = data.map(p => `
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <div class="aspect-[4/3] bg-gray-100">
+          <img src="${escAttr(p.image_url || '')}" alt="${escAttr(p.caption || '')}" class="w-full h-full object-cover" onerror="this.style.opacity='0.2'" />
+        </div>
+        <div class="p-3">
+          <p class="text-sm font-medium text-gray-800 truncate">${escHtml(p.caption || '(캡션 없음)')} ${p.is_active ? '' : '<span class="text-xs text-gray-400 font-normal">(숨김)</span>'}</p>
+          <p class="text-xs text-gray-400 mb-2">순서 ${p.sort_order}</p>
+          <div class="flex gap-3">
+            <button data-id="${p.id}" data-campus="${escAttr(p.campus)}" data-caption="${escAttr(p.caption ?? '')}"
+              data-sort="${p.sort_order}" data-active="${p.is_active ? '1' : '0'}" data-image="${escAttr(p.image_url ?? '')}"
+              class="edit-space-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+            <button data-id="${p.id}" class="del-space-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll<HTMLButtonElement>('.edit-space-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        spaceEditId = btn.dataset.id!;
+        (document.getElementById('space-campus-input') as HTMLSelectElement).value = btn.dataset.campus ?? 'neunggok';
+        (document.getElementById('space-caption-input') as HTMLInputElement).value = btn.dataset.caption ?? '';
+        (document.getElementById('space-sort-input') as HTMLInputElement).value = btn.dataset.sort ?? '0';
+        (document.getElementById('space-active-input') as HTMLInputElement).checked = btn.dataset.active === '1';
+        const preview = document.getElementById('space-image-preview') as HTMLImageElement;
+        if (btn.dataset.image) { preview.src = btn.dataset.image; preview.classList.remove('hidden'); }
+        document.getElementById('space-form-title')!.textContent = '교육환경 사진 수정';
+        document.getElementById('submit-space-btn')!.textContent = '수정 완료';
+        document.getElementById('cancel-space-btn')!.classList.remove('hidden');
+        document.getElementById('space-form-title')!.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>('.del-space-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 사진을 삭제할까요?')) return;
+        await supabase.from('space_photos').delete().eq('id', btn.dataset.id!);
+        loadSpacePhotos((document.getElementById('space-list-filter') as HTMLSelectElement).value);
+      });
+    });
+  }
+
+  document.getElementById('space-image-input')?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const preview = document.getElementById('space-image-preview') as HTMLImageElement;
+      preview.src = ev.target?.result as string;
+      preview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('space-list-filter')?.addEventListener('change', (e) => {
+    loadSpacePhotos((e.target as HTMLSelectElement).value);
+  });
+
+  document.getElementById('cancel-space-btn')?.addEventListener('click', resetSpaceForm);
+
+  document.getElementById('submit-space-btn')?.addEventListener('click', async () => {
+    const campus  = (document.getElementById('space-campus-input') as HTMLSelectElement).value;
+    const caption = (document.getElementById('space-caption-input') as HTMLInputElement).value.trim();
+    const sortOrder = parseInt((document.getElementById('space-sort-input') as HTMLInputElement).value, 10) || 0;
+    const isActive = (document.getElementById('space-active-input') as HTMLInputElement).checked;
+    const fileInput = document.getElementById('space-image-input') as HTMLInputElement;
+    const file = fileInput.files?.[0];
+    const msg = document.getElementById('space-msg')!;
+
+    if (!spaceEditId && !file) {
+      msg.textContent = '사진을 선택하세요.'; msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+      return;
+    }
+
+    const btn = document.getElementById('submit-space-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '처리 중...';
+
+    let image_url: string | undefined;
+    if (file) {
+      const ext = file.name.split('.').pop();
+      const path = `space-${Date.now()}.${ext}`;
+      const { data: up, error: upErr } = await supabase.storage.from('space-images').upload(path, file, { upsert: true });
+      if (upErr) {
+        msg.textContent = '이미지 업로드 실패: ' + upErr.message; msg.classList.remove('hidden');
+        btn.disabled = false; btn.textContent = spaceEditId ? '수정 완료' : '추가';
+        return;
+      }
+      if (up) {
+        const { data: urlData } = supabase.storage.from('space-images').getPublicUrl(path);
+        image_url = urlData.publicUrl;
+      }
+    }
+
+    const payload: any = { campus, caption: caption || null, sort_order: sortOrder, is_active: isActive };
+    if (image_url) payload.image_url = image_url;
+
+    let error;
+    if (spaceEditId) {
+      ({ error } = await supabase.from('space_photos').update(payload).eq('id', spaceEditId));
+    } else {
+      ({ error } = await supabase.from('space_photos').insert(payload));
+    }
+
+    btn.disabled = false;
+    btn.textContent = spaceEditId ? '수정 완료' : '추가';
+
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else {
+      msg.textContent = spaceEditId ? '수정되었습니다.' : '추가되었습니다.';
+      // 목록 필터를 방금 저장한 캠퍼스로 맞춰 보여줌
+      (document.getElementById('space-list-filter') as HTMLSelectElement).value = campus;
+      resetSpaceForm();
+      loadSpacePhotos(campus);
+    }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
 
   function switchAboutSub(sub: string) {
     ABOUT_SUBS.forEach(s => {

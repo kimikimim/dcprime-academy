@@ -1,10 +1,16 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
-const sections = [
+const tabs = [
   { label: '학원특징', id: 'features', key: 'about_features' },
   { label: 'HISTORY', id: 'history',  key: 'about_history' },
-  { label: 'SPACE',   id: 'space',    key: 'about_space' },
+  { label: 'SPACE',   id: 'space',    key: null },
+];
+
+// directions.astro 캠퍼스 정보 재사용
+const campuses = [
+  { id: 'neunggok', name: '능곡관', fullName: '대치프라임학원 (능곡관)', address: '경기 시흥시 장현능곡로 178', phone: '031-313-0979' },
+  { id: 'janggok',  name: '장곡관', fullName: '대치프라임장곡학원 (장곡관)', address: '경기 시흥시 장곡1로 11 4층 401, 402호', phone: '031-804-2495' },
 ];
 ---
 
@@ -21,14 +27,14 @@ const sections = [
     <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
       <div class="container mx-auto px-4">
         <div class="flex">
-          {sections.map((s, i) => (
+          {tabs.map((t, i) => (
             <button
-              data-tab={s.id}
-              data-key={s.key}
+              data-tab={t.id}
+              data-key={t.key}
               class={`about-tab px-8 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
                 ${i === 0 ? 'border-brand text-brand' : 'border-transparent text-gray-400 hover:text-gray-700'}`}
             >
-              {s.label}
+              {t.label}
             </button>
           ))}
         </div>
@@ -36,15 +42,71 @@ const sections = [
     </div>
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
-      {sections.map((s, i) => (
-        <div id={`panel-${s.id}`} class={`about-panel ${i !== 0 ? 'hidden' : ''}`}>
-          <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
-            <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
-          </div>
-        </div>
-      ))}
-    </div>
 
+      <!-- 학원특징 -->
+      <div id="panel-features" class="about-panel">
+        <div id="content-features" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div id="panel-history" class="about-panel hidden">
+        <div id="content-history" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
+        </div>
+      </div>
+
+      <!-- SPACE -->
+      <div id="panel-space" class="about-panel hidden">
+        <!-- 캠퍼스 토글 -->
+        <div class="flex gap-2 mb-8">
+          {campuses.map((c, i) => (
+            <button
+              data-campus={c.id}
+              class={`space-campus-btn px-6 py-2.5 rounded-full text-sm font-semibold transition-colors
+                ${i === 0 ? 'bg-brand text-white' : 'border border-gray-300 text-gray-500 hover:bg-gray-50'}`}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+
+        {campuses.map((c, i) => (
+          <div id={`space-campus-${c.id}`} class={`space-campus-panel ${i !== 0 ? 'hidden' : ''}`}>
+            <!-- 정보 카드 -->
+            <div class="bg-brand-light rounded-2xl p-6 mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p class="text-xs font-semibold text-brand uppercase tracking-wide mb-1">DCPRIME</p>
+                <h2 class="text-lg font-bold text-gray-900">{c.fullName}</h2>
+              </div>
+              <div class="text-sm text-gray-600 space-y-1.5">
+                <p class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  {c.address}
+                </p>
+                <p class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-brand flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <a href={`tel:${c.phone.replace(/-/g, '')}`} class="hover:text-brand transition-colors">{c.phone}</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- 교육환경 갤러리 -->
+            <h3 class="text-base font-bold text-gray-900 mb-5">교육환경</h3>
+            <div id={`space-gallery-${c.id}`} class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <p class="col-span-full text-center text-gray-400 text-sm py-10">불러오는 중...</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
   </div>
 </Layout>
 
@@ -67,11 +129,15 @@ const sections = [
 <script>
   import { supabase } from '../lib/supabase';
 
-  const loaded = new Set<string>();
+  const escHtml = (s: string) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const escAttr = (s: string) => escHtml(s).replace(/"/g,'&quot;');
+
+  const loadedContent = new Set<string>();
+  const loadedGallery = new Set<string>();
 
   async function loadContent(key: string, elId: string) {
-    if (loaded.has(key)) return;
-    loaded.add(key);
+    if (loadedContent.has(key)) return;
+    loadedContent.add(key);
     const { data } = await supabase.from('page_content').select('value').eq('key', key).single();
     const el = document.getElementById(elId);
     if (!el) return;
@@ -82,15 +148,45 @@ const sections = [
     }
   }
 
+  async function loadGallery(campus: string) {
+    if (loadedGallery.has(campus)) return;
+    loadedGallery.add(campus);
+    const el = document.getElementById(`space-gallery-${campus}`);
+    if (!el) return;
+    const { data, error } = await supabase
+      .from('space_photos')
+      .select('*')
+      .eq('campus', campus)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error || !data || data.length === 0) {
+      el.innerHTML = '<p class="col-span-full text-center text-gray-400 text-sm py-10">사진을 준비 중입니다.</p>';
+      return;
+    }
+    el.innerHTML = data.map(p => `
+      <figure class="overflow-hidden rounded-xl border border-gray-200">
+        <div class="aspect-[4/3] bg-gray-100">
+          <img src="${escAttr(p.image_url || '')}" alt="${escAttr(p.caption || '교육환경')}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.opacity='0.2'" />
+        </div>
+        ${p.caption ? `<figcaption class="px-3 py-2.5 text-sm text-gray-700 text-center font-medium">${escHtml(p.caption)}</figcaption>` : ''}
+      </figure>
+    `).join('');
+  }
+
+  function activeCampus(): string {
+    const btn = document.querySelector<HTMLButtonElement>('.space-campus-btn.bg-brand');
+    return btn?.dataset.campus || 'neunggok';
+  }
+
   function init() {
     if (!document.querySelector('.about-tab')) return;
 
     const tabs   = document.querySelectorAll<HTMLButtonElement>('.about-tab');
     const panels = document.querySelectorAll<HTMLElement>('.about-panel');
 
-    // 첫 번째 탭 콘텐츠 로드
-    const firstTab = tabs[0];
-    if (firstTab) loadContent(firstTab.dataset.key!, `content-${firstTab.dataset.tab}`);
+    // 첫 탭(학원특징) 콘텐츠 로드
+    loadContent('about_features', 'content-features');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -101,8 +197,30 @@ const sections = [
         tab.classList.add('border-brand', 'text-brand');
         tab.classList.remove('border-transparent', 'text-gray-400');
         panels.forEach(p => p.classList.add('hidden'));
-        document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('hidden');
-        loadContent(tab.dataset.key!, `content-${tab.dataset.tab}`);
+        const id = tab.dataset.tab!;
+        document.getElementById(`panel-${id}`)?.classList.remove('hidden');
+
+        if (id === 'space') loadGallery(activeCampus());
+        else if (tab.dataset.key && tab.dataset.key !== 'null') loadContent(tab.dataset.key, `content-${id}`);
+      });
+    });
+
+    // 캠퍼스 토글
+    const campusBtns = document.querySelectorAll<HTMLButtonElement>('.space-campus-btn');
+    campusBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const campus = btn.dataset.campus!;
+        campusBtns.forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('bg-brand', on);
+          b.classList.toggle('text-white', on);
+          b.classList.toggle('border', !on);
+          b.classList.toggle('border-gray-300', !on);
+          b.classList.toggle('text-gray-500', !on);
+        });
+        document.querySelectorAll<HTMLElement>('.space-campus-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`space-campus-${campus}`)?.classList.remove('hidden');
+        loadGallery(campus);
       });
     });
   }
