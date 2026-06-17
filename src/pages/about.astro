@@ -1,22 +1,50 @@
 ---
 import Layout from '../components/layout/Layout.astro';
+
+const sections = [
+  { label: '학원특징', id: 'features', key: 'about_features' },
+  { label: 'HISTORY', id: 'history',  key: 'about_history' },
+  { label: 'SPACE',   id: 'space',    key: 'about_space' },
+];
 ---
 
-<Layout title="학원특징 - 대치프라임" description="대치프라임학원의 특징을 소개합니다.">
+<Layout title="대치프라임 - 학원소개" description="대치프라임학원을 소개합니다.">
   <div class="min-h-screen bg-white">
 
     <div class="border-b border-gray-200">
       <div class="container mx-auto px-4 py-8">
-        <p class="text-xs text-gray-400 mb-1">대치프라임</p>
-        <h1 class="text-2xl font-bold text-gray-900">학원특징</h1>
+        <h1 class="text-2xl font-bold text-gray-900">대치프라임</h1>
+      </div>
+    </div>
+
+    <!-- 탭 -->
+    <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
+      <div class="container mx-auto px-4">
+        <div class="flex">
+          {sections.map((s, i) => (
+            <button
+              data-tab={s.id}
+              data-key={s.key}
+              class={`about-tab px-8 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
+                ${i === 0 ? 'border-brand text-brand' : 'border-transparent text-gray-400 hover:text-gray-700'}`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
-      <div id="content-features" class="page-content-area text-gray-700 leading-relaxed">
-        <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
-      </div>
+      {sections.map((s, i) => (
+        <div id={`panel-${s.id}`} class={`about-panel ${i !== 0 ? 'hidden' : ''}`}>
+          <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
+            <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
+          </div>
+        </div>
+      ))}
     </div>
+
   </div>
 </Layout>
 
@@ -39,10 +67,14 @@ import Layout from '../components/layout/Layout.astro';
 <script>
   import { supabase } from '../lib/supabase';
 
-  async function load() {
-    if (!document.getElementById('content-features')) return;
-    const { data } = await supabase.from('page_content').select('value').eq('key', 'about_features').single();
-    const el = document.getElementById('content-features')!;
+  const loaded = new Set<string>();
+
+  async function loadContent(key: string, elId: string) {
+    if (loaded.has(key)) return;
+    loaded.add(key);
+    const { data } = await supabase.from('page_content').select('value').eq('key', key).single();
+    const el = document.getElementById(elId);
+    if (!el) return;
     if (data?.value && data.value.trim() !== '' && data.value !== '<p><br></p>') {
       el.innerHTML = data.value;
     } else {
@@ -50,5 +82,30 @@ import Layout from '../components/layout/Layout.astro';
     }
   }
 
-  document.addEventListener('astro:page-load', load);
+  function init() {
+    if (!document.querySelector('.about-tab')) return;
+
+    const tabs   = document.querySelectorAll<HTMLButtonElement>('.about-tab');
+    const panels = document.querySelectorAll<HTMLElement>('.about-panel');
+
+    // 첫 번째 탭 콘텐츠 로드
+    const firstTab = tabs[0];
+    if (firstTab) loadContent(firstTab.dataset.key!, `content-${firstTab.dataset.tab}`);
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('border-brand', 'text-brand');
+          t.classList.add('border-transparent', 'text-gray-400');
+        });
+        tab.classList.add('border-brand', 'text-brand');
+        tab.classList.remove('border-transparent', 'text-gray-400');
+        panels.forEach(p => p.classList.add('hidden'));
+        document.getElementById(`panel-${tab.dataset.tab}`)?.classList.remove('hidden');
+        loadContent(tab.dataset.key!, `content-${tab.dataset.tab}`);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
 </script>
