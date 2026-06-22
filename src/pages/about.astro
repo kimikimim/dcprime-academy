@@ -24,25 +24,23 @@ const campuses = [
       </div>
     </div>
 
-    <!-- 탭 -->
-    <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
-      <div class="container mx-auto px-4">
-        <div class="flex">
-          {tabs.map((t, i) => (
-            <button
-              data-tab={t.id}
-              data-key={t.key}
-              class={`about-tab px-8 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
-                ${i === 0 ? 'border-brand text-brand' : 'border-transparent text-gray-400 hover:text-gray-700'}`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+    <!-- 탭 (명예의 전당 스타일 2열 그리드) -->
+    <div class="container mx-auto px-4 pt-10 max-w-3xl">
+      <div class="grid grid-cols-2 border border-gray-200 rounded-sm overflow-hidden">
+        {tabs.map((t, i) => (
+          <button
+            data-tab={t.id}
+            data-key={t.key}
+            class={`about-tab py-4 text-sm font-medium border-b border-r border-gray-200 transition-colors
+              ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-16 max-w-3xl">
+    <div class="container mx-auto px-4 pt-10 pb-16 max-w-3xl">
 
       <!-- 학원특징 -->
       <div id="panel-features" class="about-panel">
@@ -199,11 +197,11 @@ const campuses = [
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
-          t.classList.remove('border-brand', 'text-brand');
-          t.classList.add('border-transparent', 'text-gray-400');
+          t.classList.remove('bg-brand', 'text-white');
+          t.classList.add('bg-white', 'text-gray-500');
         });
-        tab.classList.add('border-brand', 'text-brand');
-        tab.classList.remove('border-transparent', 'text-gray-400');
+        tab.classList.add('bg-brand', 'text-white');
+        tab.classList.remove('bg-white', 'text-gray-500');
         panels.forEach(p => p.classList.add('hidden'));
         const id = tab.dataset.tab!;
         document.getElementById(`panel-${id}`)?.classList.remove('hidden');
