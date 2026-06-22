@@ -5,6 +5,7 @@ const tabs = [
   { label: '학원특징', id: 'features', key: 'about_features' },
   { label: 'HISTORY', id: 'history',  key: 'about_history' },
   { label: 'SPACE',   id: 'space',    key: null },
+  { label: '학원생활 관리규정', id: 'rules', key: 'about_rules' },
 ];
 
 // directions.astro 캠퍼스 정보 재사용
@@ -104,6 +105,13 @@ const campuses = [
             </div>
           </div>
         ))}
+      </div>
+
+      <!-- 학원생활 관리규정 -->
+      <div id="panel-rules" class="about-panel hidden">
+        <div id="content-rules" class="page-content-area text-gray-700 leading-relaxed">
+          <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
+        </div>
       </div>
 
     </div>

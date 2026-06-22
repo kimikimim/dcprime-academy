@@ -183,6 +183,7 @@ import Layout from '../components/layout/Layout.astro';
             <button data-about-sub="features" class="about-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">학원특징</button>
             <button data-about-sub="history"  class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">HISTORY</button>
             <button data-about-sub="space"    class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">SPACE</button>
+            <button data-about-sub="rules"    class="about-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors whitespace-nowrap">학원생활 관리규정</button>
           </div>
 
           <div id="about-sub-features" class="bg-white rounded-2xl shadow-sm p-6">
@@ -245,6 +246,16 @@ import Layout from '../components/layout/Layout.astro';
               <div id="space-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <p class="col-span-full text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
               </div>
+            </div>
+          </div>
+
+          <div id="about-sub-rules" class="hidden bg-white rounded-2xl shadow-sm p-6">
+            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+              <div id="quill-about-rules"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button data-key="about_rules" data-qid="quill-about-rules" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+              <span id="msg-about_rules" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
             </div>
           </div>
         </div>
@@ -474,7 +485,7 @@ import Layout from '../components/layout/Layout.astro';
       ],
     },
   ];
-  const ABOUT_SUBS = ['features', 'history', 'space'];
+  const ABOUT_SUBS = ['features', 'history', 'space', 'rules'];
   const CUR_SUBS = ['elementary', 'middle', 'high'];
 
   const quills: Record<string, any> = {};
@@ -602,9 +613,11 @@ import Layout from '../components/layout/Layout.astro';
   async function initAboutTab() {
     createQuill('quill-about-features', '학원 특징을 입력하세요.');
     createQuill('quill-about-history', '학원 연혁을 입력하세요.');
+    createQuill('quill-about-rules', '학원생활 관리규정을 입력하세요.');
     await Promise.all([
       loadPageContent('about_features', 'quill-about-features'),
       loadPageContent('about_history', 'quill-about-history'),
+      loadPageContent('about_rules', 'quill-about-rules'),
     ]);
     loadSpacePhotos('neunggok');
   }
