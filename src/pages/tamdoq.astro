@@ -2,1099 +2,451 @@
 import '../styles/global.css';
 // --- 데이터 정의 (포트폴리오 섹션) ---
 const zoneA = [
-    { src: "/images/tamdoq/KakaoTalk_20260116_170128683.jpg", label: "[플래너/계획표]" },
-    {
-        src: "/images/tamdoq/KakaoTalk_20260116_170128683_01.jpg",
-        label: "[스스로 피드백 O/X]",
-    },
-    { src: "/images/tamdoq/KakaoTalk_20260116_170128683_02.jpg", label: "[학습 리듬 파악]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170128683.jpg", label: "[플래너/계획표]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170128683_01.jpg", label: "[스스로 피드백 O/X]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170128683_02.jpg", label: "[학습 리듬 파악]" }
 ];
 
 const zoneB = [
-    { src: "/images/tamdoq/KakaoTalk_20260116_170603251.jpg", label: "[구조화 요약 노트]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_170603251_01.jpg", label: "[마인드맵식 정리]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_170603251_02.jpg", label: "[교과서 본문 분석]" },
-    {
-        src: "/images/tamdoq/KakaoTalk_20260116_170603251_03.jpg",
-        label: "[나만의 언어로 재조립]",
-    },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170603251.jpg", label: "[구조화 요약 노트]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170603251_01.jpg", label: "[마인드맵식 정리]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170603251_02.jpg", label: "[교과서 본문 분석]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170603251_03.jpg", label: "[나만의 언어로 재조립]" }
 ];
 
 const zoneC = [
-    { src: "/images/tamdoq/KakaoTalk_20260116_182123990.jpg", label: "[시사 이슈(NIE) 분석]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_182123990_01.jpg", label: "[논리적 에세이 1]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_182123990_02.jpg", label: "[논리적 에세이 2]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_182123990_03.jpg", label: "[선생님 심화 첨삭]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182123990.jpg", label: "[시사 이슈(NIE) 분석]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182123990_01.jpg", label: "[논리적 에세이 1]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182123990_02.jpg", label: "[논리적 에세이 2]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182123990_03.jpg", label: "[선생님 심화 첨삭]" }
 ];
 
 const extraGallery = [
-    { src: "/images/tamdoq/KakaoTalk_20260116_182203582.jpg", label: "[자소서/글쓰기 초안]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_182203582_05.jpg", label: "[탐구 보고서 예시]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_182203582_06.jpg", label: "[심화 작성물]" },
-    { src: "/images/tamdoq/KakaoTalk_20260116_170128683_03.jpg", label: "[시간 경영 플래너]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182203582.jpg", label: "[자소서/글쓰기 초안]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182203582_05.jpg", label: "[탐구 보고서 예시]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_182203582_06.jpg", label: "[심화 작성물]" },
+  { src: "/images/tamdoq/KakaoTalk_20260116_170128683_03.jpg", label: "[시간 경영 플래너]" }
 ];
 ---
 
 <html lang="ko">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>대치프라임 탐독</title>
-        <style is:global>
-            @import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>대치프라임 탐독</title>
+  <style is:global>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+    
+    .font-serif { font-family: 'Nanum Myeongjo', serif; }
+    .font-sans { font-family: 'Noto Sans KR', sans-serif; }
+    
+    /* 부드러운 스크롤 */
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
 
-            .font-serif {
-                font-family: "Nanum Myeongjo", serif;
-            }
-            .font-sans {
-                font-family: "Noto Sans KR", sans-serif;
-            }
+  <!-- 헤더 -->
+  <header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-xl">
+          耽
+        </div>
+        <span class="font-serif font-extrabold text-2xl tracking-tight text-slate-900">
+          대치프라임 탐독
+        </span>
+      </div>
+      <button class="hidden md:flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 text-sm font-bold hover:bg-slate-800 transition-colors">
+        상담 예약하기
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  </header>
 
-            /* 부드러운 스크롤 */
-            html {
-                scroll-behavior: smooth;
-            }
-        </style>
-    </head>
-    <body
-        class="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white"
-    >
-        <!-- 헤더 -->
-        <header
-            class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-50"
-        >
-            <div
-                class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between"
-            >
-                <div class="flex items-center gap-2">
-                    <div
-                        class="w-8 h-8 bg-slate-900 flex items-center justify-center text-white font-serif font-bold text-xl"
-                    >
-                        耽
-                    </div>
-                    <span
-                        class="font-serif font-extrabold text-2xl tracking-tight text-slate-900"
-                    >
-                        대치프라임 탐독
-                    </span>
-                </div>
-                <button
-                    class="hidden md:flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 text-sm font-bold hover:bg-slate-800 transition-colors"
-                >
-                    상담 예약하기
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="m9 18 6-6-6-6"></path></svg
-                    >
-                </button>
+  <!-- Main Hero Section -->
+  <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900 z-10"></div>
+      <!-- Hero background decoration -->
+      <div class="w-full h-full flex flex-wrap gap-4 p-8 justify-center items-center opacity-30 mix-blend-overlay">
+        {Array.from({ length: 20 }).map(() => (
+          <div class="w-32 h-40 border border-slate-500 transform rotate-12"></div>
+        ))}
+      </div>
+    </div>
+    
+    <div class="relative z-20 max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-slate-400 font-bold tracking-widest mb-6 text-sm md:text-base">DAECHI PRIME READING PROGRAM</h2>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-extrabold text-white leading-tight break-keep mb-8">
+        무지성의 선행과 문제만 푸는 아이<br />
+        <span class="text-slate-300">고등학교에서 무너집니다!</span>
+      </h1>
+      <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light break-keep">
+        과거처럼 맹목적으로 국영수 문제만 푸는 교육은 AI 시대에 살아남을 수 없습니다.<br class="hidden md:block" />
+        독해력부터 시간 경영, 그리고 철저한 메타인지까지.<br class="hidden md:block" />
+        내신과 입시를 꿰뚫는 최상위권의 비밀은 결국 <strong class="text-white font-bold border-b border-white pb-1">'스스로 읽고 소화하는 힘'</strong>에 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 1: Problem & Solution -->
+  <section class="py-24 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <h3 class="text-3xl md:text-4xl font-sans font-black text-red-600 leading-tight mb-6">
+            "우리 아이, 학원은 열심히 다니는데 왜 성적은 제자리일까요?"
+          </h3>
+          <div class="w-12 h-1 bg-slate-900 mb-8"></div>
+          <p class="text-lg text-slate-600 leading-relaxed mb-6">
+            스스로 무엇을 모르는지 파악하지 못하고, 플래너 한 장 스스로 작성하지 못하는 아이는 중·고등부의 압도적인 학업량을 결코 버텨낼 수 없습니다. 눈으로만 훑는 독서는 가짜 독서이며, 생각 없이 듣기만 하는 수업은 노동일뿐입니다.
+          </p>
+          <p class="text-lg text-slate-900 font-bold leading-relaxed">
+            대치프라임의 '탐독'은 국영수 진도를 무리하게 빼기 전, 아이의 <span class="bg-slate-200 px-2 py-1">'공부 그릇'</span> 자체를 키우는 본질적인 훈련입니다. 원점에서 아이의 공부 습관을 재점검하고, 고등부 3년을 흔들림 없이 버티는 자생력을 길러냅니다.
+          </p>
+        </div>
+        <div class="bg-slate-50 p-8 md:p-12 border border-slate-200">
+          <h4 class="text-xl font-bold mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+            탐독(耽讀)이 세우는 3가지 뼈대
+          </h4>
+          <ul class="space-y-6">
+            <li class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100">1</div>
+              <div>
+                <h5 class="font-bold text-lg mb-1">메타인지와 시간 경영</h5>
+                <p class="text-slate-600 text-sm leading-relaxed">자신의 학습 리듬을 파악하고 주도적으로 하루를 설계하는 힘</p>
+              </div>
+            </li>
+            <li class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100">2</div>
+              <div>
+                <h5 class="font-bold text-lg mb-1">본질적 독해와 구조화</h5>
+                <p class="text-slate-600 text-sm leading-relaxed">눈으로 훑는 것을 넘어 활자를 완전히 장악하고 재조립하는 능력</p>
+              </div>
+            </li>
+            <li class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100">3</div>
+              <div>
+                <h5 class="font-bold text-lg mb-1">사고의 확장과 논증</h5>
+                <p class="text-slate-600 text-sm leading-relaxed">비판적 사고를 바탕으로 정교한 글쓰기와 토론을 이끌어내는 심화 과정</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Portfolio / Proof -->
+  <section class="py-24 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-20">
+        <h2 class="text-sm font-bold tracking-widest text-slate-500 mb-4">PORTFOLIO</h2>
+        <h3 class="text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-6">
+          기적의 증명 : 탐독 선배들의 치열한 기록
+        </h3>
+        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+          백 마디의 미사여구보다, 탐독 프로그램 안에서 스스로 한계를 깨고 성장한 아이들의 결과물을 직접 확인하십시오.
+        </p>
+      </div>
+
+      <div class="space-y-32">
+        <!-- Zone A -->
+        <div>
+          <div class="mb-10 max-w-3xl">
+            <div class="flex items-center gap-3 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <h4 class="text-2xl font-bold">Zone A. 시간 경영과 메타인지의 시작</h4>
             </div>
-        </header>
-
-        <!-- Main Hero Section -->
-        <section
-            class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden"
-        >
-            <div class="absolute inset-0 opacity-20">
-                <div
-                    class="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900 z-10"
-                >
+            <p class="text-slate-600 text-lg">탐독은 그저 책만 읽는 수업이 아닙니다. 자신의 하루를 설계하고, 평가하고, 스스로에게 질문을 던지는 '자기주도적 시간 경영'부터 시작합니다.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {zoneA.map((item) => (
+              <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
+                <img src={item.src} alt={item.src} class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'" />
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                  <span class="text-sm font-bold text-slate-700 mb-1">{item.label}</span>
+                  <span class="text-xs font-mono text-slate-500 break-all">{item.src}</span>
                 </div>
-                <!-- Hero background decoration -->
-                <div
-                    class="w-full h-full flex flex-wrap gap-4 p-8 justify-center items-center opacity-30 mix-blend-overlay"
-                >
-                    {
-                        Array.from({ length: 20 }).map(() => (
-                            <div class="w-32 h-40 border border-slate-500 transform rotate-12" />
-                        ))
-                    }
-                </div>
+              </div>
+            ))}
+          </div>
+          <div class="mt-8 relative">
+            <div class="absolute top-0 left-0 -mt-3 -ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-slate-200 fill-current opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
             </div>
+            <blockquote class="relative z-10 pl-6 border-l-4 border-slate-800 py-2">
+              <p class="text-lg font-serif font-bold text-slate-800 leading-relaxed">
+                처음엔 시간 단위 계획조차 낯설어하던 아이가, 스스로 O/X를 체크하고 자신만의 피드백을 적어 내려가기 시작합니다. 이 플래너 한 장이 아이의 고등학교 3년을 결정짓습니다.
+              </p>
+            </blockquote>
+          </div>
+        </div>
 
-            <div class="relative z-20 max-w-5xl mx-auto px-6 text-center">
-                <h2
-                    class="text-slate-400 font-bold tracking-widest mb-6 text-sm md:text-base"
-                >
-                    DAECHI PRIME READING PROGRAM
-                </h2>
-                <h1
-                    class="text-4xl md:text-6xl lg:text-7xl font-serif font-extrabold text-white leading-tight break-keep mb-8"
-                >
-                    무지성의 선행과 문제만 푸는 아이<br />
-                    <span class="text-slate-300">고등학교에서 무너집니다!</span>
-                </h1>
-                <p
-                    class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light break-keep"
-                >
-                    과거처럼 맹목적으로 국영수 문제만 푸는 교육은 AI 시대에
-                    살아남을 수 없습니다.<br class="hidden md:block" />
-                    독해력부터 시간 경영, 그리고 철저한 메타인지까지.<br
-                        class="hidden md:block"
-                    />
-                    내신과 입시를 꿰뚫는 최상위권의 비밀은 결국 <strong
-                        class="text-white font-bold border-b border-white pb-1"
-                        >'스스로 읽고 소화하는 힘'</strong
-                    >에 있습니다.
-                </p>
+        <!-- Zone B -->
+        <div>
+          <div class="mb-10 max-w-3xl">
+            <div class="flex items-center gap-3 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <h4 class="text-2xl font-bold">Zone B. 활자를 온전히 내 것으로, 구조화 및 요약</h4>
             </div>
-        </section>
-
-        <!-- Section 1: Problem & Solution -->
-        <section class="py-24 bg-white">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <h3
-                            class="text-3xl md:text-4xl font-sans font-black text-red-600 leading-tight mb-6"
-                        >
-                            "우리 아이, 학원은 열심히 다니는데 왜 성적은
-                            제자리일까요?"
-                        </h3>
-                        <div class="w-12 h-1 bg-slate-900 mb-8"></div>
-                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
-                            스스로 무엇을 모르는지 파악하지 못하고, 플래너 한 장
-                            스스로 작성하지 못하는 아이는 중·고등부의 압도적인
-                            학업량을 결코 버텨낼 수 없습니다. 눈으로만 훑는
-                            독서는 가짜 독서이며, 생각 없이 듣기만 하는 수업은
-                            노동일뿐입니다.
-                        </p>
-                        <p
-                            class="text-lg text-slate-900 font-bold leading-relaxed"
-                        >
-                            대치프라임의 '탐독'은 국영수 진도를 무리하게 빼기
-                            전, 아이의 <span class="bg-slate-200 px-2 py-1"
-                                >'공부 그릇'</span
-                            > 자체를 키우는 본질적인 훈련입니다. 원점에서 아이의 공부
-                            습관을 재점검하고, 고등부 3년을 흔들림 없이 버티는 자생력을
-                            길러냅니다.
-                        </p>
-                    </div>
-                    <div
-                        class="bg-slate-50 p-8 md:p-12 border border-slate-200"
-                    >
-                        <h4
-                            class="text-xl font-bold mb-6 flex items-center gap-2"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-6 h-6 text-slate-900"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                ></path><path d="M22 4 12 14.01l-3-3"
-                                ></path></svg
-                            >
-                            탐독(耽讀)이 세우는 3가지 뼈대
-                        </h4>
-                        <ul class="space-y-6">
-                            <li class="flex gap-4">
-                                <div
-                                    class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100"
-                                >
-                                    1
-                                </div>
-                                <div>
-                                    <h5 class="font-bold text-lg mb-1">
-                                        메타인지와 시간 경영
-                                    </h5>
-                                    <p
-                                        class="text-slate-600 text-sm leading-relaxed"
-                                    >
-                                        자신의 학습 리듬을 파악하고 주도적으로
-                                        하루를 설계하는 힘
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="flex gap-4">
-                                <div
-                                    class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100"
-                                >
-                                    2
-                                </div>
-                                <div>
-                                    <h5 class="font-bold text-lg mb-1">
-                                        본질적 독해와 구조화
-                                    </h5>
-                                    <p
-                                        class="text-slate-600 text-sm leading-relaxed"
-                                    >
-                                        눈으로 훑는 것을 넘어 활자를 완전히
-                                        장악하고 재조립하는 능력
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="flex gap-4">
-                                <div
-                                    class="w-10 h-10 shrink-0 bg-white shadow-sm flex items-center justify-center font-serif font-bold text-lg border border-slate-100"
-                                >
-                                    3
-                                </div>
-                                <div>
-                                    <h5 class="font-bold text-lg mb-1">
-                                        사고의 확장과 논증
-                                    </h5>
-                                    <p
-                                        class="text-slate-600 text-sm leading-relaxed"
-                                    >
-                                        비판적 사고를 바탕으로 정교한 글쓰기와
-                                        토론을 이끌어내는 심화 과정
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+            <p class="text-slate-600 text-lg">교과서와 비문학 지문을 정확히 읽어내고, 중심 문장을 뽑아내어 자신만의 지식으로 재조립하는 훈련입니다. 이 과정이 수학, 영어, 탐구 과목의 성적 동반 상승을 견인합니다.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {zoneB.map((item) => (
+              <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
+                <img src={item.src} alt={item.src} class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'" />
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                  <span class="text-sm font-bold text-slate-700 mb-1">{item.label}</span>
+                  <span class="text-xs font-mono text-slate-500 break-all">{item.src}</span>
                 </div>
+              </div>
+            ))}
+          </div>
+          <div class="mt-8 relative">
+            <div class="absolute top-0 left-0 -mt-3 -ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-slate-200 fill-current opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
             </div>
-        </section>
+            <blockquote class="relative z-10 pl-6 border-l-4 border-slate-800 py-2">
+              <p class="text-lg font-serif font-bold text-slate-800 leading-relaxed">
+                텍스트를 단순히 읽는 것에 그치지 않고, 마인드맵과 다이어그램으로 도식화하여 완벽히 장악한 노트입니다. 이것이 바로 학업 누수를 막는 진짜 공부의 흔적입니다.
+              </p>
+            </blockquote>
+          </div>
+        </div>
 
-        <!-- Section 2: Portfolio / Proof -->
-        <section class="py-24 bg-slate-50 border-t border-slate-200">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-20">
-                    <h2
-                        class="text-sm font-bold tracking-widest text-slate-500 mb-4"
-                    >
-                        PORTFOLIO
-                    </h2>
-                    <h3
-                        class="text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-6"
-                    >
-                        기적의 증명 : 탐독 선배들의 치열한 기록
-                    </h3>
-                    <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                        백 마디의 미사여구보다, 탐독 프로그램 안에서 스스로
-                        한계를 깨고 성장한 아이들의 결과물을 직접 확인하십시오.
-                    </p>
-                </div>
-
-                <div class="space-y-32">
-                    <!-- Zone A -->
-                    <div>
-                        <div class="mb-10 max-w-3xl">
-                            <div class="flex items-center gap-3 mb-4">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 text-slate-400"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><circle cx="12" cy="12" r="10"
-                                    ></circle><polyline
-                                        points="12 6 12 12 16 14"
-                                    ></polyline></svg
-                                >
-                                <h4 class="text-2xl font-bold">
-                                    Zone A. 시간 경영과 메타인지의 시작
-                                </h4>
-                            </div>
-                            <p class="text-slate-600 text-lg">
-                                탐독은 그저 책만 읽는 수업이 아닙니다. 자신의
-                                하루를 설계하고, 평가하고, 스스로에게 질문을
-                                던지는 '자기주도적 시간 경영'부터 시작합니다.
-                            </p>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {
-                                zoneA.map((item) => (
-                                    <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
-                                        <img
-                                            src={item.src}
-                                            alt={item.src}
-                                            class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105"
-                                            onerror="this.style.display='none'"
-                                        />
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-8 h-8 text-slate-400 mb-2"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            >
-                                                <>
-                                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                                    <polyline points="14 2 14 8 20 8" />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="13"
-                                                        y2="13"
-                                                    />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="17"
-                                                        y2="17"
-                                                    />
-                                                    <line
-                                                        x1="10"
-                                                        x2="8"
-                                                        y1="9"
-                                                        y2="9"
-                                                    />
-                                                </>
-                                            </svg>
-                                            <span class="text-sm font-bold text-slate-700 mb-1">
-                                                {item.label}
-                                            </span>
-                                            <span class="text-xs font-mono text-slate-500 break-all">
-                                                {item.src}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <div class="mt-8 relative">
-                            <div class="absolute top-0 left-0 -mt-3 -ml-2">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-10 h-10 text-slate-200 fill-current opacity-50"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"
-                                    ></path><path
-                                        d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
-                                    ></path></svg
-                                >
-                            </div>
-                            <blockquote
-                                class="relative z-10 pl-6 border-l-4 border-slate-800 py-2"
-                            >
-                                <p
-                                    class="text-lg font-serif font-bold text-slate-800 leading-relaxed"
-                                >
-                                    처음엔 시간 단위 계획조차 낯설어하던 아이가,
-                                    스스로 O/X를 체크하고 자신만의 피드백을 적어
-                                    내려가기 시작합니다. 이 플래너 한 장이
-                                    아이의 고등학교 3년을 결정짓습니다.
-                                </p>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <!-- Zone B -->
-                    <div>
-                        <div class="mb-10 max-w-3xl">
-                            <div class="flex items-center gap-3 mb-4">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 text-slate-400"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
-                                    ></path><path
-                                        d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
-                                    ></path></svg
-                                >
-                                <h4 class="text-2xl font-bold">
-                                    Zone B. 활자를 온전히 내 것으로, 구조화 및
-                                    요약
-                                </h4>
-                            </div>
-                            <p class="text-slate-600 text-lg">
-                                교과서와 비문학 지문을 정확히 읽어내고, 중심
-                                문장을 뽑아내어 자신만의 지식으로 재조립하는
-                                훈련입니다. 이 과정이 수학, 영어, 탐구 과목의
-                                성적 동반 상승을 견인합니다.
-                            </p>
-                        </div>
-                        <div
-                            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                        >
-                            {
-                                zoneB.map((item) => (
-                                    <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
-                                        <img
-                                            src={item.src}
-                                            alt={item.src}
-                                            class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105"
-                                            onerror="this.style.display='none'"
-                                        />
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-8 h-8 text-slate-400 mb-2"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            >
-                                                <>
-                                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                                    <polyline points="14 2 14 8 20 8" />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="13"
-                                                        y2="13"
-                                                    />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="17"
-                                                        y2="17"
-                                                    />
-                                                    <line
-                                                        x1="10"
-                                                        x2="8"
-                                                        y1="9"
-                                                        y2="9"
-                                                    />
-                                                </>
-                                            </svg>
-                                            <span class="text-sm font-bold text-slate-700 mb-1">
-                                                {item.label}
-                                            </span>
-                                            <span class="text-xs font-mono text-slate-500 break-all">
-                                                {item.src}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <div class="mt-8 relative">
-                            <div class="absolute top-0 left-0 -mt-3 -ml-2">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-10 h-10 text-slate-200 fill-current opacity-50"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"
-                                    ></path><path
-                                        d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
-                                    ></path></svg
-                                >
-                            </div>
-                            <blockquote
-                                class="relative z-10 pl-6 border-l-4 border-slate-800 py-2"
-                            >
-                                <p
-                                    class="text-lg font-serif font-bold text-slate-800 leading-relaxed"
-                                >
-                                    텍스트를 단순히 읽는 것에 그치지 않고,
-                                    마인드맵과 다이어그램으로 도식화하여 완벽히
-                                    장악한 노트입니다. 이것이 바로 학업 누수를
-                                    막는 진짜 공부의 흔적입니다.
-                                </p>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <!-- Zone C -->
-                    <div>
-                        <div class="mb-10 max-w-3xl">
-                            <div class="flex items-center gap-3 mb-4">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 text-slate-400"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path d="m12 19 7-7 3 3-7 7-3-3z"
-                                    ></path><path
-                                        d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"
-                                    ></path><path d="m2 2 7.586 7.586"
-                                    ></path><circle cx="11" cy="11" r="2"
-                                    ></circle></svg
-                                >
-                                <h4 class="text-2xl font-bold">
-                                    Zone C. 깊이 있는 사고의 확장과 논증
-                                </h4>
-                            </div>
-                            <p class="text-slate-600 text-lg">
-                                단순한 독후감이 아닙니다. 시사 이슈(NIE)와
-                                연계하여 비판적으로 사고하고, 논리적인 글로
-                                완성해 냅니다. 이는 특목·자사고 자소서와 고교
-                                심화 수행평가의 탄탄한 밑거름이 됩니다.
-                            </p>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            {
-                                zoneC.map((item) => (
-                                    <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
-                                        <img
-                                            src={item.src}
-                                            alt={item.src}
-                                            class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105"
-                                            onerror="this.style.display='none'"
-                                        />
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-8 h-8 text-slate-400 mb-2"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            >
-                                                <>
-                                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                                    <polyline points="14 2 14 8 20 8" />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="13"
-                                                        y2="13"
-                                                    />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="17"
-                                                        y2="17"
-                                                    />
-                                                    <line
-                                                        x1="10"
-                                                        x2="8"
-                                                        y1="9"
-                                                        y2="9"
-                                                    />
-                                                </>
-                                            </svg>
-                                            <span class="text-sm font-bold text-slate-700 mb-1">
-                                                {item.label}
-                                            </span>
-                                            <span class="text-xs font-mono text-slate-500 break-all">
-                                                {item.src}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <div class="mt-8 relative">
-                            <div class="absolute top-0 left-0 -mt-3 -ml-2">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-10 h-10 text-slate-200 fill-current opacity-50"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"
-                                    ></path><path
-                                        d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
-                                    ></path></svg
-                                >
-                            </div>
-                            <blockquote
-                                class="relative z-10 pl-6 border-l-4 border-slate-800 py-2"
-                            >
-                                <p
-                                    class="text-lg font-serif font-bold text-slate-800 leading-relaxed"
-                                >
-                                    단락 나누기조차 버거워하던 아이들이, 이제는
-                                    치열하게 고민하며 원고지를 채우고 시사
-                                    쟁점을 논리적으로 파고듭니다. 강도 높은
-                                    첨삭을 이겨낸 아이들의 사고력은 차원이
-                                    다릅니다.
-                                </p>
-                            </blockquote>
-                        </div>
-                    </div>
-
-                    <!-- Extra Gallery -->
-                    <div class="pt-16 border-t border-slate-200">
-                        <h5 class="text-lg font-bold mb-6 text-slate-500">
-                            그 외 선배들의 치열한 기록
-                        </h5>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {
-                                extraGallery.map((item) => (
-                                    <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
-                                        <img
-                                            src={item.src}
-                                            alt={item.src}
-                                            class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105"
-                                            onerror="this.style.display='none'"
-                                        />
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="w-8 h-8 text-slate-400 mb-2"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            >
-                                                <>
-                                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                                    <polyline points="14 2 14 8 20 8" />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="13"
-                                                        y2="13"
-                                                    />
-                                                    <line
-                                                        x1="16"
-                                                        x2="8"
-                                                        y1="17"
-                                                        y2="17"
-                                                    />
-                                                    <line
-                                                        x1="10"
-                                                        x2="8"
-                                                        y1="9"
-                                                        y2="9"
-                                                    />
-                                                </>
-                                            </svg>
-                                            <span class="text-sm font-bold text-slate-700 mb-1">
-                                                {item.label}
-                                            </span>
-                                            <span class="text-xs font-mono text-slate-500 break-all">
-                                                {item.src}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-                </div>
+        <!-- Zone C -->
+        <div>
+          <div class="mb-10 max-w-3xl">
+            <div class="flex items-center gap-3 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+              <h4 class="text-2xl font-bold">Zone C. 깊이 있는 사고의 확장과 논증</h4>
             </div>
-        </section>
-
-        <!-- Section: Teacher Intro -->
-        <section class="py-24 bg-white">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <!-- Image 영역 -->
-                    <div class="relative">
-                        <div
-                            class="absolute inset-0 bg-slate-900 translate-x-4 translate-y-4"
-                        >
-                        </div>
-                        <img
-                            src="image_89ea48.jpg"
-                            alt="남명심 원장"
-                            class="relative z-10 w-full h-auto object-cover border border-slate-200 grayscale hover:grayscale-0 transition-all duration-700"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                        />
-                        <div
-                            class="hidden absolute inset-0 z-10 bg-slate-100 border border-slate-300 flex-col items-center justify-center p-4 text-center"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-8 h-8 text-slate-400 mb-2"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><path
-                                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
-                                ></path><polyline points="14 2 14 8 20 8"
-                                ></polyline><line x1="16" x2="8" y1="13" y2="13"
-                                ></line><line x1="16" x2="8" y1="17" y2="17"
-                                ></line><line x1="10" x2="8" y1="9" y2="9"
-                                ></line></svg
-                            >
-                            <span class="text-sm font-bold text-slate-700 mb-1"
-                                >[원장님 프로필 사진]</span
-                            >
-                            <span class="text-xs font-mono text-slate-500"
-                                >image_89ea48.jpg</span
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Text 영역 -->
-                    <div>
-                        <h2
-                            class="text-sm font-bold tracking-widest text-slate-500 mb-4"
-                        >
-                            입시디자이너
-                        </h2>
-                        <h3
-                            class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-6 leading-tight break-keep"
-                        >
-                            "아이들의 소중한 중고등 6년,<br />가짜 공부로
-                            허비하게 둘 수 없습니다."
-                        </h3>
-                        <div class="w-12 h-1 bg-slate-900 mb-8"></div>
-
-                        <div class="mb-8">
-                            <p class="text-2xl font-black text-slate-900 mb-2">
-                                남명심 선생님
-                            </p>
-                            <div class="space-y-1">
-                                <p class="text-slate-600 font-bold">
-                                    대치·분당·수지 교육특구 16년 전문가
-                                </p>
-                                <p class="text-slate-600 font-bold">
-                                    대치프라임 '탐독' 전임
-                                </p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="space-y-5 text-lg text-slate-600 leading-relaxed break-keep"
-                        >
-                            <p>
-                                수많은 아이들이 학원에 앉아 고개만 끄덕이다
-                                집으로 돌아갑니다. 스스로 계획을 세우지 못하고,
-                                활자를 완전히 장악해 내지 못하는 아이에게
-                                무의미한 선행과 기계적인 문제 풀이는 독(毒)이 될
-                                뿐입니다.
-                            </p>
-                            <p>
-                                대치프라임 탐독(耽讀)은 타협하지 않습니다.
-                                아이가 스스로 사고하고, 질문하고, 자신의 언어로
-                                세상을 꿰뚫어 보는 <strong
-                                    class="text-slate-900 font-black"
-                                    >'진짜 힘'</strong
-                                >을 길러냅니다.
-                            </p>
-                            <p
-                                class="font-bold text-slate-900 pt-4 border-t border-slate-200 mt-6"
-                            >
-                                치열하게 읽고 쓰며, 한계를 깨고 성장할 준비가 된
-                                아이들만 기다립니다.
-                            </p>
-                        </div>
-                    </div>
+            <p class="text-slate-600 text-lg">단순한 독후감이 아닙니다. 시사 이슈(NIE)와 연계하여 비판적으로 사고하고, 논리적인 글로 완성해 냅니다. 이는 특목·자사고 자소서와 고교 심화 수행평가의 탄탄한 밑거름이 됩니다.</p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {zoneC.map((item) => (
+              <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
+                <img src={item.src} alt={item.src} class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'" />
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                  <span class="text-sm font-bold text-slate-700 mb-1">{item.label}</span>
+                  <span class="text-xs font-mono text-slate-500 break-all">{item.src}</span>
                 </div>
+              </div>
+            ))}
+          </div>
+          <div class="mt-8 relative">
+            <div class="absolute top-0 left-0 -mt-3 -ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-slate-200 fill-current opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.036c0 1.05.32 1.964 1 2.964z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
             </div>
-        </section>
+            <blockquote class="relative z-10 pl-6 border-l-4 border-slate-800 py-2">
+              <p class="text-lg font-serif font-bold text-slate-800 leading-relaxed">
+                단락 나누기조차 버거워하던 아이들이, 이제는 치열하게 고민하며 원고지를 채우고 시사 쟁점을 논리적으로 파고듭니다. 강도 높은 첨삭을 이겨낸 아이들의 사고력은 차원이 다릅니다.
+              </p>
+            </blockquote>
+          </div>
+        </div>
 
-        <!-- Section 3: System -->
-        <section class="py-24 bg-slate-900 text-white">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
-                        타협 없는 밀착 케어, 탐독의 수업 시스템
-                    </h2>
-                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">
-                        단순히 과제만 내주고 끝나는 수업이라면 시작하지
-                        않았습니다.<br />대치프라임 탐독은 주 2회, 빈틈없는 밀착
-                        케어 시스템으로 운영됩니다.
-                    </p>
+        <!-- Extra Gallery -->
+        <div class="pt-16 border-t border-slate-200">
+          <h5 class="text-lg font-bold mb-6 text-slate-500">그 외 선배들의 치열한 기록</h5>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {extraGallery.map((item) => (
+              <div class="relative w-full aspect-[4/3] bg-slate-100 border border-slate-300 overflow-hidden group">
+                <img src={item.src} alt={item.src} class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'" />
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                  <span class="text-sm font-bold text-slate-700 mb-1">{item.label}</span>
+                  <span class="text-xs font-mono text-slate-500 break-all">{item.src}</span>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-slate-800 p-10 border-t-4 border-white">
-                        <h3 class="text-2xl font-bold mb-2">
-                            Day 1 : 방향 설정 및 훈련
-                        </h3>
-                        <p class="text-slate-400 font-bold mb-8">
-                            원장 직강 및 메인 케어
-                        </p>
-                        <ul class="space-y-5">
-                            <li class="flex gap-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 shrink-0 text-slate-300"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path><path d="M22 4 12 14.01l-3-3"
-                                    ></path></svg
-                                >
-                                <span class="text-lg leading-tight"
-                                    >주간 플랜 작성 및 이행 여부 철저 점검</span
-                                >
-                            </li>
-                            <li class="flex gap-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 shrink-0 text-slate-300"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path><path d="M22 4 12 14.01l-3-3"
-                                    ></path></svg
-                                >
-                                <span class="text-lg leading-tight"
-                                    >100% 개별화된 맞춤 도서(완독/발췌독) 및
-                                    교과서 정독 훈련</span
-                                >
-                            </li>
-                            <li class="flex gap-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 shrink-0 text-slate-300"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path><path d="M22 4 12 14.01l-3-3"
-                                    ></path></svg
-                                >
-                                <span class="text-lg leading-tight"
-                                    >학업 누수를 완벽히 차단하는 100%
-                                    서술형(주관식) 테스트</span
-                                >
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-slate-800 p-10 border-t-4 border-slate-500">
-                        <h3 class="text-2xl font-bold mb-2">
-                            Day 2 : 확인 및 약점 보완
-                        </h3>
-                        <p class="text-slate-400 font-bold mb-8">
-                            튜터 밀착 케어
-                        </p>
-                        <ul class="space-y-5">
-                            <li class="flex gap-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 shrink-0 text-slate-300"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path><path d="M22 4 12 14.01l-3-3"
-                                    ></path></svg
-                                >
-                                <span class="text-lg leading-tight"
-                                    >1:1 구두 점검 및 테스트 진행</span
-                                >
-                            </li>
-                            <li class="flex gap-3">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-6 h-6 shrink-0 text-slate-300"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path><path d="M22 4 12 14.01l-3-3"
-                                    ></path></svg
-                                >
-                                <span class="text-lg leading-tight"
-                                    >'알아듣는 척'하는 누수를 찾아내는 집요한
-                                    오답 정리 및 피드백</span
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+  <!-- Section: Teacher Intro -->
+  <section class="py-24 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <!-- Image 영역 -->
+        <div class="relative">
+          <div class="absolute inset-0 bg-slate-900 translate-x-4 translate-y-4"></div>
+          <img 
+            src="image_89ea48.jpg" 
+            alt="남명심 원장" 
+            class="relative z-10 w-full h-auto object-cover border border-slate-200 grayscale hover:grayscale-0 transition-all duration-700"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="hidden absolute inset-0 z-10 bg-slate-100 border border-slate-300 flex-col items-center justify-center p-4 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+            <span class="text-sm font-bold text-slate-700 mb-1">[원장님 프로필 사진]</span>
+            <span class="text-xs font-mono text-slate-500">image_89ea48.jpg</span>
+          </div>
+        </div>
+        
+        <!-- Text 영역 -->
+        <div>
+          <h2 class="text-sm font-bold tracking-widest text-slate-500 mb-4">입시디자이너</h2>
+          <h3 class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-6 leading-tight break-keep">
+            "아이들의 소중한 중고등 6년,<br />가짜 공부로 허비하게 둘 수 없습니다."
+          </h3>
+          <div class="w-12 h-1 bg-slate-900 mb-8"></div>
+          
+          <div class="mb-8">
+            <p class="text-2xl font-black text-slate-900 mb-2">남명심 선생님</p>
+            <div class="space-y-1">
+              <p class="text-slate-600 font-bold">대치·분당·수지 교육특구 16년 전문가</p>
+              <p class="text-slate-600 font-bold">대치프라임 '탐독' 전임</p>
             </div>
-        </section>
+          </div>
+          
+          <div class="space-y-5 text-lg text-slate-600 leading-relaxed break-keep">
+            <p>
+              수많은 아이들이 학원에 앉아 고개만 끄덕이다 집으로 돌아갑니다. 스스로 계획을 세우지 못하고, 활자를 완전히 장악해 내지 못하는 아이에게 무의미한 선행과 기계적인 문제 풀이는 독(毒)이 될 뿐입니다.
+            </p>
+            <p>
+              대치프라임 탐독(耽讀)은 타협하지 않습니다. 아이가 스스로 사고하고, 질문하고, 자신의 언어로 세상을 꿰뚫어 보는 <strong class="text-slate-900 font-black">'진짜 힘'</strong>을 길러냅니다.
+            </p>
+            <p class="font-bold text-slate-900 pt-4 border-t border-slate-200 mt-6">
+              치열하게 읽고 쓰며, 한계를 깨고 성장할 준비가 된 아이들만 기다립니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Section 4: Target -->
-        <section class="py-24 bg-white">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="mb-16">
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
-                        모집 대상 및 타겟 학년
-                    </h2>
-                    <p class="text-lg text-slate-600">
-                        학생의 현재 성취도와 목표에 따라 두 가지 트랙으로
-                        분리하여 철저하게 운영됩니다.
-                    </p>
-                </div>
+  <!-- Section 3: System -->
+  <section class="py-24 bg-slate-900 text-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">타협 없는 밀착 케어, 탐독의 수업 시스템</h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+          단순히 과제만 내주고 끝나는 수업이라면 시작하지 않았습니다.<br />대치프라임 탐독은 주 2회, 빈틈없는 밀착 케어 시스템으로 운영됩니다.
+        </p>
+      </div>
 
-                <div class="space-y-6">
-                    <div
-                        class="flex flex-col md:flex-row border border-slate-200"
-                    >
-                        <div
-                            class="md:w-1/3 bg-slate-50 p-8 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col justify-center"
-                        >
-                            <h3 class="text-2xl font-bold text-slate-900 mb-2">
-                                탐독 주니어
-                            </h3>
-                            <p class="text-slate-500 font-bold">
-                                초등학교 4학년 ~ 중학교 1학년
-                            </p>
-                        </div>
-                        <div class="md:w-2/3 p-8 flex flex-col justify-center">
-                            <div class="mb-4">
-                                <span
-                                    class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2"
-                                    >교육 목표</span
-                                >
-                                <p class="text-lg text-slate-800 font-medium">
-                                    '제대로 읽기'의 시작과 흔들리지 않는 공부
-                                    습관 형성
-                                </p>
-                            </div>
-                            <div>
-                                <span
-                                    class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2"
-                                    >주요 내용</span
-                                >
-                                <p class="text-slate-600">
-                                    교과서 중심 읽기 훈련, 기본 노트 정리법,
-                                    핵심 문단 요약 훈련
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-slate-800 p-10 border-t-4 border-white">
+          <h3 class="text-2xl font-bold mb-2">Day 1 : 방향 설정 및 훈련</h3>
+          <p class="text-slate-400 font-bold mb-8">원장 직강 및 메인 케어</p>
+          <ul class="space-y-5">
+            <li class="flex gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              <span class="text-lg leading-tight">주간 플랜 작성 및 이행 여부 철저 점검</span>
+            </li>
+            <li class="flex gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              <span class="text-lg leading-tight">100% 개별화된 맞춤 도서(완독/발췌독) 및 교과서 정독 훈련</span>
+            </li>
+            <li class="flex gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              <span class="text-lg leading-tight">학업 누수를 완벽히 차단하는 100% 서술형(주관식) 테스트</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="bg-slate-800 p-10 border-t-4 border-slate-500">
+          <h3 class="text-2xl font-bold mb-2">Day 2 : 확인 및 약점 보완</h3>
+          <p class="text-slate-400 font-bold mb-8">튜터 밀착 케어</p>
+          <ul class="space-y-5">
+            <li class="flex gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              <span class="text-lg leading-tight">1:1 구두 점검 및 테스트 진행</span>
+            </li>
+            <li class="flex gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 shrink-0 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+              <span class="text-lg leading-tight">'알아듣는 척'하는 누수를 찾아내는 집요한 오답 정리 및 피드백</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                    <div
-                        class="flex flex-col md:flex-row border border-slate-800 shadow-lg"
-                    >
-                        <div
-                            class="md:w-1/3 bg-slate-900 text-white p-8 border-b md:border-b-0 md:border-r border-slate-700 flex flex-col justify-center"
-                        >
-                            <h3 class="text-2xl font-bold mb-2">탐독 프라임</h3>
-                            <p class="text-slate-400 font-bold">
-                                중학교 2학년 ~ 중학교 3학년
-                            </p>
-                        </div>
-                        <div
-                            class="md:w-2/3 p-8 flex flex-col justify-center bg-white"
-                        >
-                            <div class="mb-4">
-                                <span
-                                    class="inline-block px-3 py-1 bg-slate-900 text-white text-sm font-bold mb-2"
-                                    >교육 목표</span
-                                >
-                                <p class="text-lg text-slate-900 font-bold">
-                                    최상위권 도약을 위한 심화 논리력 및 자생력
-                                    완성
-                                </p>
-                            </div>
-                            <div>
-                                <span
-                                    class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2"
-                                    >주요 내용</span
-                                >
-                                <p class="text-slate-600">
-                                    시사 이슈(NIE) 연계 분석, 특목/자사고 대비
-                                    수준의 심화 논술 및 자기주도 학습 포트폴리오
-                                    완성 <br /><span
-                                        class="text-sm text-red-600 mt-1 inline-block"
-                                        >* 우수한 성적 증명 및 수용 태도 필수</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <!-- Section 4: Target -->
+  <section class="py-24 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="mb-16">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">모집 대상 및 타겟 학년</h2>
+        <p class="text-lg text-slate-600">학생의 현재 성취도와 목표에 따라 두 가지 트랙으로 분리하여 철저하게 운영됩니다.</p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="flex flex-col md:flex-row border border-slate-200">
+          <div class="md:w-1/3 bg-slate-50 p-8 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold text-slate-900 mb-2">탐독 주니어</h3>
+            <p class="text-slate-500 font-bold">초등학교 4학년 ~ 중학교 1학년</p>
+          </div>
+          <div class="md:w-2/3 p-8 flex flex-col justify-center">
+            <div class="mb-4">
+              <span class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2">교육 목표</span>
+              <p class="text-lg text-slate-800 font-medium">'제대로 읽기'의 시작과 흔들리지 않는 공부 습관 형성</p>
             </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section
-            class="py-24 bg-slate-100 border-t border-slate-200 text-center"
-        >
-            <div class="max-w-3xl mx-auto px-6">
-                <h2
-                    class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-8 leading-tight"
-                >
-                    탐독의 상담은 단순한<br class="md:hidden" /> 레벨 테스트 점수만으로
-                    이루어지지 않습니다.
-                </h2>
-                <div
-                    class="bg-white p-8 md:p-10 border border-slate-200 shadow-sm mb-10 text-left"
-                >
-                    <p
-                        class="text-lg text-slate-700 leading-relaxed break-keep"
-                    >
-                        상담 시, 아이가 평소 학원이나 학교에서 사용하던 <strong
-                            class="text-slate-900 underline decoration-slate-400 underline-offset-4"
-                            >'노트'와 '플래너'를 반드시 지참</strong
-                        >해 주십시오.<br class="hidden md:block" />
-                        아이가 쓴 글씨와 필기 상태를 통해 현재의 학업 태도와 문제점을
-                        정확히 진단하는 것에서부터 대치프라임 탐독은 시작됩니다.
-                    </p>
-                </div>
-
-                <button
-                    class="inline-flex items-center justify-center gap-3 bg-slate-900 text-white text-lg md:text-xl font-bold px-10 py-5 w-full md:w-auto hover:bg-slate-800 transition-all hover:scale-105 shadow-xl"
-                >
-                    탐독 프로그램 심층 상담 예약하기
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 h-6"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="m9 18 6-6-6-6"></path></svg
-                    >
-                </button>
+            <div>
+              <span class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2">주요 내용</span>
+              <p class="text-slate-600">교과서 중심 읽기 훈련, 기본 노트 정리법, 핵심 문단 요약 훈련</p>
             </div>
-        </section>
+          </div>
+        </div>
 
-        <!-- Footer -->
-        <footer
-            class="bg-slate-950 py-12 text-center border-t border-slate-800"
-        >
-            <div class="max-w-5xl mx-auto px-6">
-                <h2 class="font-serif font-bold text-2xl text-white mb-4">
-                    대치프라임 국어 논술
-                </h2>
-                <p class="text-slate-500 text-sm">
-                    본 웹페이지에 포함된 학생들의 모든 포트폴리오 및 기록물은
-                    대치프라임의 자산이며 무단 도용을 금합니다.
-                </p>
+        <div class="flex flex-col md:flex-row border border-slate-800 shadow-lg">
+          <div class="md:w-1/3 bg-slate-900 text-white p-8 border-b md:border-b-0 md:border-r border-slate-700 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-2">탐독 프라임</h3>
+            <p class="text-slate-400 font-bold">중학교 2학년 ~ 중학교 3학년</p>
+          </div>
+          <div class="md:w-2/3 p-8 flex flex-col justify-center bg-white">
+            <div class="mb-4">
+              <span class="inline-block px-3 py-1 bg-slate-900 text-white text-sm font-bold mb-2">교육 목표</span>
+              <p class="text-lg text-slate-900 font-bold">최상위권 도약을 위한 심화 논리력 및 자생력 완성</p>
             </div>
-        </footer>
-    </body>
+            <div>
+              <span class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-sm font-bold mb-2">주요 내용</span>
+              <p class="text-slate-600">시사 이슈(NIE) 연계 분석, 특목/자사고 대비 수준의 심화 논술 및 자기주도 학습 포트폴리오 완성 <br/><span class="text-sm text-red-600 mt-1 inline-block">* 우수한 성적 증명 및 수용 태도 필수</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 bg-slate-100 border-t border-slate-200 text-center">
+    <div class="max-w-3xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-8 leading-tight">
+        탐독의 상담은 단순한<br class="md:hidden" /> 레벨 테스트 점수만으로 이루어지지 않습니다.
+      </h2>
+      <div class="bg-white p-8 md:p-10 border border-slate-200 shadow-sm mb-10 text-left">
+        <p class="text-lg text-slate-700 leading-relaxed break-keep">
+          상담 시, 아이가 평소 학원이나 학교에서 사용하던 <strong class="text-slate-900 underline decoration-slate-400 underline-offset-4">'노트'와 '플래너'를 반드시 지참</strong>해 주십시오.<br class="hidden md:block" />
+          아이가 쓴 글씨 and 필기 상태를 통해 현재의 학업 태도와 문제점을 정확히 진단하는 것에서부터 대치프라임 탐독은 시작됩니다.
+        </p>
+      </div>
+      
+      <button class="inline-flex items-center justify-center gap-3 bg-slate-900 text-white text-lg md:text-xl font-bold px-10 py-5 w-full md:w-auto hover:bg-slate-800 transition-all hover:scale-105 shadow-xl">
+        탐독 프로그램 심층 상담 예약하기
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 py-12 text-center border-t border-slate-800">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="font-serif font-bold text-2xl text-white mb-4">대치프라임 국어 논술</h2>
+      <p class="text-slate-500 text-sm">
+        본 웹페이지에 포함된 학생들의 모든 포트폴리오 및 기록물은 대치프라임의 자산이며 무단 도용을 금합니다.
+      </p>
+    </div>
+  </footer>
+
+</body>
 </html>
