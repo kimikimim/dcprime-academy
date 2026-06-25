@@ -23,6 +23,19 @@
   <div id="hero-dots" class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2"></div>
 </section>
 
+<style>
+  #hero-slides-wrapper,
+  .hero-slide {
+    min-height: 480px;
+  }
+  @media (min-width: 768px) {
+    #hero-slides-wrapper,
+    .hero-slide {
+      min-height: 960px;
+    }
+  }
+</style>
+
 <script>
   import { createClient } from '@supabase/supabase-js';
 
@@ -47,8 +60,7 @@
 
     // 슬라이드 HTML 생성
     wrapper.innerHTML = slides.map((s, i) => `
-      <div class="hero-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
-           style="min-height: 480px;">
+      <div class="hero-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}">
         <img src="${s.image_url || ''}" alt="${s.title || ''}"
              class="absolute inset-0 w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black/45"></div>
@@ -63,8 +75,6 @@
       </div>
     `).join('');
 
-    // 높이를 첫 슬라이드 기준으로 맞추기 위해 wrapper에 min-height 설정
-    wrapper.style.minHeight = '480px';
     wrapper.style.position = 'relative';
 
     // 점 인디케이터
