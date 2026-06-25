@@ -238,24 +238,29 @@ import Layout from '../components/layout/Layout.astro';
       return;
     }
 
-    // 이메일 알림 (실패해도 신청은 완료 처리)
-    fetch('https://smnakhjdtbqgwocwlluz.supabase.co/functions/v1/notify-inquiry', {
+    // 이메일 알림 via Web3Forms (실패해도 신청은 완료 처리)
+    const branchLabel = branches.includes('neunggok') && branches.includes('jangkok')
+      ? '능곡관 + 장곡관'
+      : branches.includes('neunggok') ? '능곡관'
+      : branches.includes('jangkok') ? '장곡관'
+      : branches.join(', ') || '-';
+    fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        record: {
-          student_name: fd.get('student_name'),
-          student_phone: studentPhone,
-          parent_name: (fd.get('parent_name') as string) || null,
-          parent_phone: parentPhone,
-          school_name: (fd.get('school_name') as string) || null,
-          track: (fd.get('track') as string) || null,
-          grade: (fd.get('grade') as string) || null,
-          branch: branches.length > 0 ? branches[0] : null,
-          created_at: new Date().toISOString(),
-        }
+        access_key: '97c7b48b-2199-41ff-b7ba-7f3c9ac1da54',
+        subject: `[대치프라임] 상담 신청 - ${fd.get('student_name') ?? '이름없음'} (${branchLabel})`,
+        from_name: '대치프라임 상담신청',
+        student_name: fd.get('student_name') ?? '-',
+        student_phone: studentPhone,
+        parent_name: (fd.get('parent_name') as string) || '-',
+        parent_phone: parentPhone || '-',
+        school_name: (fd.get('school_name') as string) || '-',
+        track: (fd.get('track') as string) || '-',
+        grade: (fd.get('grade') as string) || '-',
+        branch: branchLabel,
       }),
-    }).catch(() => {}); // 알림 실패해도 무시
+    }).catch(() => {});
 
     form.style.display = 'none';
     successMsg?.classList.remove('hidden');

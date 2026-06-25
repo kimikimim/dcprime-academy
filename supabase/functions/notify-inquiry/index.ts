@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? '';
-const TO_EMAIL = 'dcprime@gmail.com';
+const TO_EMAIL = 'suo1250@gmail.com';
 const FROM_EMAIL = 'onboarding@resend.dev'; // Resend 도메인 인증 전 기본값
 
 serve(async (req) => {
