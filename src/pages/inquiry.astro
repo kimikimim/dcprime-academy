@@ -238,6 +238,25 @@ import Layout from '../components/layout/Layout.astro';
       return;
     }
 
+    // 이메일 알림 (실패해도 신청은 완료 처리)
+    fetch('https://smnakhjdtbqgwocwlluz.supabase.co/functions/v1/notify-inquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        record: {
+          student_name: fd.get('student_name'),
+          student_phone: studentPhone,
+          parent_name: (fd.get('parent_name') as string) || null,
+          parent_phone: parentPhone,
+          school_name: (fd.get('school_name') as string) || null,
+          track: (fd.get('track') as string) || null,
+          grade: (fd.get('grade') as string) || null,
+          branch: branches.length > 0 ? branches[0] : null,
+          created_at: new Date().toISOString(),
+        }
+      }),
+    }).catch(() => {}); // 알림 실패해도 무시
+
     form.style.display = 'none';
     successMsg?.classList.remove('hidden');
   });
