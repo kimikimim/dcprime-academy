@@ -1,2 +1,107 @@
 ---
 ---
+
+<section id="hero-section" class="hidden relative w-full overflow-hidden bg-gray-900">
+  <!-- 슬라이드 컨테이너 -->
+  <div id="hero-slides-wrapper" class="relative">
+    <!-- JS가 슬라이드를 동적으로 삽입 -->
+  </div>
+
+  <!-- 이전/다음 버튼 -->
+  <button id="hero-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors" aria-label="이전">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button id="hero-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors" aria-label="다음">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <!-- 점 인디케이터 -->
+  <div id="hero-dots" class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2"></div>
+</section>
+
+<script>
+  import { createClient } from '@supabase/supabase-js';
+
+  const supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+  );
+
+  (async () => {
+    const { data: slides } = await supabase
+      .from('hero_slides')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order')
+      .order('created_at');
+
+    if (!slides || slides.length === 0) return;
+
+    const section = document.getElementById('hero-section')!;
+    const wrapper = document.getElementById('hero-slides-wrapper')!;
+    const dotsEl  = document.getElementById('hero-dots')!;
+
+    // 슬라이드 HTML 생성
+    wrapper.innerHTML = slides.map((s, i) => `
+      <div class="hero-slide absolute inset-0 transition-opacity duration-700 ${i === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
+           style="min-height: 480px;">
+        <img src="${s.image_url || ''}" alt="${s.title || ''}"
+             class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-black/45"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 py-20">
+          ${s.eyebrow ? `<p class="text-xs font-semibold tracking-widest text-white/70 uppercase mb-3">${s.eyebrow}</p>` : ''}
+          ${s.title   ? `<h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">${s.title}</h1>` : ''}
+          ${s.subtitle ? `<p class="text-base md:text-lg text-white/80 mb-8 max-w-xl">${s.subtitle}</p>` : ''}
+          ${s.cta_text && s.cta_link
+            ? `<a href="${s.cta_link}" class="inline-block bg-brand text-white font-semibold px-8 py-3 rounded-full hover:opacity-90 transition-opacity">${s.cta_text}</a>`
+            : ''}
+        </div>
+      </div>
+    `).join('');
+
+    // 높이를 첫 슬라이드 기준으로 맞추기 위해 wrapper에 min-height 설정
+    wrapper.style.minHeight = '480px';
+    wrapper.style.position = 'relative';
+
+    // 점 인디케이터
+    dotsEl.innerHTML = slides.map((_, i) =>
+      `<button class="hero-dot w-2 h-2 rounded-full transition-colors ${i === 0 ? 'bg-white' : 'bg-white/40'}" data-idx="${i}" aria-label="${i + 1}번 슬라이드"></button>`
+    ).join('');
+
+    let current = 0;
+    const slideEls = wrapper.querySelectorAll<HTMLElement>('.hero-slide');
+    const dotEls   = dotsEl.querySelectorAll<HTMLElement>('.hero-dot');
+
+    function goTo(idx: number) {
+      slideEls[current].classList.replace('opacity-100', 'opacity-0');
+      slideEls[current].classList.add('pointer-events-none');
+      dotEls[current].classList.replace('bg-white', 'bg-white/40');
+
+      current = (idx + slides.length) % slides.length;
+
+      slideEls[current].classList.replace('opacity-0', 'opacity-100');
+      slideEls[current].classList.remove('pointer-events-none');
+      dotEls[current].classList.replace('bg-white/40', 'bg-white');
+    }
+
+    document.getElementById('hero-prev')?.addEventListener('click', () => goTo(current - 1));
+    document.getElementById('hero-next')?.addEventListener('click', () => goTo(current + 1));
+    dotEls.forEach(d => d.addEventListener('click', () => goTo(Number(d.dataset.idx))));
+
+    // 슬라이드가 1개면 화살표/점 숨김
+    if (slides.length === 1) {
+      document.getElementById('hero-prev')!.classList.add('hidden');
+      document.getElementById('hero-next')!.classList.add('hidden');
+      dotsEl.classList.add('hidden');
+    } else {
+      // 자동 슬라이드 5초
+      setInterval(() => goTo(current + 1), 5000);
+    }
+
+    section.classList.remove('hidden');
+  })();
+</script>
