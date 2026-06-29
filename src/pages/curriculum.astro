@@ -22,16 +22,15 @@ const subjects = [
 
     <!-- 2×3 그리드 탭 -->
     <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
-      <div class="container mx-auto px-4 py-3">
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <div class="container mx-auto px-4 py-4">
+        <div class="grid grid-cols-2 border border-gray-200 rounded-sm overflow-hidden">
           {subjects.map((s, i) => (
             <button
               data-tab={s.id}
               data-key={s.key}
-              class={`cur-tab py-2.5 text-sm font-medium rounded-lg border transition-colors
-                ${i === 0
-                  ? 'bg-brand text-white border-brand'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-brand hover:text-brand'}`}
+              class={`cur-tab py-4 text-sm font-medium border-r border-gray-200 transition-colors
+                ${i < 4 ? 'border-b' : ''}
+                ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
             >
               {s.label}
             </button>
@@ -99,14 +98,12 @@ const subjects = [
 
     function activate(id: string) {
       tabs.forEach(t => {
-        const match = t.dataset.tab === id;
-        t.classList.toggle('bg-brand',   match);
-        t.classList.toggle('text-white', match);
-        t.classList.toggle('border-brand', match);
-        t.classList.toggle('bg-white',   !match);
-        t.classList.toggle('text-gray-500', !match);
-        t.classList.toggle('border-gray-200', !match);
+        t.classList.remove('bg-brand', 'text-white');
+        t.classList.add('bg-white', 'text-gray-500');
       });
+      const active = document.querySelector<HTMLButtonElement>(`.cur-tab[data-tab="${id}"]`);
+      active?.classList.add('bg-brand', 'text-white');
+      active?.classList.remove('bg-white', 'text-gray-500');
       panels.forEach(p => p.classList.add('hidden'));
       document.getElementById(`panel-${id}`)?.classList.remove('hidden');
     }
