@@ -262,41 +262,33 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 커리큘럼 탭 ── -->
         <div id="panel-curriculum" class="hidden">
-          <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
-            <button data-cur-sub="elementary" class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">초등</button>
-            <button data-cur-sub="middle"     class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">중등</button>
-            <button data-cur-sub="high"       class="cur-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">고등</button>
+          <div class="grid grid-cols-3 gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
+            <button data-cur-sub="korean"   class="cur-sub py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">국어</button>
+            <button data-cur-sub="english"  class="cur-sub py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">영어</button>
+            <button data-cur-sub="math"     class="cur-sub py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">수학</button>
+            <button data-cur-sub="science"  class="cur-sub py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">과학</button>
+            <button data-cur-sub="tamdoq"   class="cur-sub py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">탐독</button>
+            <button data-cur-sub="entrance" class="cur-sub py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">입시와 대치</button>
           </div>
 
-          <div id="cur-sub-elementary" class="bg-white rounded-2xl shadow-sm p-6">
-            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-cur-elementary"></div>
+          {[
+            ['korean',   '국어'],
+            ['english',  '영어'],
+            ['math',     '수학'],
+            ['science',  '과학'],
+            ['tamdoq',   '탐독'],
+            ['entrance', '입시와 대치'],
+          ].map(([id, label], i) => (
+            <div id={`cur-sub-${id}`} class={`${i !== 0 ? 'hidden ' : ''}bg-white rounded-2xl shadow-sm p-6`}>
+              <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
+                <div id={`quill-cur-${id}`}></div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button data-key={`curriculum_${id}`} data-qid={`quill-cur-${id}`} class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
+                <span id={`msg-curriculum_${id}`} class="text-sm text-gray-500 hidden">저장되었습니다.</span>
+              </div>
             </div>
-            <div class="flex items-center gap-3">
-              <button data-key="curriculum_elementary" data-qid="quill-cur-elementary" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-curriculum_elementary" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
-            </div>
-          </div>
-
-          <div id="cur-sub-middle" class="hidden bg-white rounded-2xl shadow-sm p-6">
-            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-cur-middle"></div>
-            </div>
-            <div class="flex items-center gap-3">
-              <button data-key="curriculum_middle" data-qid="quill-cur-middle" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-curriculum_middle" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
-            </div>
-          </div>
-
-          <div id="cur-sub-high" class="hidden bg-white rounded-2xl shadow-sm p-6">
-            <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
-              <div id="quill-cur-high"></div>
-            </div>
-            <div class="flex items-center gap-3">
-              <button data-key="curriculum_high" data-qid="quill-cur-high" class="save-content-btn bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90">저장</button>
-              <span id="msg-curriculum_high" class="text-sm text-gray-500 hidden">저장되었습니다.</span>
-            </div>
-          </div>
+          ))}
         </div>
 
         <!-- ── 강사소개 탭 ── -->
@@ -486,7 +478,7 @@ import Layout from '../components/layout/Layout.astro';
     },
   ];
   const ABOUT_SUBS = ['features', 'history', 'space', 'rules'];
-  const CUR_SUBS = ['elementary', 'middle', 'high'];
+  const CUR_SUBS = ['korean', 'english', 'math', 'science', 'tamdoq', 'entrance'];
 
   const quills: Record<string, any> = {};
   const tabInited = new Set<string>();
@@ -789,15 +781,20 @@ import Layout from '../components/layout/Layout.astro';
   }
 
   // ── 커리큘럼 탭 ──
+  const CUR_SUBJECTS = [
+    { id: 'korean',   label: '국어' },
+    { id: 'english',  label: '영어' },
+    { id: 'math',     label: '수학' },
+    { id: 'science',  label: '과학' },
+    { id: 'tamdoq',   label: '탐독' },
+    { id: 'entrance', label: '입시와 대치' },
+  ];
+
   async function initCurriculumTab() {
-    createQuill('quill-cur-elementary', '초등 커리큘럼을 입력하세요.');
-    createQuill('quill-cur-middle', '중등 커리큘럼을 입력하세요.');
-    createQuill('quill-cur-high', '고등 커리큘럼을 입력하세요.');
-    await Promise.all([
-      loadPageContent('curriculum_elementary', 'quill-cur-elementary'),
-      loadPageContent('curriculum_middle', 'quill-cur-middle'),
-      loadPageContent('curriculum_high', 'quill-cur-high'),
-    ]);
+    CUR_SUBJECTS.forEach(s => createQuill(`quill-cur-${s.id}`, `${s.label} 커리큘럼을 입력하세요.`));
+    await Promise.all(
+      CUR_SUBJECTS.map(s => loadPageContent(`curriculum_${s.id}`, `quill-cur-${s.id}`))
+    );
   }
 
   function switchCurSub(sub: string) {

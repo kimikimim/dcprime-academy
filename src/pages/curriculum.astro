@@ -1,10 +1,13 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
-const levels = [
-  { label: '초등', id: 'elementary', key: 'curriculum_elementary' },
-  { label: '중등', id: 'middle',     key: 'curriculum_middle' },
-  { label: '고등', id: 'high',       key: 'curriculum_high' },
+const subjects = [
+  { label: '국어',      id: 'korean',   key: 'curriculum_korean' },
+  { label: '영어',      id: 'english',  key: 'curriculum_english' },
+  { label: '수학',      id: 'math',     key: 'curriculum_math' },
+  { label: '과학',      id: 'science',  key: 'curriculum_science' },
+  { label: '탐독',      id: 'tamdoq',   key: 'curriculum_tamdoq' },
+  { label: '입시와 대치', id: 'entrance', key: 'curriculum_entrance' },
 ];
 ---
 
@@ -17,18 +20,20 @@ const levels = [
       </div>
     </div>
 
-    <!-- 탭 -->
+    <!-- 2×3 그리드 탭 -->
     <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
-      <div class="container mx-auto px-4">
-        <div class="flex">
-          {levels.map((l, i) => (
+      <div class="container mx-auto px-4 py-3">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {subjects.map((s, i) => (
             <button
-              data-tab={l.id}
-              data-key={l.key}
-              class={`cur-tab px-8 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
-                ${i === 0 ? 'border-brand text-brand' : 'border-transparent text-gray-400 hover:text-gray-700'}`}
+              data-tab={s.id}
+              data-key={s.key}
+              class={`cur-tab py-2.5 text-sm font-medium rounded-lg border transition-colors
+                ${i === 0
+                  ? 'bg-brand text-white border-brand'
+                  : 'bg-white text-gray-500 border-gray-200 hover:border-brand hover:text-brand'}`}
             >
-              {l.label}
+              {s.label}
             </button>
           ))}
         </div>
@@ -36,10 +41,10 @@ const levels = [
     </div>
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
-      {levels.map((l, i) => (
-        <div id={`panel-${l.id}`} class={`cur-panel ${i !== 0 ? 'hidden' : ''}`}>
-          <h2 class="text-xl font-bold text-gray-900 mb-6">{l.label} 커리큘럼</h2>
-          <div id={`content-${l.id}`} class="page-content-area text-gray-700 leading-relaxed">
+      {subjects.map((s, i) => (
+        <div id={`panel-${s.id}`} class={`cur-panel ${i !== 0 ? 'hidden' : ''}`}>
+          <h2 class="text-xl font-bold text-gray-900 mb-6">{s.label} 커리큘럼</h2>
+          <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
             <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
           </div>
         </div>
@@ -68,6 +73,15 @@ const levels = [
 <script>
   import { supabase } from '../lib/supabase';
 
+  const subjects = [
+    { id: 'korean',   key: 'curriculum_korean' },
+    { id: 'english',  key: 'curriculum_english' },
+    { id: 'math',     key: 'curriculum_math' },
+    { id: 'science',  key: 'curriculum_science' },
+    { id: 'tamdoq',   key: 'curriculum_tamdoq' },
+    { id: 'entrance', key: 'curriculum_entrance' },
+  ];
+
   async function loadContent(key: string, elId: string) {
     const { data } = await supabase.from('page_content').select('value').eq('key', key).single();
     const el = document.getElementById(elId);
@@ -86,10 +100,12 @@ const levels = [
     function activate(id: string) {
       tabs.forEach(t => {
         const match = t.dataset.tab === id;
+        t.classList.toggle('bg-brand',   match);
+        t.classList.toggle('text-white', match);
         t.classList.toggle('border-brand', match);
-        t.classList.toggle('text-brand', match);
-        t.classList.toggle('border-transparent', !match);
-        t.classList.toggle('text-gray-400', !match);
+        t.classList.toggle('bg-white',   !match);
+        t.classList.toggle('text-gray-500', !match);
+        t.classList.toggle('border-gray-200', !match);
       });
       panels.forEach(p => p.classList.add('hidden'));
       document.getElementById(`panel-${id}`)?.classList.remove('hidden');
@@ -97,15 +113,7 @@ const levels = [
 
     tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
 
-    const hashMap: Record<string, string> = { '초등': 'elementary', '중등': 'middle', '고등': 'high' };
-    const raw  = decodeURIComponent(location.hash.replace('#', ''));
-    const hash = hashMap[raw] ?? raw;
-    if (hash) activate(hash);
-
-    // 콘텐츠 로드
-    loadContent('curriculum_elementary', 'content-elementary');
-    loadContent('curriculum_middle',     'content-middle');
-    loadContent('curriculum_high',       'content-high');
+    subjects.forEach(s => loadContent(s.key, `content-${s.id}`));
   }
 
   document.addEventListener('astro:page-load', init);
