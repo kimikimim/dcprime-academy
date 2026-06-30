@@ -243,24 +243,30 @@ import Layout from '../components/layout/Layout.astro';
       : branches.includes('neunggok') ? '능곡관'
       : branches.includes('jangkok') ? '장곡관'
       : branches.join(', ') || '-';
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        access_key: '5bf62618-a762-4ecf-8021-8ed18d0c6dad',
-        ccemail: 'janggok@dcprime.co.kr; neunggok@dcprime.co.kr',
-        subject: `[대치프라임] 상담 신청 - ${fd.get('student_name') ?? '이름없음'} (${branchLabel})`,
-        from_name: '대치프라임 상담신청',
-        student_name: fd.get('student_name') ?? '-',
-        student_phone: studentPhone,
-        parent_name: (fd.get('parent_name') as string) || '-',
-        parent_phone: parentPhone || '-',
-        school_name: (fd.get('school_name') as string) || '-',
-        track: (fd.get('track') as string) || '-',
-        grade: (fd.get('grade') as string) || '-',
-        branch: branchLabel,
-      }),
-    }).catch(() => {});
+    const web3formsKeys = [
+      '5bf62618-a762-4ecf-8021-8ed18d0c6dad', // dcprime@dcprime.co.kr
+      'f2db3d11-ccc0-444f-9150-f1c721f5a875', // janggok@dcprime.co.kr
+      'd5b3d4bb-110d-4b75-ba3a-8132a80ad6c6', // neunggok@dcprime.co.kr
+    ];
+    web3formsKeys.forEach(access_key => {
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key,
+          subject: `[대치프라임] 상담 신청 - ${fd.get('student_name') ?? '이름없음'} (${branchLabel})`,
+          from_name: '대치프라임 상담신청',
+          student_name: fd.get('student_name') ?? '-',
+          student_phone: studentPhone,
+          parent_name: (fd.get('parent_name') as string) || '-',
+          parent_phone: parentPhone || '-',
+          school_name: (fd.get('school_name') as string) || '-',
+          track: (fd.get('track') as string) || '-',
+          grade: (fd.get('grade') as string) || '-',
+          branch: branchLabel,
+        }),
+      }).catch(() => {});
+    });
 
     form.style.display = 'none';
     successMsg?.classList.remove('hidden');
