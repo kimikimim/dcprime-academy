@@ -248,6 +248,7 @@ import Layout from '../components/layout/Layout.astro';
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         access_key: '5bf62618-a762-4ecf-8021-8ed18d0c6dad',
+        cc: 'janggok@dcprime.co.kr,neunggok@dcprime.co.kr',
         subject: `[대치프라임] 상담 신청 - ${fd.get('student_name') ?? '이름없음'} (${branchLabel})`,
         from_name: '대치프라임 상담신청',
         student_name: fd.get('student_name') ?? '-',
