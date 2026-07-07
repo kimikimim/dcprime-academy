@@ -396,6 +396,19 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
 
             if (submitBtn) submitBtn.disabled = true;
 
+            // 중복 연락처 확인
+            const { data: existing } = await supabase
+                .from('seminar_bookings')
+                .select('id')
+                .eq('phone', phone)
+                .maybeSingle();
+
+            if (existing) {
+                if (submitBtn) submitBtn.disabled = false;
+                showError('이미 신청하신 연락처입니다. 문의사항은 학원으로 연락해주세요.');
+                return;
+            }
+
             const { error } = await supabase.from('seminar_bookings').insert({
                 campus,
                 name,
