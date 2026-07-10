@@ -4,7 +4,7 @@
 - **프레임워크**: Astro (SSG, ClientRouter로 SPA 전환 효과)
 - **스타일**: Tailwind CSS v4 (`@tailwindcss/vite`)
 - **DB/백엔드**: Supabase (PostgreSQL + Storage)
-- **배포**: Vercel (`dcprime.co.kr` 도메인 연결)
+- **배포**: Cloudflare Pages (`dcprime.co.kr` 도메인 연결)
 - **코드 저장소**: 
   - `origin` → `kimikimim/dcprime-academy`
   - `suo1250` → `suo1250-lab/dcprime-academy`
