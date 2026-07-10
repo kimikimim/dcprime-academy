@@ -464,7 +464,7 @@ import Layout from '../components/layout/Layout.astro';
       ],
     },
     {
-      key: 'seminar', label: '설명회 신청', table: 'seminar_bookings', order: 'created_at',
+      key: 'seminar', label: '설명회 신청', table: 'seminar_bookings', order: 'created_at', canReset: true,
       columns: [
         ['신청일시', r => fmtDateTime(r.created_at)],
         ['캠퍼스', r => r.campus],
@@ -1477,10 +1477,13 @@ import Layout from '../components/layout/Layout.astro';
     const list = document.getElementById('download-source-list');
     if (list) {
       list.innerHTML = DOWNLOAD_SOURCES.map(s => `
-        <button data-dl="${s.key}" class="dl-source w-full flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 hover:border-brand hover:bg-brand-light text-left transition-colors">
-          <span class="text-sm font-semibold text-gray-800">${s.label}</span>
-          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
-        </button>`).join('');
+        <div class="flex items-center gap-2">
+          <button data-dl="${(s as any).key}" class="dl-source flex-1 flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 hover:border-brand hover:bg-brand-light text-left transition-colors">
+            <span class="text-sm font-semibold text-gray-800">${(s as any).label}</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          </button>
+          ${(s as any).canReset ? `<button data-reset="${(s as any).key}" class="reset-source px-3 py-3 rounded-lg border border-red-200 text-red-400 hover:bg-red-50 hover:border-red-400 transition-colors text-xs font-bold whitespace-nowrap" title="신청자 초기화">초기화</button>` : ''}
+        </div>`).join('');
     }
     const modal = document.getElementById('download-modal');
     modal?.classList.remove('hidden');
@@ -1531,9 +1534,21 @@ import Layout from '../components/layout/Layout.astro';
     if (e.target === document.getElementById('download-modal')) closeDownloadModal();
   });
   document.getElementById('download-source-list')?.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.dl-source');
-    if (btn) downloadSource(btn.dataset.dl!, btn);
+    const dlBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('.dl-source');
+    if (dlBtn) downloadSource(dlBtn.dataset.dl!, dlBtn);
+
+    const resetBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('.reset-source');
+    if (resetBtn) resetSource(resetBtn.dataset.reset!);
   });
+
+  async function resetSource(key: string) {
+    const source = DOWNLOAD_SOURCES.find(s => s.key === key);
+    if (!source) return;
+    if (!confirm(`[${source.label}] 신청자를 전부 삭제합니다.\n이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?`)) return;
+    const { error } = await supabase.from(source.table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    if (error) { alert('초기화 실패: ' + error.message); return; }
+    alert(`[${source.label}] 신청자가 모두 삭제되었습니다.`);
+  }
 
   // ── 탭 이벤트 ──
   document.querySelectorAll<HTMLButtonElement>('.admin-tab').forEach(tab => {
