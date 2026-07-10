@@ -1,0 +1,195 @@
+---
+import Layout from '../components/layout/Layout.astro';
+
+const CATEGORIES = [
+  {
+    title: '해석학 및 복소해석학',
+    subtitle: 'Analysis & Complex Analysis',
+    terms: [
+      { ko: '코시-리만 방정식', en: 'Cauchy-Riemann Equations', formula: 'u_x = v_y,\\quad u_y = -v_x', desc: '복소함수 $f(z) = u(x,y) + iv(x,y)$가 미분 가능(정칙)하기 위해 만족해야 하는 편미분 방정식 계.' },
+      { ko: '테일러 정리', en: "Taylor's Theorem", desc: '어떤 점에서 미분 가능한 함수를 다항함수의 급수(테일러 급수) 형태로 근사하는 정리. 동적 시스템 근사에 활용됨.' },
+      { ko: '리만 적분', en: 'Riemann Integral', desc: '구간을 잘게 쪼개어 사각형의 합(리만 합)의 극한으로 정적분을 정의하는 고전적 적분 방식.' },
+      { ko: '르베그 적분', en: 'Lebesgue Integral', desc: '치역을 쪼개어 측정(Measure, 측도)하는 방식으로 정의한 현대적 적분. 리만 적분이 불가능한 디리클레 함수 같은 경우도 적분 가능함.' },
+      { ko: "로피탈의 정리", en: "L'Hôpital's Rule", formula: '\\lim \\frac{0}{0}, \\quad \\lim \\frac{\\infty}{\\infty}', desc: '함수의 극한에서 부정형을 계산할 때, 분모와 분자를 각각 미분하여 극한을 구하는 정리.' },
+      { ko: '볼차노-바이어슈트라스 정리', en: 'Bolzano-Weierstrass Theorem', desc: '유계인 임의의 수열은 수렴하는 부분수열을 갖는다는 정리. 실수의 완비성을 증명하는 기반.' },
+      { ko: '하이네-보렐 정리', en: 'Heine-Borel Theorem', formula: '\\mathbb{R}^n', desc: '유클리드 공간의 부분집합이 콤팩트(Compact)할 필요충분조건은 그 집합이 닫혀 있고 유계(Closed and Bounded)라는 정리.' },
+      { ko: '코시 적분 공식', en: "Cauchy's Integral Formula", desc: '복소해석학에서 정칙함수의 내부 값이 경계에서의 선적분으로 완전히 결정된다는 정리.' },
+      { ko: '디리클레 판정법', en: "Dirichlet's Test", desc: '무한급수의 수렴 여부를 판정할 때 사용하는 방법으로, 교대급수 판정법을 일반화한 형태.' },
+    ],
+  },
+  {
+    title: '선형대수학 및 추상대수학',
+    subtitle: 'Linear Algebra & Abstract Algebra',
+    terms: [
+      { ko: '가우스 소거법', en: 'Gaussian Elimination', desc: '행렬의 기본 행 연산을 사용하여 연립일차방정식을 풀거나 역행렬을 구하는 알고리즘. 행 사다리꼴(REF)을 만듦.' },
+      { ko: '가우스-조르당 소거법', en: 'Gauss-Jordan Elimination', desc: '가우스 소거법을 확장하여 행렬을 기약 행 사다리꼴(RREF)로 만들어 연립방정식의 해를 직접 구하는 알고리즘.' },
+      { ko: '그람-슈미트 과정', en: 'Gram-Schmidt Process', desc: '임의의 기저(Basis)를 내적 공간의 직교 기저 또는 정규직교 기저로 변환하는 알고리즘.' },
+      { ko: '케일리-해밀턴 정리', en: 'Cayley-Hamilton Theorem', desc: '모든 정사각행렬은 자신의 특성방정식을 만족한다는 정리. 행렬의 고차 거듭제곱을 낮출 때 사용.' },
+      { ko: '코시-슈바르츠 부등식', en: 'Cauchy-Schwarz Inequality', formula: '|\\langle u, v \\rangle| \\le \\|u\\|\\|v\\|', desc: '내적 공간에서 두 벡터의 내적과 크기 사이에 성립하는 부등식.' },
+      { ko: '조르당 표준형', en: 'Jordan Canonical Form', desc: '임의의 정사각행렬을 대각행렬과 유사한 형태(블록 대각행렬)로 변환하는 기법. 대각화가 불가능한 행렬을 다룰 때 사용.' },
+      { ko: '실로우 정리', en: 'Sylow Theorems', desc: '유한군의 구조를 파악할 때 사용되는 정리로, 군의 위수의 소인수 분해 결과에 대응하는 특정 부분군(실로우 부분군)의 존재와 개수를 보장함.' },
+    ],
+  },
+  {
+    title: '미분방정식 및 Fourier 해석',
+    subtitle: 'Differential Equations',
+    terms: [
+      { ko: '푸리에 변환', en: 'Fourier Transform', desc: '시간이나 공간에 대한 함수를 주파수 성분으로 분해하는 변환. 미분방정식을 대수방정식으로 변환하여 해결함.' },
+      { ko: '라플라스 변환', en: 'Laplace Transform', desc: '시간 영역의 미분방정식을 복소수 주파수 영역의 대수방정식으로 변환하여 초기값 문제를 해결하는 도구.' },
+      { ko: '베셀 방정식', en: "Bessel's Equation", formula: "x^2 y'' + x y' + (x^2 - \\alpha^2)y = 0", desc: '원통 좌표계에서 라플라스 방정식을 풀 때 나타나는 특수 미분방정식. 그 해를 베셀 함수라고 함.' },
+      { ko: '슈투름-리우빌 이론', en: 'Sturm-Liouville Theory', desc: '특정 형태의 2계 선형 미분방정식의 고윳값 문제를 다루는 이론. 양자역학 및 전자기학의 고유함수 전개의 기초가 됨.' },
+    ],
+  },
+  {
+    title: '정수론',
+    subtitle: 'Number Theory',
+    terms: [
+      { ko: '페르마의 소정리', en: "Fermat's Little Theorem", formula: 'a^{p-1} \\equiv 1 \\pmod{p}', desc: '소수 $p$와 $p$의 배수가 아닌 정수 $a$에 대해 성립하는 정리. RSA 암호 알고리즘의 기반.' },
+      { ko: '오일러 정리', en: "Euler's Theorem", formula: 'a^{\\varphi(n)} \\equiv 1 \\pmod{n}', desc: '페르마의 소정리를 일반화한 것으로, 서로 소인 두 정수 $a, n$에 대해 성립함.' },
+      { ko: '라그랑주 정리', en: "Lagrange's Theorem", desc: '유한군 $G$의 부분군 $H$가 있을 때, 부분군의 원소 개수(위수)는 전체 군의 원소 개수의 약수여야 한다는 정리.' },
+    ],
+  },
+  {
+    title: '위상수학 및 기하학',
+    subtitle: 'Topology & Geometry',
+    terms: [
+      { ko: '하우스도르프 공간', en: 'Hausdorff Space', desc: '서로 다른 두 점을 각각 포함하고 서로 겹치지 않는 열린 집합이 항상 존재하는 위상공간. 대부분의 대수적·해석적 위상 공간의 기본 전제 조건.' },
+      { ko: '가우스-보네 정리', en: 'Gauss-Bonnet Theorem', desc: '곡면의 기하학적 성질(곡률의 적분)과 위상적 성질(오일러 지표)을 연결하는 미분기하학의 핵심 정리.' },
+      { ko: '리만 기하학', en: 'Riemannian Geometry', desc: '매끄러운 다양체 위에 내적(리만 계량)을 정의하여 휘어진 공간에서의 거리, 각도, 곡률을 다루는 기하학. 일반상대성이론의 수학적 토대.' },
+    ],
+  },
+  {
+    title: '수치해석학 및 최적화',
+    subtitle: 'Numerical Analysis & Optimization',
+    terms: [
+      { ko: '뉴턴-랩슨 메서드', en: 'Newton-Raphson Method', formula: 'x_{n+1} = x_n - \\frac{f(x_n)}{f\'(x_n)}', desc: '도함수를 사용하여 방정식 $f(x) = 0$의 근을 수치적으로 근사하는 반복 알고리즘.' },
+      { ko: '룽게-쿠타 방법', en: 'Runge-Kutta Methods', desc: '미분방정식의 초깃값 문제를 컴퓨터로 풀 때 사용하는 고정밀 수치 계산 알고리즘 군 (특히 4차 변형인 RK4가 흔히 쓰임).' },
+      { ko: '라그랑주 승수법', en: 'Lagrange Multiplier', desc: '제약 조건이 있는 최적화 문제를 해결하기 위해, 제약 식에 새로운 변수(승수)를 도입하여 무제약 극값 문제로 변환하는 방법.' },
+    ],
+  },
+];
+
+const totalCount = CATEGORIES.reduce((sum, c) => sum + c.terms.length, 0);
+---
+
+<Layout title="Your Future - 대학수학 개념 사전 | 대치프라임" description="대학에서 만나게 될 수학 개념을 가볍게 미리 알아보는 사전입니다.">
+
+<div class="min-h-screen bg-gray-50">
+
+  <div class="border-b border-gray-200 bg-white">
+    <div class="container mx-auto px-4 py-10">
+      <p class="text-sm text-brand font-semibold mb-1">Your Future</p>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">대학수학 개념 사전</h1>
+      <p class="text-sm text-gray-500 mt-2 leading-relaxed">
+        전공을 정하기 전, 대학 수학이 어떤 걸 다루는지 가볍게 훑어보는 페이지입니다.
+        깊이 이해할 필요는 없고, "이런 게 있구나" 정도로만 알아두면 충분해요. 총 {totalCount}개 개념.
+      </p>
+    </div>
+  </div>
+
+  <div class="sticky top-[65px] z-40 bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4 py-4">
+      <div class="relative max-w-xl">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          id="term-search"
+          type="text"
+          placeholder="개념 이름으로 검색 (예: 푸리에, Taylor, 코시)"
+          class="w-full pl-11 pr-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-brand"
+        />
+      </div>
+      <p id="search-empty" class="hidden text-sm text-gray-400 mt-3">검색 결과가 없습니다.</p>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-10 max-w-4xl">
+    {CATEGORIES.map((cat) => (
+      <div class="category-block mb-10">
+        <div class="mb-4">
+          <h2 class="text-lg font-bold text-gray-900">{cat.title}</h2>
+          <p class="text-xs text-gray-400">{cat.subtitle}</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {cat.terms.map((t) => (
+            <div
+              class="term-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm"
+              data-search={`${t.ko} ${t.en} ${t.desc}`.toLowerCase()}
+            >
+              <p class="text-sm font-bold text-gray-900">{t.ko}</p>
+              <p class="text-xs text-gray-400 mb-2">{t.en}</p>
+              {t.formula && (
+                <div class="katex-formula text-sm text-brand my-2 overflow-x-auto" data-formula={t.formula}></div>
+              )}
+              <p class="text-sm text-gray-600 leading-relaxed" set:html={t.desc.replace(/\$([^$]+)\$/g, '<span class="katex-inline" data-formula="$1"></span>')} />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+</div>
+
+</Layout>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<script>
+  async function loadKatex() {
+    if ((window as any).katex) return;
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+      script.onload = () => resolve();
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function renderFormulas() {
+    await loadKatex();
+    const katex = (window as any).katex;
+    if (!katex) return;
+    document.querySelectorAll<HTMLElement>('.katex-formula, .katex-inline').forEach(el => {
+      const formula = el.dataset.formula;
+      if (!formula) return;
+      try {
+        katex.render(formula, el, { throwOnError: false, displayMode: el.classList.contains('katex-formula') });
+      } catch {
+        el.textContent = formula;
+      }
+    });
+  }
+
+  function initSearch() {
+    const input = document.getElementById('term-search') as HTMLInputElement | null;
+    const emptyMsg = document.getElementById('search-empty');
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let anyVisible = false;
+
+      document.querySelectorAll<HTMLElement>('.category-block').forEach(block => {
+        let blockHasMatch = false;
+        block.querySelectorAll<HTMLElement>('.term-card').forEach(card => {
+          const match = !q || (card.dataset.search ?? '').includes(q);
+          card.classList.toggle('hidden', !match);
+          if (match) { blockHasMatch = true; anyVisible = true; }
+        });
+        block.classList.toggle('hidden', !blockHasMatch);
+      });
+
+      emptyMsg?.classList.toggle('hidden', anyVisible || !q);
+    });
+  }
+
+  function init() {
+    renderFormulas();
+    initSearch();
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>
