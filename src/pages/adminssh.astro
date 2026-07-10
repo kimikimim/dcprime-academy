@@ -379,6 +379,16 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 출제 경향 탭 ── -->
         <div id="panel-reports" class="hidden">
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 class="text-base font-bold text-gray-900 mb-1">페이지 안내 문구</h2>
+            <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지 상단 (제목 아래) 에 표시되는 한 줄 안내입니다.</p>
+            <div class="flex items-center gap-3">
+              <input id="report-notice-input" type="text" placeholder="예: 2026년 7월 3일 시행 · 초등부~중등부" class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <button id="submit-notice-report-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity whitespace-nowrap">저장</button>
+              <p id="report-notice-msg" class="text-sm text-gray-500 hidden whitespace-nowrap"></p>
+            </div>
+          </div>
+
           <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
             <button data-report-sub="trend"  class="report-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">출제 경향</button>
             <button data-report-sub="sketch" class="report-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">기말고사 스케치</button>
@@ -673,7 +683,7 @@ import Layout from '../components/layout/Layout.astro';
       if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
-      if (tab === 'reports')    loadReportsAdmin();
+      if (tab === 'reports')    { loadReportsAdmin(); loadReportNotice(); }
     }
   }
 
@@ -1376,6 +1386,23 @@ import Layout from '../components/layout/Layout.astro';
 
     if (error) { msg.textContent = '오류: ' + error.message; }
     else { msg.textContent = reportEditId ? '수정되었습니다.' : '추가되었습니다.'; resetReportForm(); loadReportsAdmin(); }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
+  // ── 출제 경향 페이지 안내 문구 ──
+  async function loadReportNotice() {
+    const { data } = await supabase.from('page_content').select('value').eq('key', 'in_house_exam_notice').maybeSingle();
+    (document.getElementById('report-notice-input') as HTMLInputElement).value = data?.value ?? '';
+  }
+
+  document.getElementById('submit-notice-report-btn')?.addEventListener('click', async () => {
+    const value = (document.getElementById('report-notice-input') as HTMLInputElement).value.trim();
+    const msg = document.getElementById('report-notice-msg')!;
+    const { error } = await supabase
+      .from('page_content')
+      .upsert({ key: 'in_house_exam_notice', value, updated_at: new Date().toISOString() });
+    msg.textContent = error ? '오류: ' + error.message : '저장되었습니다.';
     msg.classList.remove('hidden');
     setTimeout(() => msg.classList.add('hidden'), 3000);
   });

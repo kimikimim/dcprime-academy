@@ -11,7 +11,7 @@ import Layout from '../components/layout/Layout.astro';
     <div class="container mx-auto px-4 py-8">
       <p class="text-sm text-brand font-semibold mb-1">대치프라임 자체 평가</p>
       <h1 class="text-2xl font-bold text-gray-900">진단 평가 분석 리포트</h1>
-      <p class="text-sm text-gray-500 mt-1">2026년 7월 3일 시행 · 초등부~중등부</p>
+      <p id="exam-notice" class="text-sm text-gray-500 mt-1">2026년 7월 3일 시행 · 초등부~중등부</p>
     </div>
   </div>
 
@@ -111,6 +111,14 @@ import Layout from '../components/layout/Layout.astro';
           parentGuide: r.parent_guide,
         };
       });
+    }
+  }
+
+  async function loadNotice() {
+    const { data } = await supabase.from('page_content').select('value').eq('key', 'in_house_exam_notice').maybeSingle();
+    if (data?.value) {
+      const el = document.getElementById('exam-notice');
+      if (el) el.textContent = data.value;
     }
   }
 
@@ -450,6 +458,7 @@ import Layout from '../components/layout/Layout.astro';
     const content = document.getElementById('report-content');
     if (content) content.innerHTML = '<p class="text-center text-gray-400 py-20">불러오는 중...</p>';
     loadReports().then(renderReport);
+    loadNotice();
   }
 
   document.addEventListener('astro:page-load', init);
