@@ -191,10 +191,7 @@ src/
 | `supabase-new-tables.sql` | page_content, faculty 테이블 생성 |
 | `supabase-faculty-divisions.sql` | faculty divisions/role 설정 (완전 재설정 버전) |
 | `supabase-results-2019-2023.sql` | 과거 연도 합격자 데이터 이관 |
-| `supabase-exam-reports.sql` | exam_reports 테이블 생성 + 초기 데이터 (초5 영어, 초6 영어/수학, 중1 영어) |
-| `supabase-exam-reports-batch2.sql` | exam_reports 추가분 (초5 수학, 중1 영어) |
-| `supabase-exam-reports-batch3.sql` | exam_reports 추가분 (중1 과학) |
-| `supabase-exam-reports-batch4.sql` | exam_reports 추가분 (중1 수학) |
+| `supabase-exam-reports.sql` | exam_reports 테이블 생성 + 전체 데이터 (초5/초6/중1 × 국영수과 중 등록된 조합, 학년·과목 unique upsert라 재실행해도 안전) |
 | `supabase-exam-sketch-bucket.sql` | exam-sketch 스토리지 버킷 + anon 업로드/삭제 정책 |
 
 > SQL 파일은 **Supabase SQL Editor에 붙여넣고 수동 실행** 필요
