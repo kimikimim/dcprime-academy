@@ -37,6 +37,7 @@ import Layout from '../components/layout/Layout.astro';
           <button data-tab="curriculum" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">커리큘럼</button>
           <button data-tab="faculty"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">강사소개</button>
           <button data-tab="results"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">명예의 전당</button>
+          <button data-tab="reports"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">진단 리포트</button>
         </div>
       </div>
 
@@ -376,6 +377,53 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
 
+        <!-- ── 진단 리포트 탭 ── -->
+        <div id="panel-reports" class="hidden">
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 id="report-form-title" class="text-base font-bold text-gray-900 mb-1">진단 평가 리포트 추가</h2>
+            <p class="text-xs text-gray-400 mb-4">/report 페이지의 학년·과목별 분석 리포트입니다. 같은 학년·과목으로 저장하면 기존 내용을 덮어씁니다.</p>
+            <input type="hidden" id="report-edit-id" />
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <select id="report-grade-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="초5">초5</option>
+                <option value="초6">초6</option>
+                <option value="중1">중1</option>
+              </select>
+              <select id="report-subject-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="수학">수학</option>
+                <option value="영어">영어</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mb-3">
+              <input id="report-date-input" type="text" placeholder="시험일 (예: 2026. 7. 3.)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="report-total-input" type="text" placeholder="총 문항 (예: 32문항)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="report-difficulty-input" type="text" placeholder="난이도 (예: 중상)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
+            <input id="report-scope-input" type="text" placeholder="시험 범위" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <textarea id="report-overview-input" rows="4" placeholder="총평 (개요)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
+            <div class="mb-3">
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs text-gray-500">세부 섹션 (JSON 배열)</label>
+                <span class="text-xs text-gray-400">type: list / difficulty / keypoints / area-table / key-items / capability / mistake-rank / prescription</span>
+              </div>
+              <textarea id="report-sections-input" rows="10" placeholder='[{"title":"출제 범위","type":"list","items":["..."]}]' class="w-full border border-gray-300 rounded-lg px-4 py-3 text-xs font-mono focus:outline-none focus:border-brand"></textarea>
+            </div>
+            <textarea id="report-parentguide-input" rows="3" placeholder="학부모님 가이드" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:border-brand"></textarea>
+            <div class="flex items-center gap-3">
+              <button id="submit-report-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+              <button id="cancel-report-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
+              <p id="report-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h2 class="text-base font-bold text-gray-900 mb-4">리포트 목록</h2>
+            <div id="report-list" class="divide-y divide-gray-100">
+              <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -422,7 +470,7 @@ import Layout from '../components/layout/Layout.astro';
   import { supabase } from '../lib/supabase';
 
   const SESSION_KEY = 'dcprime_admin';
-  const ALL_TABS = ['hero', 'notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results'];
+  const ALL_TABS = ['hero', 'notices', 'inquiries', 'about', 'curriculum', 'faculty', 'results', 'reports'];
 
   // ── 신청 목록 다운로드 소스 레지스트리 ──
   // 새 프로그램 추가 시 아래 배열에 1개 항목만 추가하면 됩니다.
@@ -598,6 +646,7 @@ import Layout from '../components/layout/Layout.astro';
       if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
+      if (tab === 'reports')    loadReportsAdmin();
     }
   }
 
@@ -1181,6 +1230,127 @@ import Layout from '../components/layout/Layout.astro';
 
   document.getElementById('result-year-filter')?.addEventListener('change', (e) => {
     loadResults((e.target as HTMLSelectElement).value || undefined);
+  });
+
+  // ── 진단 리포트 ──
+  let reportEditId: number | null = null;
+
+  function resetReportForm() {
+    reportEditId = null;
+    (document.getElementById('report-edit-id') as HTMLInputElement).value = '';
+    (document.getElementById('report-grade-input') as HTMLSelectElement).value = '초5';
+    (document.getElementById('report-subject-input') as HTMLSelectElement).value = '수학';
+    (document.getElementById('report-date-input') as HTMLInputElement).value = '';
+    (document.getElementById('report-total-input') as HTMLInputElement).value = '';
+    (document.getElementById('report-difficulty-input') as HTMLInputElement).value = '';
+    (document.getElementById('report-scope-input') as HTMLInputElement).value = '';
+    (document.getElementById('report-overview-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('report-sections-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('report-parentguide-input') as HTMLTextAreaElement).value = '';
+    document.getElementById('report-form-title')!.textContent = '진단 평가 리포트 추가';
+    document.getElementById('submit-report-btn')!.textContent = '추가';
+    document.getElementById('cancel-report-btn')!.classList.add('hidden');
+  }
+
+  async function loadReportsAdmin() {
+    const container = document.getElementById('report-list')!;
+    const { data, error } = await supabase.from('exam_reports').select('*').order('grade').order('subject');
+    if (error) {
+      container.innerHTML = `<p class="text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
+      return;
+    }
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">등록된 리포트가 없습니다.</p>';
+      return;
+    }
+    container.innerHTML = data.map(r => `
+      <div class="py-3 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900">${escHtml(r.grade)} · ${escHtml(r.subject)}</p>
+          <p class="text-xs text-gray-400 truncate">${escHtml(r.scope ?? '')} ${r.difficulty_level ? '· ' + escHtml(r.difficulty_level) : ''}</p>
+        </div>
+        <div class="flex gap-3 flex-shrink-0">
+          <button data-id="${r.id}" class="edit-report-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+          <button data-id="${r.id}" class="del-report-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll<HTMLButtonElement>('.edit-report-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = data.find((x: any) => String(x.id) === btn.dataset.id);
+        if (!r) return;
+        reportEditId = r.id;
+        (document.getElementById('report-edit-id') as HTMLInputElement).value = String(r.id);
+        (document.getElementById('report-grade-input') as HTMLSelectElement).value = r.grade;
+        (document.getElementById('report-subject-input') as HTMLSelectElement).value = r.subject;
+        (document.getElementById('report-date-input') as HTMLInputElement).value = r.exam_date ?? '';
+        (document.getElementById('report-total-input') as HTMLInputElement).value = r.total ?? '';
+        (document.getElementById('report-difficulty-input') as HTMLInputElement).value = r.difficulty_level ?? '';
+        (document.getElementById('report-scope-input') as HTMLInputElement).value = r.scope ?? '';
+        (document.getElementById('report-overview-input') as HTMLTextAreaElement).value = r.overview ?? '';
+        (document.getElementById('report-sections-input') as HTMLTextAreaElement).value = r.sections ? JSON.stringify(r.sections, null, 2) : '';
+        (document.getElementById('report-parentguide-input') as HTMLTextAreaElement).value = r.parent_guide ?? '';
+        document.getElementById('report-form-title')!.textContent = '진단 평가 리포트 수정';
+        document.getElementById('submit-report-btn')!.textContent = '수정 완료';
+        document.getElementById('cancel-report-btn')!.classList.remove('hidden');
+        document.getElementById('report-form-title')!.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>('.del-report-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 리포트를 삭제할까요?')) return;
+        await supabase.from('exam_reports').delete().eq('id', btn.dataset.id!);
+        loadReportsAdmin();
+      });
+    });
+  }
+
+  document.getElementById('cancel-report-btn')?.addEventListener('click', resetReportForm);
+
+  document.getElementById('submit-report-btn')?.addEventListener('click', async () => {
+    const grade      = (document.getElementById('report-grade-input') as HTMLSelectElement).value;
+    const subject    = (document.getElementById('report-subject-input') as HTMLSelectElement).value;
+    const exam_date  = (document.getElementById('report-date-input') as HTMLInputElement).value.trim();
+    const total      = (document.getElementById('report-total-input') as HTMLInputElement).value.trim();
+    const difficulty_level = (document.getElementById('report-difficulty-input') as HTMLInputElement).value.trim();
+    const scope      = (document.getElementById('report-scope-input') as HTMLInputElement).value.trim();
+    const overview   = (document.getElementById('report-overview-input') as HTMLTextAreaElement).value.trim();
+    const sectionsRaw = (document.getElementById('report-sections-input') as HTMLTextAreaElement).value.trim();
+    const parent_guide = (document.getElementById('report-parentguide-input') as HTMLTextAreaElement).value.trim();
+    const msg = document.getElementById('report-msg')!;
+
+    let sections: any = [];
+    if (sectionsRaw) {
+      try {
+        sections = JSON.parse(sectionsRaw);
+      } catch (e) {
+        msg.textContent = '세부 섹션 JSON 형식이 올바르지 않습니다.';
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 4000);
+        return;
+      }
+    }
+
+    const btn = document.getElementById('submit-report-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '처리 중...';
+
+    const payload = { grade, subject, exam_date, total, difficulty_level, scope, overview, sections, parent_guide };
+    let error;
+    if (reportEditId) {
+      ({ error } = await supabase.from('exam_reports').update(payload).eq('id', reportEditId));
+    } else {
+      ({ error } = await supabase.from('exam_reports').upsert(payload, { onConflict: 'grade,subject' }));
+    }
+
+    btn.disabled = false;
+    btn.textContent = reportEditId ? '수정 완료' : '추가';
+
+    if (error) { msg.textContent = '오류: ' + error.message; }
+    else { msg.textContent = reportEditId ? '수정되었습니다.' : '추가되었습니다.'; resetReportForm(); loadReportsAdmin(); }
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
   });
 
   // ── 공지사항 ──
