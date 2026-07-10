@@ -389,6 +389,21 @@ import Layout from '../components/layout/Layout.astro';
             </div>
           </div>
 
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h2 class="text-base font-bold text-gray-900 mb-1">표시할 과목 설정</h2>
+            <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지의 과목 선택 버튼 중 체크한 과목만 노출됩니다. (예: 이번 시험에 국어를 안 봤다면 국어만 체크 해제)</p>
+            <div class="flex gap-5 mb-4">
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="subject-visible-check accent-brand" value="국어" checked /> 국어</label>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="subject-visible-check accent-brand" value="영어" checked /> 영어</label>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="subject-visible-check accent-brand" value="수학" checked /> 수학</label>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="subject-visible-check accent-brand" value="과학" checked /> 과학</label>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="submit-subjects-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">저장</button>
+              <p id="subjects-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
           <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
             <button data-report-sub="trend"  class="report-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">출제 경향</button>
             <button data-report-sub="sketch" class="report-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">기말고사 스케치</button>
@@ -406,8 +421,10 @@ import Layout from '../components/layout/Layout.astro';
                   <option value="중1">중1</option>
                 </select>
                 <select id="report-subject-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                  <option value="수학">수학</option>
+                  <option value="국어">국어</option>
                   <option value="영어">영어</option>
+                  <option value="수학">수학</option>
+                  <option value="과학">과학</option>
                 </select>
               </div>
               <div class="grid grid-cols-3 gap-3 mb-3">
@@ -683,7 +700,7 @@ import Layout from '../components/layout/Layout.astro';
       if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
-      if (tab === 'reports')    { loadReportsAdmin(); loadReportNotice(); }
+      if (tab === 'reports')    { loadReportsAdmin(); loadReportNotice(); loadSubjectVisibility(); }
     }
   }
 
@@ -1402,6 +1419,29 @@ import Layout from '../components/layout/Layout.astro';
     const { error } = await supabase
       .from('page_content')
       .upsert({ key: 'in_house_exam_notice', value, updated_at: new Date().toISOString() });
+    msg.textContent = error ? '오류: ' + error.message : '저장되었습니다.';
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
+  // ── 표시할 과목 설정 ──
+  async function loadSubjectVisibility() {
+    const { data } = await supabase.from('page_content').select('value').eq('key', 'in_house_exam_subjects').maybeSingle();
+    let visible: string[] | null = null;
+    if (data?.value) {
+      try { visible = JSON.parse(data.value); } catch { visible = null; }
+    }
+    document.querySelectorAll<HTMLInputElement>('.subject-visible-check').forEach(cb => {
+      cb.checked = Array.isArray(visible) ? visible.includes(cb.value) : true;
+    });
+  }
+
+  document.getElementById('submit-subjects-btn')?.addEventListener('click', async () => {
+    const visible = Array.from(document.querySelectorAll<HTMLInputElement>('.subject-visible-check:checked')).map(cb => cb.value);
+    const msg = document.getElementById('subjects-msg')!;
+    const { error } = await supabase
+      .from('page_content')
+      .upsert({ key: 'in_house_exam_subjects', value: JSON.stringify(visible), updated_at: new Date().toISOString() });
     msg.textContent = error ? '오류: ' + error.message : '저장되었습니다.';
     msg.classList.remove('hidden');
     setTimeout(() => msg.classList.add('hidden'), 3000);

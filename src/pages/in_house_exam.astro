@@ -49,8 +49,8 @@ import Layout from '../components/layout/Layout.astro';
     <!-- 과목 선택 -->
     <div class="mb-8">
       <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">과목 선택</p>
-      <div class="flex gap-2">
-        {['수학', '영어'].map((s, i) => (
+      <div class="flex gap-2 flex-wrap">
+        {['국어', '영어', '수학', '과학'].map((s, i) => (
           <button
             data-subject={s}
             class={`subject-btn px-5 py-2.5 rounded-lg text-sm font-semibold border transition-colors
@@ -122,11 +122,35 @@ import Layout from '../components/layout/Layout.astro';
     }
   }
 
+  async function loadSubjectVisibility() {
+    const { data } = await supabase.from('page_content').select('value').eq('key', 'in_house_exam_subjects').maybeSingle();
+    let visible: string[] | null = null;
+    if (data?.value) {
+      try { visible = JSON.parse(data.value); } catch { visible = null; }
+    }
+    if (!Array.isArray(visible) || visible.length === 0) return; // 설정 없으면 전체 노출(기본 동작 유지)
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.subject-btn');
+    buttons.forEach(btn => {
+      btn.classList.toggle('hidden', !visible!.includes(btn.dataset.subject!));
+    });
+
+    if (!visible.includes(currentSubject)) {
+      currentSubject = visible[0];
+      buttons.forEach(b => {
+        const a = b.dataset.subject === currentSubject;
+        b.classList.toggle('bg-brand', a); b.classList.toggle('text-white', a); b.classList.toggle('border-brand', a);
+        b.classList.toggle('bg-white', !a); b.classList.toggle('text-gray-600', !a); b.classList.toggle('border-gray-200', !a);
+      });
+      renderReport();
+    }
+  }
+
   /* ──────────────────────────────────────────
      상태
   ────────────────────────────────────────── */
   let currentGrade = '초5';
-  let currentSubject = '수학';
+  let currentSubject = '국어';
 
   /* ──────────────────────────────────────────
      렌더링 유틸
@@ -459,6 +483,7 @@ import Layout from '../components/layout/Layout.astro';
     if (content) content.innerHTML = '<p class="text-center text-gray-400 py-20">불러오는 중...</p>';
     loadReports().then(renderReport);
     loadNotice();
+    loadSubjectVisibility();
   }
 
   document.addEventListener('astro:page-load', init);
