@@ -379,47 +379,74 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 출제 경향 탭 ── -->
         <div id="panel-reports" class="hidden">
-          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            <h2 id="report-form-title" class="text-base font-bold text-gray-900 mb-1">출제 경향 추가</h2>
-            <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지의 학년·과목별 분석 리포트입니다. 같은 학년·과목으로 저장하면 기존 내용을 덮어씁니다.</p>
-            <input type="hidden" id="report-edit-id" />
-            <div class="grid grid-cols-2 gap-3 mb-3">
-              <select id="report-grade-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="초5">초5</option>
-                <option value="초6">초6</option>
-                <option value="중1">중1</option>
-              </select>
-              <select id="report-subject-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="수학">수학</option>
-                <option value="영어">영어</option>
-              </select>
-            </div>
-            <div class="grid grid-cols-3 gap-3 mb-3">
-              <input id="report-date-input" type="text" placeholder="시험일 (예: 2026. 7. 3.)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
-              <input id="report-total-input" type="text" placeholder="총 문항 (예: 32문항)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
-              <input id="report-difficulty-input" type="text" placeholder="난이도 (예: 중상)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
-            </div>
-            <input id="report-scope-input" type="text" placeholder="시험 범위" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
-            <textarea id="report-overview-input" rows="4" placeholder="총평 (개요)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
-            <div class="mb-3">
-              <div class="flex items-center justify-between mb-1">
-                <label class="block text-xs text-gray-500">세부 섹션 (JSON 배열)</label>
-                <span class="text-xs text-gray-400">type: list / difficulty / keypoints / area-table / key-items / capability / mistake-rank / prescription</span>
+          <div class="flex gap-1 mb-6 bg-white rounded-xl shadow-sm p-1">
+            <button data-report-sub="trend"  class="report-sub flex-1 py-2 rounded-lg text-sm font-medium bg-brand text-white transition-colors">출제 경향</button>
+            <button data-report-sub="sketch" class="report-sub flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">기말고사 스케치</button>
+          </div>
+
+          <div id="report-sub-trend">
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+              <h2 id="report-form-title" class="text-base font-bold text-gray-900 mb-1">출제 경향 추가</h2>
+              <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지의 학년·과목별 분석 리포트입니다. 같은 학년·과목으로 저장하면 기존 내용을 덮어씁니다.</p>
+              <input type="hidden" id="report-edit-id" />
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <select id="report-grade-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                  <option value="초5">초5</option>
+                  <option value="초6">초6</option>
+                  <option value="중1">중1</option>
+                </select>
+                <select id="report-subject-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                  <option value="수학">수학</option>
+                  <option value="영어">영어</option>
+                </select>
               </div>
-              <textarea id="report-sections-input" rows="10" placeholder='[{"title":"출제 범위","type":"list","items":["..."]}]' class="w-full border border-gray-300 rounded-lg px-4 py-3 text-xs font-mono focus:outline-none focus:border-brand"></textarea>
+              <div class="grid grid-cols-3 gap-3 mb-3">
+                <input id="report-date-input" type="text" placeholder="시험일 (예: 2026. 7. 3.)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+                <input id="report-total-input" type="text" placeholder="총 문항 (예: 32문항)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+                <input id="report-difficulty-input" type="text" placeholder="난이도 (예: 중상)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              </div>
+              <input id="report-scope-input" type="text" placeholder="시험 범위" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+              <textarea id="report-overview-input" rows="4" placeholder="총평 (개요)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
+              <div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <label class="block text-xs text-gray-500">세부 섹션 (JSON 배열)</label>
+                  <span class="text-xs text-gray-400">type: list / difficulty / keypoints / area-table / key-items / capability / mistake-rank / prescription</span>
+                </div>
+                <textarea id="report-sections-input" rows="10" placeholder='[{"title":"출제 범위","type":"list","items":["..."]}]' class="w-full border border-gray-300 rounded-lg px-4 py-3 text-xs font-mono focus:outline-none focus:border-brand"></textarea>
+              </div>
+              <textarea id="report-parentguide-input" rows="3" placeholder="학부모님 가이드" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:border-brand"></textarea>
+              <div class="flex items-center gap-3">
+                <button id="submit-report-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
+                <button id="cancel-report-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
+                <p id="report-msg" class="text-sm text-gray-500 hidden"></p>
+              </div>
             </div>
-            <textarea id="report-parentguide-input" rows="3" placeholder="학부모님 가이드" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-4 focus:outline-none focus:border-brand"></textarea>
-            <div class="flex items-center gap-3">
-              <button id="submit-report-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
-              <button id="cancel-report-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
-              <p id="report-msg" class="text-sm text-gray-500 hidden"></p>
+
+            <div class="bg-white rounded-2xl shadow-sm p-6">
+              <h2 class="text-base font-bold text-gray-900 mb-4">출제 경향 목록</h2>
+              <div id="report-list" class="divide-y divide-gray-100">
+                <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+              </div>
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-base font-bold text-gray-900 mb-4">출제 경향 목록</h2>
-            <div id="report-list" class="divide-y divide-gray-100">
-              <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+          <!-- ── 기말고사 스케치 사진 관리 ── -->
+          <div id="report-sub-sketch" class="hidden">
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+              <h2 class="text-base font-bold text-gray-900 mb-1">기말고사 스케치 사진 추가</h2>
+              <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지 "자체 기말고사 스케치" 탭에 표시되는 사진입니다. 여러 장을 한번에 선택할 수 있습니다.</p>
+              <input type="file" id="sketch-image-input" accept="image/*" multiple class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
+              <div class="flex items-center gap-3 mt-4">
+                <button id="submit-sketch-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">업로드</button>
+                <p id="sketch-msg" class="text-sm text-gray-500 hidden"></p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-6">
+              <h2 class="text-base font-bold text-gray-900 mb-4">스케치 사진 목록</h2>
+              <div id="sketch-list" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <p class="col-span-full text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1351,6 +1378,96 @@ import Layout from '../components/layout/Layout.astro';
     else { msg.textContent = reportEditId ? '수정되었습니다.' : '추가되었습니다.'; resetReportForm(); loadReportsAdmin(); }
     msg.classList.remove('hidden');
     setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
+  // ── 출제 경향 서브탭 (출제 경향 / 기말고사 스케치) ──
+  const REPORT_SUBS = ['trend', 'sketch'];
+  let sketchLoaded = false;
+
+  function switchReportSub(sub: string) {
+    REPORT_SUBS.forEach(s => {
+      document.getElementById(`report-sub-${s}`)?.classList.toggle('hidden', s !== sub);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.report-sub').forEach(b => {
+      const active = b.dataset.reportSub === sub;
+      b.classList.toggle('bg-brand', active);
+      b.classList.toggle('text-white', active);
+      b.classList.toggle('text-gray-500', !active);
+    });
+    if (sub === 'sketch' && !sketchLoaded) {
+      sketchLoaded = true;
+      loadSketchAdmin();
+    }
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.report-sub').forEach(btn => {
+    btn.addEventListener('click', () => switchReportSub(btn.dataset.reportSub!));
+  });
+
+  // ── 기말고사 스케치 사진 관리 ──
+  const SKETCH_BUCKET = 'exam-sketch';
+
+  async function loadSketchAdmin() {
+    const container = document.getElementById('sketch-list')!;
+    const { data, error } = await supabase.storage.from(SKETCH_BUCKET).list('', { sortBy: { column: 'name', order: 'desc' } });
+    if (error) {
+      container.innerHTML = `<p class="col-span-full text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
+      return;
+    }
+    const files = (data ?? []).filter(f => f.name.match(/\.(jpg|jpeg|png|webp|gif)$/i));
+    if (files.length === 0) {
+      container.innerHTML = '<p class="col-span-full text-sm text-gray-400 py-4 text-center">등록된 사진이 없습니다.</p>';
+      return;
+    }
+    container.innerHTML = files.map(f => {
+      const { data: urlData } = supabase.storage.from(SKETCH_BUCKET).getPublicUrl(f.name);
+      return `
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <div class="aspect-square bg-gray-100">
+          <img src="${escAttr(urlData.publicUrl)}" alt="${escAttr(f.name)}" class="w-full h-full object-cover" onerror="this.style.opacity='0.2'" />
+        </div>
+        <div class="p-2">
+          <button data-name="${escAttr(f.name)}" class="del-sketch-btn w-full text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    container.querySelectorAll<HTMLButtonElement>('.del-sketch-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('이 사진을 삭제할까요?')) return;
+        await supabase.storage.from(SKETCH_BUCKET).remove([btn.dataset.name!]);
+        loadSketchAdmin();
+      });
+    });
+  }
+
+  document.getElementById('submit-sketch-btn')?.addEventListener('click', async () => {
+    const fileInput = document.getElementById('sketch-image-input') as HTMLInputElement;
+    const files = fileInput.files;
+    const msg = document.getElementById('sketch-msg')!;
+    if (!files || files.length === 0) {
+      msg.textContent = '사진을 선택하세요.'; msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+      return;
+    }
+    const btn = document.getElementById('submit-sketch-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '업로드 중...';
+
+    let failCount = 0;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = file.name.split('.').pop();
+      const path = `${Date.now()}-${i}.${ext}`;
+      const { error } = await supabase.storage.from(SKETCH_BUCKET).upload(path, file, { upsert: true });
+      if (error) failCount++;
+    }
+
+    btn.disabled = false; btn.textContent = '업로드';
+    fileInput.value = '';
+    msg.textContent = failCount > 0 ? `${failCount}건 업로드 실패` : '업로드되었습니다.';
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+    loadSketchAdmin();
   });
 
   // ── 공지사항 ──
