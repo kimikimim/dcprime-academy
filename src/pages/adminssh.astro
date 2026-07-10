@@ -37,7 +37,7 @@ import Layout from '../components/layout/Layout.astro';
           <button data-tab="curriculum" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">커리큘럼</button>
           <button data-tab="faculty"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">강사소개</button>
           <button data-tab="results"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">명예의 전당</button>
-          <button data-tab="reports"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">진단 리포트</button>
+          <button data-tab="reports"    class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">출제 경향</button>
         </div>
       </div>
 
@@ -377,11 +377,11 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
 
-        <!-- ── 진단 리포트 탭 ── -->
+        <!-- ── 출제 경향 탭 ── -->
         <div id="panel-reports" class="hidden">
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            <h2 id="report-form-title" class="text-base font-bold text-gray-900 mb-1">진단 평가 리포트 추가</h2>
-            <p class="text-xs text-gray-400 mb-4">/report 페이지의 학년·과목별 분석 리포트입니다. 같은 학년·과목으로 저장하면 기존 내용을 덮어씁니다.</p>
+            <h2 id="report-form-title" class="text-base font-bold text-gray-900 mb-1">출제 경향 추가</h2>
+            <p class="text-xs text-gray-400 mb-4">/in_house_exam 페이지의 학년·과목별 분석 리포트입니다. 같은 학년·과목으로 저장하면 기존 내용을 덮어씁니다.</p>
             <input type="hidden" id="report-edit-id" />
             <div class="grid grid-cols-2 gap-3 mb-3">
               <select id="report-grade-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
@@ -417,7 +417,7 @@ import Layout from '../components/layout/Layout.astro';
           </div>
 
           <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-base font-bold text-gray-900 mb-4">리포트 목록</h2>
+            <h2 class="text-base font-bold text-gray-900 mb-4">출제 경향 목록</h2>
             <div id="report-list" class="divide-y divide-gray-100">
               <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
             </div>
@@ -1232,7 +1232,7 @@ import Layout from '../components/layout/Layout.astro';
     loadResults((e.target as HTMLSelectElement).value || undefined);
   });
 
-  // ── 진단 리포트 ──
+  // ── 출제 경향 ──
   let reportEditId: number | null = null;
 
   function resetReportForm() {
@@ -1247,7 +1247,7 @@ import Layout from '../components/layout/Layout.astro';
     (document.getElementById('report-overview-input') as HTMLTextAreaElement).value = '';
     (document.getElementById('report-sections-input') as HTMLTextAreaElement).value = '';
     (document.getElementById('report-parentguide-input') as HTMLTextAreaElement).value = '';
-    document.getElementById('report-form-title')!.textContent = '진단 평가 리포트 추가';
+    document.getElementById('report-form-title')!.textContent = '출제 경향 추가';
     document.getElementById('submit-report-btn')!.textContent = '추가';
     document.getElementById('cancel-report-btn')!.classList.add('hidden');
   }
@@ -1260,7 +1260,7 @@ import Layout from '../components/layout/Layout.astro';
       return;
     }
     if (!data || data.length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">등록된 리포트가 없습니다.</p>';
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">등록된 출제 경향이 없습니다.</p>';
       return;
     }
     container.innerHTML = data.map(r => `
@@ -1291,7 +1291,7 @@ import Layout from '../components/layout/Layout.astro';
         (document.getElementById('report-overview-input') as HTMLTextAreaElement).value = r.overview ?? '';
         (document.getElementById('report-sections-input') as HTMLTextAreaElement).value = r.sections ? JSON.stringify(r.sections, null, 2) : '';
         (document.getElementById('report-parentguide-input') as HTMLTextAreaElement).value = r.parent_guide ?? '';
-        document.getElementById('report-form-title')!.textContent = '진단 평가 리포트 수정';
+        document.getElementById('report-form-title')!.textContent = '출제 경향 수정';
         document.getElementById('submit-report-btn')!.textContent = '수정 완료';
         document.getElementById('cancel-report-btn')!.classList.remove('hidden');
         document.getElementById('report-form-title')!.scrollIntoView({ behavior: 'smooth' });
@@ -1300,7 +1300,7 @@ import Layout from '../components/layout/Layout.astro';
 
     container.querySelectorAll<HTMLButtonElement>('.del-report-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('이 리포트를 삭제할까요?')) return;
+        if (!confirm('이 출제 경향을 삭제할까요?')) return;
         await supabase.from('exam_reports').delete().eq('id', btn.dataset.id!);
         loadReportsAdmin();
       });
