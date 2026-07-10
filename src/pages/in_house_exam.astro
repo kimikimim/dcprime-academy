@@ -122,28 +122,24 @@ import Layout from '../components/layout/Layout.astro';
     }
   }
 
-  async function loadSubjectVisibility() {
-    const { data } = await supabase.from('page_content').select('value').eq('key', 'in_house_exam_subjects').maybeSingle();
-    let visible: string[] | null = null;
-    if (data?.value) {
-      try { visible = JSON.parse(data.value); } catch { visible = null; }
-    }
-    if (!Array.isArray(visible) || visible.length === 0) return; // 설정 없으면 전체 노출(기본 동작 유지)
-
-    const buttons = document.querySelectorAll<HTMLButtonElement>('.subject-btn');
-    buttons.forEach(btn => {
-      btn.classList.toggle('hidden', !visible!.includes(btn.dataset.subject!));
+  function selectSubjectButton(subject: string) {
+    document.querySelectorAll<HTMLButtonElement>('.subject-btn').forEach(b => {
+      const a = b.dataset.subject === subject;
+      b.classList.toggle('bg-brand', a); b.classList.toggle('text-white', a); b.classList.toggle('border-brand', a);
+      b.classList.toggle('bg-white', !a); b.classList.toggle('text-gray-600', !a); b.classList.toggle('border-gray-200', !a);
     });
+  }
 
-    if (!visible.includes(currentSubject)) {
-      currentSubject = visible[0];
-      buttons.forEach(b => {
-        const a = b.dataset.subject === currentSubject;
-        b.classList.toggle('bg-brand', a); b.classList.toggle('text-white', a); b.classList.toggle('border-brand', a);
-        b.classList.toggle('bg-white', !a); b.classList.toggle('text-gray-600', !a); b.classList.toggle('border-gray-200', !a);
-      });
-      renderReport();
+  // 선택된 학년에 실제 리포트가 등록된 과목만 버튼으로 노출
+  function updateSubjectButtons() {
+    const available = Object.keys(REPORTS[currentGrade] ?? {});
+    document.querySelectorAll<HTMLButtonElement>('.subject-btn').forEach(btn => {
+      btn.classList.toggle('hidden', !available.includes(btn.dataset.subject!));
+    });
+    if (!available.includes(currentSubject)) {
+      currentSubject = available[0] ?? '';
     }
+    selectSubjectButton(currentSubject);
   }
 
   /* ──────────────────────────────────────────
@@ -350,7 +346,7 @@ import Layout from '../components/layout/Layout.astro';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
           </div>
-          <p class="text-gray-500 font-semibold">${currentGrade} ${currentSubject} 분석 리포트를 준비 중입니다.</p>
+          <p class="text-gray-500 font-semibold">${currentGrade}${currentSubject ? ' ' + currentSubject : ''} 분석 리포트를 준비 중입니다.</p>
           <p class="text-sm text-gray-400 mt-1">빠른 시일 내에 업로드하겠습니다.</p>
         </div>`;
       return;
@@ -463,6 +459,7 @@ import Layout from '../components/layout/Layout.astro';
           b.classList.toggle('bg-brand', a); b.classList.toggle('text-white', a); b.classList.toggle('border-brand', a);
           b.classList.toggle('bg-white', !a); b.classList.toggle('text-gray-600', !a); b.classList.toggle('border-gray-200', !a);
         });
+        updateSubjectButtons();
         renderReport();
       });
     });
@@ -470,20 +467,18 @@ import Layout from '../components/layout/Layout.astro';
     document.querySelectorAll<HTMLButtonElement>('.subject-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         currentSubject = btn.dataset.subject!;
-        document.querySelectorAll<HTMLButtonElement>('.subject-btn').forEach(b => {
-          const a = b.dataset.subject === currentSubject;
-          b.classList.toggle('bg-brand', a); b.classList.toggle('text-white', a); b.classList.toggle('border-brand', a);
-          b.classList.toggle('bg-white', !a); b.classList.toggle('text-gray-600', !a); b.classList.toggle('border-gray-200', !a);
-        });
+        selectSubjectButton(currentSubject);
         renderReport();
       });
     });
 
     const content = document.getElementById('report-content');
     if (content) content.innerHTML = '<p class="text-center text-gray-400 py-20">불러오는 중...</p>';
-    loadReports().then(renderReport);
+    loadReports().then(() => {
+      updateSubjectButtons();
+      renderReport();
+    });
     loadNotice();
-    loadSubjectVisibility();
   }
 
   document.addEventListener('astro:page-load', init);
