@@ -9,14 +9,6 @@ const subjects = [
   { label: '탐독',      id: 'tamdoq',   key: 'curriculum_tamdoq' },
   { label: '입시와 대치', id: 'entrance', key: 'curriculum_entrance' },
 ];
-
-
-const TIMETABLE_IMAGES: Record<string, string> = {
-  korean: '/images/curriculum/korean-timetable.png',
-  english: '/images/curriculum/english-timetable.png',
-  math: '/images/curriculum/math-timetable.png',
-  science: '/images/curriculum/science-timetable.png',
-};
 ---
 
 <Layout title="커리큘럼 - 대치프라임" description="대치프라임학원 커리큘럼을 안내합니다.">
@@ -54,12 +46,6 @@ const TIMETABLE_IMAGES: Record<string, string> = {
           <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
             <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
           </div>
-
-          {TIMETABLE_IMAGES[s.id] && (
-            <div class="mt-12">
-              <img src={TIMETABLE_IMAGES[s.id]} alt={`${s.label} 정규반 시간표`} class="w-full h-auto border border-gray-100 rounded-lg" />
-            </div>
-          )}
         </div>
       ))}
     </div>
