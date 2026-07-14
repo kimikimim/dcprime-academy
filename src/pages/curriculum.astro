@@ -101,7 +101,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
     if (data?.value && data.value.trim() !== '' && data.value !== '<p><br></p>') {
       el.innerHTML = data.value;
     } else {
-      el.innerHTML = '<p class="text-gray-400 text-sm text-center py-10">내용을 준비 중입니다.</p>';
+      el.classList.add('hidden');
     }
   }
 
