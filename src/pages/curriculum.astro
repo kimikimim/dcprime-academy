@@ -17,6 +17,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
   english: '영어',
   math: '수학',
   science: '과학',
+  tamdoq: '탐독',
 };
 ---
 
@@ -136,6 +137,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
     english: '영어',
     math: '수학',
     science: '과학',
+    tamdoq: '탐독',
   };
   const GROUP_ORDER = ['초등', '중등', '고1', '고2·3', '고등'];
 
@@ -152,6 +154,11 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
 
   function escHtml(str: unknown) {
     return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // 사용교재 칸은 여러 줄(불릿)일 수 있어 줄바꿈만 <br>로 변환
+  function escMultiline(str: unknown) {
+    return escHtml(str).replace(/\n/g, '<br>');
   }
 
   function renderTimetable(rows: any[][]): string {
@@ -180,7 +187,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
               <p class="text-xs text-gray-500 whitespace-nowrap">${escHtml(time)}</p>
             </div>
             <p class="text-xs text-gray-500 mt-0.5">${escHtml(teacher)}</p>
-            <p class="text-xs text-gray-600 mt-1 leading-relaxed">${escHtml(book)}</p>
+            <p class="text-xs text-gray-600 mt-1 leading-relaxed">${escMultiline(book)}</p>
           </div>`;
       }).join('');
 
@@ -192,7 +199,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
             <td class="py-2.5 pr-4 text-sm font-semibold text-gray-900 whitespace-nowrap align-top">${escHtml(nameLabel)}</td>
             <td class="py-2.5 pr-4 text-sm text-gray-600 whitespace-nowrap align-top">${escHtml(time)}</td>
             <td class="py-2.5 pr-4 text-sm text-gray-600 whitespace-nowrap align-top">${escHtml(teacher)}</td>
-            <td class="py-2.5 text-sm text-gray-600 align-top">${escHtml(book)}</td>
+            <td class="py-2.5 text-sm text-gray-600 align-top">${escMultiline(book)}</td>
           </tr>`;
       }).join('');
 
