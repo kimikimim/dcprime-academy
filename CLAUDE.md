@@ -155,6 +155,21 @@ src/
 
 ---
 
+## 정규반 시간표 (curriculum.astro) — Google Sheets 연동
+
+수학/영어/국어/과학 탭 하단 "정규반 시간표"는 Supabase가 아니라 **선생님들이 직접 편집하는 구글시트**에서 불러옴 (코드 재배포 없이 선생님이 시트만 고치면 바로 반영됨).
+
+- 시트: 탭 4개(수학/영어/국어/과학), 컬럼은 `구분 | 학년 | 반명 | 수업시간 | 강사 | 사용교재`로 통일
+  - `구분`: 초등/중등/고1/고2·3/고등 (그룹핑·정렬용)
+- 시트 ID: `curriculum.astro`의 `TIMETABLE_SHEET_ID`에 하드코딩 (`1ktrfPNbLn5dmBawtAXBag0kwFHRpYdK7cP10Ac6CR5Y`)
+- 공유 설정: "링크가 있는 모든 사용자 - 뷰어" (전체 파일을 `?format=xlsx`로 내보내는 방식이라 "웹에 게시"는 불필요)
+- 클라이언트에서 `https://docs.google.com/spreadsheets/d/{ID}/export?format=xlsx`를 fetch → SheetJS(`xlsx-0.20.3` CDN, adminssh.astro 엑셀 다운로드와 동일 버전)로 파싱 → 탭 이름으로 시트 매칭 → `구분`별로 그룹핑해서 렌더링
+- 데스크톱은 표, 모바일은 카드로 자동 전환 (Tailwind `sm:` 브레이크포인트, JS 분기 없음)
+- 시트 fetch 실패 시 조용히 무시 (Quill 본문은 그대로 표시됨, 에러 UI 없음)
+- ⚠️ 이 코드와 별개로, admin 페이지 커리큘럼 Quill 콘텐츠에 예전에 올려둔 시간표 이미지가 남아있을 수 있음 — 중복이니 발견하면 지우는 게 좋음
+
+---
+
 ## 강사소개 페이지
 
 탭: 초등부 / 중등부 / 고등부 / 입시와대치
