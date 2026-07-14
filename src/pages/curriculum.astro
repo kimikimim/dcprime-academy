@@ -9,6 +9,15 @@ const subjects = [
   { label: '탐독',      id: 'tamdoq',   key: 'curriculum_tamdoq' },
   { label: '입시와 대치', id: 'entrance', key: 'curriculum_entrance' },
 ];
+
+// 정규반 시간표: 선생님들이 직접 편집하는 구글시트에서 불러옴 (탭 이름 = 과목명)
+const TIMETABLE_SHEET_ID = '1ktrfPNbLn5dmBawtAXBag0kwFHRpYdK7cP10Ac6CR5Y';
+const TIMETABLE_SHEET_NAMES: Record<string, string> = {
+  korean: '국어',
+  english: '영어',
+  math: '수학',
+  science: '과학',
+};
 ---
 
 <Layout title="커리큘럼 - 대치프라임" description="대치프라임학원 커리큘럼을 안내합니다.">
@@ -46,6 +55,10 @@ const subjects = [
           <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
             <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
           </div>
+
+          {TIMETABLE_SHEET_NAMES[s.id] && (
+            <div id={`timetable-${s.id}`} class="mt-12"></div>
+          )}
         </div>
       ))}
     </div>
@@ -111,6 +124,121 @@ const subjects = [
     tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
 
     subjects.forEach(s => loadContent(s.key, `content-${s.id}`));
+    loadTimetables();
+  }
+
+  // ──────────────────────────────────────────
+  // 정규반 시간표: 구글시트(선생님 편집) → XLSX 내보내기 → 클라이언트에서 파싱
+  // ──────────────────────────────────────────
+  const SHEET_ID = '1ktrfPNbLn5dmBawtAXBag0kwFHRpYdK7cP10Ac6CR5Y';
+  const SHEET_NAMES: Record<string, string> = {
+    korean: '국어',
+    english: '영어',
+    math: '수학',
+    science: '과학',
+  };
+  const GROUP_ORDER = ['초등', '중등', '고1', '고2·3', '고등'];
+
+  async function loadXlsxLib() {
+    if ((window as any).XLSX) return;
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+      script.onload = () => resolve();
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function escHtml(str: unknown) {
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderTimetable(rows: any[][]): string {
+    // rows: [구분, 학년, 반명, 수업시간, 강사, 사용교재][] (헤더 제외)
+    const groups = new Map<string, any[][]>();
+    rows.forEach(r => {
+      const g = String(r[0] ?? '').trim() || '기타';
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g)!.push(r);
+    });
+
+    const sortedGroups = [...groups.keys()].sort((a, b) => {
+      const ia = GROUP_ORDER.indexOf(a), ib = GROUP_ORDER.indexOf(b);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
+
+    return sortedGroups.map(g => {
+      const groupRows = groups.get(g)!;
+      const cardRows = groupRows.map(r => {
+        const [, grade, className, time, teacher, book] = r;
+        const nameLabel = [grade, className].filter(Boolean).join(' ');
+        return `
+          <div class="border-b border-gray-100 py-3 last:border-b-0">
+            <div class="flex items-baseline justify-between gap-3">
+              <p class="text-sm font-bold text-gray-900">${escHtml(nameLabel)}</p>
+              <p class="text-xs text-gray-500 whitespace-nowrap">${escHtml(time)}</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">${escHtml(teacher)}</p>
+            <p class="text-xs text-gray-600 mt-1 leading-relaxed">${escHtml(book)}</p>
+          </div>`;
+      }).join('');
+
+      const tableRows = groupRows.map(r => {
+        const [, grade, className, time, teacher, book] = r;
+        const nameLabel = [grade, className].filter(Boolean).join(' ');
+        return `
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 pr-4 text-sm font-semibold text-gray-900 whitespace-nowrap align-top">${escHtml(nameLabel)}</td>
+            <td class="py-2.5 pr-4 text-sm text-gray-600 whitespace-nowrap align-top">${escHtml(time)}</td>
+            <td class="py-2.5 pr-4 text-sm text-gray-600 whitespace-nowrap align-top">${escHtml(teacher)}</td>
+            <td class="py-2.5 text-sm text-gray-600 align-top">${escHtml(book)}</td>
+          </tr>`;
+      }).join('');
+
+      return `
+        <div class="mb-8 last:mb-0">
+          <h3 class="text-sm font-bold text-gray-900 mb-2">${escHtml(g)} 정규반</h3>
+          <div class="sm:hidden">${cardRows}</div>
+          <table class="hidden sm:table w-full border-collapse">
+            <thead>
+              <tr class="border-b-2 border-black">
+                <th class="text-left text-xs font-bold text-gray-900 py-2 pr-4">반명</th>
+                <th class="text-left text-xs font-bold text-gray-900 py-2 pr-4">수업시간</th>
+                <th class="text-left text-xs font-bold text-gray-900 py-2 pr-4">강사</th>
+                <th class="text-left text-xs font-bold text-gray-900 py-2">사용교재</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </div>`;
+    }).join('');
+  }
+
+  async function loadTimetables() {
+    const targets = Object.keys(SHEET_NAMES).filter(id => document.getElementById(`timetable-${id}`));
+    if (targets.length === 0) return;
+
+    try {
+      await loadXlsxLib();
+      const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=xlsx`);
+      if (!res.ok) throw new Error('sheet fetch failed');
+      const buf = await res.arrayBuffer();
+      const XLSX = (window as any).XLSX;
+      const wb = XLSX.read(buf, { type: 'array' });
+
+      targets.forEach(id => {
+        const el = document.getElementById(`timetable-${id}`);
+        if (!el) return;
+        const sheetName = SHEET_NAMES[id];
+        const sheet = wb.Sheets[sheetName];
+        if (!sheet) { el.innerHTML = ''; return; }
+        const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(1).filter((r: any[]) => r.some(c => c !== undefined && c !== ''));
+        el.innerHTML = rows.length > 0 ? renderTimetable(rows) : '';
+      });
+    } catch {
+      // 시간표 로드 실패는 조용히 무시 (Quill 본문 내용은 이미 표시됨)
+    }
   }
 
   document.addEventListener('astro:page-load', init);
