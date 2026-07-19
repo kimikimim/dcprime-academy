@@ -1,5 +1,61 @@
 ---
-const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
+const pageTitle = "대치프라임학원 | 예비고1 특별관 - 시흥 고교선택 전략 설명회";
+
+const schools = [
+    {
+        name: '시흥능곡고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '능곡관 인근',
+        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
+        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
+        target: '[추천 대상 학생 유형을 입력하세요]',
+    },
+    {
+        name: '장곡고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '장곡관 인근',
+        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
+        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
+        target: '[추천 대상 학생 유형을 입력하세요]',
+    },
+    {
+        name: '시흥고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
+        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
+        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
+        target: '[추천 대상 학생 유형을 입력하세요]',
+    },
+    {
+        name: '소래고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
+        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
+        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
+        target: '[추천 대상 학생 유형을 입력하세요]',
+    },
+    {
+        name: '함현고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
+        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
+        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
+        target: '[추천 대상 학생 유형을 입력하세요]',
+    },
+];
+
+const strengths = [
+    {
+        icon: '📖', iconBg: 'bg-blue-100 text-blue-700',
+        title: '탐독(耽讀) 학업매니지먼트',
+        desc: '자기주도학습 관리 시스템으로 <strong>학습 계획-실행-피드백</strong>을 매일 점검합니다.',
+    },
+    {
+        icon: '📵', iconBg: 'bg-blue-100 text-blue-700',
+        title: '스마트폰 사용 전면 통제',
+        desc: '원내 스마트폰 사용을 전면 통제하여 <strong>몰입 가능한 학습 환경</strong>을 만듭니다.',
+    },
+    {
+        icon: '📐', iconBg: 'bg-blue-100 text-blue-700',
+        title: '국·수·영·과 전문 시스템',
+        desc: '과목별 전문 강사진이 고1 첫 시험을 목표로 <strong>전과목 몰입 커리큘럼</strong>을 설계합니다.',
+    },
+    {
+        icon: '🌙', iconBg: 'bg-blue-100 text-blue-700',
+        title: '텐투텐(10 to 10) 관리',
+        desc: '등원부터 하원까지 학습 시간을 <strong>밀착 관리</strong>하여 학습 공백을 최소화합니다.',
+    },
+];
 ---
 
 <!DOCTYPE html>
@@ -8,7 +64,7 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
-    <meta name="description" content="초4~중2 대상 대치프라임 여름방학 전략 설명회. 능곡관 7/10 · 장곡관 7/17, 선착순 마감." />
+    <meta name="description" content="경기도 시흥 비평준화 지역 중3(예비고1) 학부모·학생을 위한 고교선택 전략 설명회. 200점 내신 산출과 5등급제 개편, 관내 고교 정밀 비교 분석." />
     <link rel="icon" type="image/png" href="/favicon-circle.png" />
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com" is:inline></script>
@@ -28,218 +84,414 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
 <body class="bg-gray-50 text-gray-800 tracking-tight antialiased">
 
     <!-- 상단 헤더 -->
-    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-extrabold text-blue-900 tracking-tighter cursor-pointer">대치프라임학원</a>
-            <a href="#reservation" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm hover:shadow-md active:scale-95">예약하기</a>
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="/" class="text-2xl font-extrabold text-blue-900 tracking-tighter cursor-pointer">대치프라임학원</a>
+                <span class="hidden sm:inline-block bg-blue-900 text-white text-xs px-2 py-1 rounded font-bold">예비고1 특별관</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-7 font-medium text-gray-600 text-sm">
+                <a href="#intro" class="hover:text-blue-700 transition">시흥 비평준화 이슈</a>
+                <a href="#programs" class="hover:text-blue-700 transition">핵심 프로그램</a>
+                <a href="#high-school-match" class="hover:text-blue-700 transition">관내 고교 비교</a>
+                <a href="#features" class="hover:text-blue-700 transition">대치프라임 시스템</a>
+            </nav>
+            <a href="#reservation" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm hover:shadow-md active:scale-95">설명회 예약하기</a>
         </div>
     </header>
 
     <!-- 1. Hero Section -->
-    <section class="bg-hero text-white text-center py-24 px-4 relative overflow-hidden">
+    <section id="intro" class="bg-hero text-white text-center py-24 px-4 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-10">
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full border-4 border-blue-400"></div>
             <div class="absolute top-1/2 -right-12 w-64 h-64 rounded-full border-4 border-yellow-400"></div>
         </div>
 
         <div class="max-w-4xl mx-auto relative z-10 animate-fade-in">
-            <span class="inline-block py-1.5 px-4 rounded-full bg-blue-900/50 text-blue-200 text-sm font-semibold mb-6 border border-blue-700/50 backdrop-blur-sm shadow-inner">
-                초4 ~ 중2 학부모 초청 설명회
+            <span class="inline-block py-1.5 px-4 rounded-full bg-blue-900/50 text-blue-200 text-sm font-semibold mb-6 border border-blue-700/50 backdrop-blur-sm shadow-inner break-keep">
+                경기도 시흥 비평준화 지역 중3 (예비고1) 학부모·학생 필수 코스
             </span>
-            <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight break-keep">
-                여름학기 개강 설명회,<br>
-                <span class="text-accent">여름방학이 '진짜 상위권'을 만듭니다.</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight break-keep">
+                200점 내신 산출과 5등급제 개편,<br />
+                <span class="text-accent font-black">카더라에 흔들리지 않는 진짜 해법</span>을 제시합니다.
             </h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-10 break-keep font-light">
-                변화하는 교육환경 속에서 흔들리지 않는 학습 로드맵을 제시합니다.
+            <p class="text-lg md:text-xl text-gray-300 mb-10 break-keep font-light leading-relaxed">
+                2028 대입 개편안과 고교학점제 전면화의 파도가 시작되었습니다.<br class="hidden md:block" />
+                무조건적인 상향 지원과 막연한 하향 안정화 사이, 시흥 관내 주요 고교(능곡·장곡·시흥·소래·함현고 등)의
+                실제 내신 난이도와 합격자 데이터를 기반으로 대치프라임만의 3단계 성공 로드맵을 제시합니다.
             </p>
-            <a href="#reservation" class="inline-flex items-center justify-center bg-yellow-500 hover:bg-yellow-400 text-gray-900 text-lg font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]">
-                설명회 사전 예약하기
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
-        </div>
-    </section>
-
-    <!-- 1-2. 설명회 포스터 -->
-    <section class="bg-white pt-16 pb-4 px-4">
-        <div class="max-w-md mx-auto">
-            <img src="/images/seminar-poster.jpg" alt="대치프라임 여름방학 설명회 안내 포스터"
-                 class="w-full h-auto rounded-2xl shadow-xl border border-gray-100"
-                 style="width:100%;height:auto;display:block;">
-        </div>
-    </section>
-
-    <!-- 2. Hook / 문제 제기 -->
-    <section class="py-20 px-4 bg-white">
-        <div class="max-w-4xl mx-auto">
-            <h3 class="text-2xl md:text-4xl font-bold text-center mb-12 text-gray-900 break-keep leading-snug">
-                학원에 오래 앉아있는데,<br class="hidden md:block">왜 우리 아이 성적은 제자리일까요?
-            </h3>
-            <div class="grid md:grid-cols-3 gap-6 text-center">
-                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                    <div class="text-5xl mb-6">📱</div>
-                    <p class="font-semibold text-gray-800 break-keep">책상에 앉아 스마트폰만<br>만지작거리는 아이</p>
-                </div>
-                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                    <div class="text-5xl mb-6">🤷‍♂️</div>
-                    <p class="font-semibold text-gray-800 break-keep">안다고 착각하지만 막상<br>설명해보라면 말문이 막히는 아이</p>
-                </div>
-                <div class="p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
-                    <div class="text-5xl mb-6">🥱</div>
-                    <p class="font-semibold text-gray-800 break-keep">자유학기제라는 이유로<br>긴장감이 완전히 풀려버린 아이</p>
-                </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#programs" class="bg-white text-blue-900 hover:bg-gray-100 px-8 py-4 rounded-full font-bold shadow-lg transition inline-flex items-center gap-2">
+                    하반기 3단계 프로그램 확인 <span>⬇</span>
+                </a>
+                <a href="#reservation" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(245,158,11,0.4)] transition">
+                    설명회 즉시 예약하기
+                </a>
             </div>
-            <div class="mt-12 p-6 bg-blue-50 rounded-xl text-center">
-                <p class="text-gray-700 text-lg md:text-xl break-keep">
-                    단순히 지식을 주입하는 것만으로는 고등학교에서 무너집니다.<br class="hidden md:block">
-                    이번 설명회에서 <strong class="text-blue-700">'스스로 공부하는 힘'</strong>을 길러주는 명확한 해답을 제시합니다.
+        </div>
+    </section>
+
+    <!-- 2. 3대 핵심 입시 이슈 -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Reality of Siheung District</span>
+                <h3 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2 break-keep">
+                    🚨 2026년 시흥 관내 중3 고교 선택의 3대 핵심 입시 이슈
+                </h3>
+                <p class="mt-4 text-base text-gray-500 break-keep">
+                    경기도 시흥시는 '비평준화 지역'입니다. 변화하는 대입 제도와 결합했을 때, 다른 지역과는 완전히 다른 고유의 전략이 필요합니다.
                 </p>
             </div>
-        </div>
-    </section>
 
-    <!-- 3. 현장사진 / 후기 -->
-    <section class="py-20 px-4 bg-gray-100">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-12">
-                <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">대치프라임의 로드맵은 결과로 증명합니다</h3>
-                <p class="text-gray-600 text-lg">지난 설명회 현장 및 재원생들의 생생한 변화</p>
-            </div>
-
-            <!-- 사진 영역 -->
-            <div class="grid md:grid-cols-2 gap-6 mb-12">
-                <div class="group relative rounded-2xl overflow-hidden shadow-lg" style="height:18rem;">
-                    <img src="/images/seminar-live-1.jpg" alt="설명회 현장" class="transition duration-500 group-hover:scale-105" style="width:100%;height:100%;object-fit:cover;display:block;">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                        <span class="text-white font-semibold">📸 열기 가득했던 지난 설명회 현장</span>
-                    </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-6">🎓</div>
+                    <span class="text-xs font-bold text-gray-400">Issue 01</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-1 mb-3 break-keep">내신 5등급제 전환의 허와 실</h4>
+                    <p class="text-gray-600 leading-relaxed text-sm break-keep">
+                        기존 9등급제에서 5등급 상대평가(1등급 10%)로 전환됨에 따라 내신 따기 좋은 학교의 희소성이 변했습니다. 이제 대학은 단순 등급 숫자가 아닌 <strong>'어떤 과목(교육과정 편제표)'</strong>을 이수했는지, 그리고 <strong>'학생부 세특의 깊이'</strong>를 집중 평가합니다.
+                    </p>
                 </div>
-                <div class="group relative rounded-2xl overflow-hidden shadow-lg" style="height:18rem;">
-                    <img src="/images/seminar-live-2.jpg" alt="설명회 현장" class="transition duration-500 group-hover:scale-105" style="width:100%;height:100%;object-fit:cover;display:block;">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                        <span class="text-white font-semibold">📸 학부모님들의 뜨거운 관심</span>
-                    </div>
+                <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-6">📚</div>
+                    <span class="text-xs font-bold text-gray-400">Issue 02</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-1 mb-3 break-keep">고교학점제 전면 시행 = 전공 선택</h4>
+                    <p class="text-gray-600 leading-relaxed text-sm break-keep">
+                        선택 과목 폭이 넓어지며 고등학교마다 개설되는 심화/융합선택 과목 개설 역량이 완전히 다릅니다. 우리 아이가 목표로 하는 계열(의약학, 공학, 상경, 인문)에 따라 유리한 과목 편제가 깔끔하게 개설되어 있는 최적의 고교를 찾아내야 합니다.
+                    </p>
                 </div>
-            </div>
-
-            <!-- 텍스트 후기 -->
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
-                    <div class="text-blue-500 mb-4">
-                        <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"단순한 선행이 아니라, 아이의 메타인지를 깨워주는 시스템과 '탐독(耽讀)' 프로그램이 정말 인상 깊었습니다."</p>
-                    <p class="text-right text-sm font-bold text-gray-900">- 초5 재원생 학부모</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
-                    <div class="text-blue-500 mb-4">
-                         <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"학원 내 스마트폰 전면 통제 덕분에 아이의 공부 집중력과 태도가 눈에 띄게 달라졌습니다. 원장님 원칙에 감사드립니다."</p>
-                    <p class="text-right text-sm font-bold text-gray-900">- 중2 재원생 학부모</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 hover:shadow-md transition">
-                    <div class="text-blue-500 mb-4">
-                         <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="text-gray-700 italic mb-6 break-keep leading-relaxed">"막연했던 초중등 학습 방향이 완벽하게 잡혔어요. 당장 무엇을 해야 할지 명확해졌습니다."</p>
-                    <p class="text-right text-sm font-bold text-gray-900">- 중1 재원생 학부모</p>
+                <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-6">🧭</div>
+                    <span class="text-xs font-bold text-gray-400">Issue 03</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-1 mb-3 break-keep">시흥 비평준화 & 200점 컷 고민</h4>
+                    <p class="text-gray-600 leading-relaxed text-sm break-keep">
+                        중학 내신 200점 만점 기준의 당락 예측은 학부모들의 연례 최대 고민입니다. 학업 역량이 높은 고교에 상향하여 빡빡한 경쟁에 놓일지, 혹은 전략적으로 교과 전교권을 선점할 고교를 고를 것인지의 선택. 대치프라임이 1:1 정밀 시뮬레이션으로 해답을 제시합니다.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. 프로그램 소개 -->
-    <section class="py-20 px-4 bg-white">
-        <div class="max-w-4xl mx-auto">
-            <h3 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">설명회 프로그램 안내</h3>
+    <!-- 3. 하반기 3단계 프로그램 -->
+    <section id="programs" class="py-20 px-4 bg-gray-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Harvest Season Program</span>
+                <h3 class="text-3xl font-bold text-gray-900 mt-2 break-keep">대치프라임 하반기 3단계 고교선택 로드맵</h3>
+            </div>
 
-            <div class="space-y-6">
-                <!-- 1부 -->
-                <div class="flex flex-col md:flex-row bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-8 hover:shadow-md transition">
-                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
-                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold text-xl mr-4 md:mr-0">1</span>
-                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 mb-12">
+                <button id="btn-tab1" data-tab="tab1" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-blue-600 text-white shadow-md">
+                    STEP 1. 고교선택 설명회 (8월)
+                </button>
+                <button id="btn-tab2" data-tab="tab2" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-white text-gray-600 hover:bg-gray-200 shadow-sm">
+                    STEP 2. 고교선택 진단평가 (9월·11월)
+                </button>
+                <button id="btn-tab3" data-tab="tab3" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-white text-gray-600 hover:bg-gray-200 shadow-sm">
+                    STEP 3. 고교선택 간담회 (12월)
+                </button>
+            </div>
+
+            <!-- Tab 1: 설명회 -->
+            <div id="tab1-content" class="tab-pane block">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6">
+                        <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">학부모 대상 대형 입시 설명회</span>
+                        <h4 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-4 mb-4 break-keep">카더라 너머, 시흥 관내 고교의 실질 데이터 분석 3부작</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 text-sm break-keep">
+                            단순한 대입 제도 요약을 넘어 시흥 관내 주요 고교(장곡, 능곡, 시흥, 소래, 함현고 등)의 고교학점제 선택 과목 개설 역량 및 최근 서울권 대입 실적의 특징을 철저하게 해부해 드립니다.
+                        </p>
+
+                        <div class="space-y-4 border-t border-gray-100 pt-6">
+                            <div class="flex gap-3">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-900 text-white font-bold flex items-center justify-center text-xs">1부</span>
+                                <div>
+                                    <h5 class="font-bold text-gray-900 text-sm break-keep">내신 5등급제와 통합형 수능, 위기인가 기회인가?</h5>
+                                    <p class="text-xs text-gray-500 mt-0.5 break-keep">2028 대입 개편에 맞춰 현 중3의 고등학교 선택이 이전 세대와 왜 완전히 달라야 하는지 당위성 분석</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-900 text-white font-bold flex items-center justify-center text-xs">2부</span>
+                                <div>
+                                    <h5 class="font-bold text-gray-900 text-sm break-keep">시흥 관내 주요 고등학교 현미경 매치 (능곡·장곡·시흥·소래·함현 등)</h5>
+                                    <p class="text-xs text-gray-500 mt-0.5 break-keep">고교별 최근 입결 특징, 내신 난이도(서술형 비중, 수학 킬러 난이도), 분위기를 가감 없이 비교 분석</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-900 text-white font-bold flex items-center justify-center text-xs">3부</span>
+                                <div>
+                                    <h5 class="font-bold text-gray-900 text-sm break-keep">고교 선택 완성 후, 역전을 만드는 '예비고1 하반기 로드맵'</h5>
+                                    <p class="text-xs text-gray-500 mt-0.5 break-keep">고교 진학 전 탄탄한 기초 학업 역량을 빌딩할 국·수·영·과 전문 프로그램과 텐투텐 관리 소개</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row justify-between gap-1 text-xs text-gray-500">
+                            <div><strong>장곡관:</strong> 8월 28일(금) 오후 7:00</div>
+                            <div><strong>능곡관:</strong> 8월 29일(토) 오후 2:00</div>
+                        </div>
                     </div>
-                    <div class="md:w-3/4">
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">변화하는 교육환경과 초4~중2가 지금 당장 잡아야 할 것</h4>
-                        <p class="text-gray-600 leading-relaxed break-keep">고교학점제와 2022 개정 교육과정의 핵심을 꿰뚫습니다. 당장의 내신을 넘어 흔들림 없는 기초 체력과 문해력을 어떻게 다져야 하는지 실질적인 방향을 제시합니다.</p>
+
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="relative rounded-2xl overflow-hidden shadow-md" style="height:13rem;">
+                            <img src="/images/seminar-live-1.jpg" alt="대치프라임 입시설명회 현장" class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-5">
+                                <span class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded w-max mb-1.5">장곡관 & 능곡관 실제 세미나</span>
+                                <h5 class="text-sm font-bold text-white leading-tight break-keep">만석과 뜨거운 현장 열기, 대치프라임 대표 원장단 직강 설명회 전경</h5>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                            <h5 class="font-bold text-gray-900 mb-1.5 text-sm">🎁 설명회 한정 특별 혜택</h5>
+                            <p class="text-xs text-gray-600 leading-relaxed mb-3 break-keep">
+                                <strong>참석자 전원 100% 증정:</strong> 2027학년도 시흥 예비고1 고교선택 핵심 분석 가이드북 (고교별 과목 편제 일람표 수록)
+                            </p>
+                            <a href="#reservation" class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs transition">설명회 좌석 예약 바로가기</a>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 2부 -->
-                <div class="flex flex-col md:flex-row bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-8 hover:shadow-md transition">
-                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
-                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold text-xl mr-4 md:mr-0">2</span>
-                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
+            <!-- Tab 2: 진단평가 -->
+            <div id="tab2-content" class="tab-pane hidden">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-5">
+                        <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">현 중3 학생 대상 진단평가</span>
+                        <h4 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-4 mb-4 break-keep">"고교 내신 시뮬레이션 기반 진단평가"</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 text-sm break-keep">
+                            절대평가인 중학 A등급에 안주했다가 겪게 될 첫 고1 등급 충격을 사전에 방지합니다. 시흥 주요 고등학교의 실제 중간고사/기말고사 출제 경향을 적용하여, 해당 고교 입학 시의 등급 커트라인을 1:1 매칭으로 정확히 가려냅니다.
+                        </p>
+
+                        <div class="space-y-4 border-t border-gray-100 pt-6">
+                            <div>
+                                <h5 class="font-bold text-gray-900 text-sm mb-1">📅 평가 일정</h5>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• <strong class="text-gray-700">1차 진단평가:</strong> 9월 4일(금) ~ 9월 6일(일) (택 1회)</li>
+                                    <li>• <strong class="text-gray-700">2차 진단평가:</strong> 11월 27일(금) ~ 11월 29일(일) (예정)</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 text-sm mb-1">🎓 수능/내신 예측 피드백</h5>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• 통합형 수능형 문해력 분석, 국/수/영 과목별 취약점 도식화</li>
+                                    <li>• 목표 희망 고교 지원 시 실제 예상 백분위와 5등급제 환산 시뮬레이션</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md:w-3/4">
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">무너지지 않는 상위권의 비밀: 올바른 공부 습관과 메타인지</h4>
-                        <p class="text-gray-600 leading-relaxed break-keep">'공부하는 척'하는 아이를 '진짜 공부'하는 아이로 바꾸는 비결. 아는 것과 모르는 것을 정확히 구분하는 메타인지 훈련법과 최상위권의 절대적인 학습 습관을 공개합니다.</p>
+
+                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-2xl border border-gray-200 p-4 space-y-3 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">실제 시험장 풍경</span>
+                                <h5 class="font-bold text-gray-800 text-xs mt-2">고교 진단평가 응시 현장</h5>
+                                <p class="text-[11px] text-gray-500 leading-normal break-keep">
+                                    학원 고사실에서 마킹과 타이머 조절 훈련을 실전 수능 및 내신 고사 환경과 똑같이 이행합니다.
+                                </p>
+                            </div>
+                            <div class="relative rounded-xl overflow-hidden h-36">
+                                <img src="/images/seminar-live-2.jpg" alt="대치프라임 진단평가 응시 현장" class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-gray-200 p-4 space-y-3 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <span class="text-[10px] font-bold text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded">입시진단 리포트 샘플</span>
+                                <h5 class="font-bold text-gray-800 text-xs mt-2">1:1 개별 맞춤 5등급제 분석표</h5>
+                                <p class="text-[11px] text-gray-500 leading-normal break-keep">
+                                    성취도 분석을 바탕으로, 시흥 내신 시뮬레이션 데이터를 제공합니다.
+                                </p>
+                            </div>
+                            <div class="border border-gray-200 rounded-xl p-3 bg-gray-50 text-[10px] space-y-2">
+                                <div class="flex justify-between items-center border-b pb-1 text-gray-400">
+                                    <span class="font-bold">대치프라임 고교선택 시뮬레이션</span>
+                                    <span>김프라임 (중3)</span>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <div class="flex justify-between font-bold">
+                                        <span class="text-gray-600">공통수학 I (기본/심화)</span>
+                                        <span class="text-yellow-600 font-extrabold">상위 3.2% (1등급 예측)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-yellow-500 h-full" style="width:96.8%"></div>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <div class="flex justify-between font-bold">
+                                        <span class="text-gray-600">공통영어 (수능 어법/구문)</span>
+                                        <span class="text-blue-600 font-extrabold">상위 11% (2등급 경계)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-blue-500 h-full" style="width:89%"></div>
+                                    </div>
+                                </div>
+                                <div class="pt-1.5 border-t border-dashed border-gray-300 flex justify-between text-gray-700 font-bold">
+                                    <span>시흥 능곡고/장곡고 지원 시:</span>
+                                    <span class="text-emerald-600">전교 극상위 1등급 매칭권</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 3부 (강조) -->
-                <div class="flex flex-col md:flex-row bg-blue-50 border-2 border-blue-200 shadow-md rounded-2xl p-6 md:p-8 relative overflow-hidden transform md:scale-105 z-10 my-8">
-                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-sm font-bold px-4 py-1.5 rounded-bl-xl shadow-sm">설명회 핵심</div>
-                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start pt-2">
-                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold text-xl mr-4 md:mr-0 shadow-sm">3</span>
-                        <span class="md:hidden font-bold text-blue-700 text-xl">부</span>
-                    </div>
-                    <div class="md:w-3/4 pt-2">
-                        <h4 class="text-xl font-bold text-blue-900 mb-3 break-keep">대치프라임만의 초·중등 확장형 커리큘럼 및 밀착 관리 시스템</h4>
-                        <p class="text-gray-700 mb-4 break-keep">초등부터 고등 대입까지 직결되는 대치프라임만의 연계 로드맵입니다.</p>
-                        <ul class="space-y-3 bg-white/60 p-4 rounded-xl border border-blue-100">
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span class="text-gray-800 text-sm md:text-base font-medium break-keep">학업매니지먼트 프로그램'탐독' 및 <strong class="text-blue-700">수학/영어/국어/과학</strong> 시스템</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span class="text-gray-800 text-sm md:text-base font-medium break-keep">원내 <strong class="text-red-600">스마트폰 사용 전면 통제</strong> 등 으로 나타나는 대치프라임의 관리시스템</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <!-- Tab 3: 간담회 -->
+            <div id="tab3-content" class="tab-pane hidden">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6">
+                        <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">대치프라임 재원생 및 학부모</span>
+                        <h4 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-4 mb-6 break-keep">명문대 진학 선배들이 들려주는 합격의 나침반</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 text-sm break-keep">
+                            학교 정보와 성적 진단을 끝낸 후, 이제는 실전에 임하는 멘토십의 시간입니다. 관내 고교를 졸업하고 명문대에 입학한 대치프라임 졸업 선배 멘토들을 초대하여 직접 소통하는 토크 콘서트입니다.
+                        </p>
 
-                <!-- 4부 -->
-                <div class="flex flex-col md:flex-row bg-gray-50 border border-gray-200 shadow-sm rounded-2xl p-6 md:p-8">
-                    <div class="md:w-1/4 mb-4 md:mb-0 flex items-center md:items-start">
-                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 text-gray-600 font-bold text-xl mr-4 md:mr-0">4</span>
-                        <span class="md:hidden font-bold text-gray-600 text-xl">부</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100 pt-6">
+                            <div>
+                                <h5 class="font-bold text-gray-900 text-sm mb-1">💬 간담회 일자</h5>
+                                <p class="text-xs text-gray-500">
+                                    • 12월 4일(금) ~ 12월 5일(토) (예정)<br />
+                                    • 대치프라임 본관 세미나실
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 text-sm mb-1">🎓 핵심 주제</h5>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• 선배가 직접 겪은 고교별 지필평가 서술형 팁</li>
+                                    <li>• 고교학점제 선택과목 선택 및 세특 구축 과정</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md:w-3/4">
-                        <h4 class="text-xl font-bold text-gray-900 mb-3 break-keep">질의응답 및 현장 예약 안내</h4>
-                        <p class="text-gray-600 leading-relaxed break-keep">평소 궁금했던 학습 고민을 해소하는 Q&A 및 진단 테스트 등 참석자 특별 혜택 안내</p>
+
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="relative rounded-2xl overflow-hidden shadow-md" style="height:13rem;">
+                            <img src="/images/hero-seminar.jpg" alt="지난 예비고1 선배 간담회 모습" class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-5">
+                                <span class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded w-max mb-1.5">지난 간담회 전경</span>
+                                <h5 class="text-sm font-bold text-white leading-tight break-keep">대치프라임 선배 멘토들과 함께한 뜨거웠던 질문과 대화의 순간</h5>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-xs text-gray-600 break-keep">
+                            <strong>1:1 입시 연계 면담:</strong> 간담회 이후, 각 개별 학생은 입시 전략팀 소장 및 과목 책임 강사와 함께 개별면담을 진행하여, 겨울방학 텐투텐 몰입과정에 필요한 개인 지망 고교별 커리큘럼 세밀 가이드를 부여받게 됩니다.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 5. 일정 및 예약 폼 -->
+    <!-- 4. 관내 고교 정밀비교 -->
+    <section id="high-school-match" class="py-20 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">School Analysis</span>
+                <h3 class="text-3xl font-bold text-gray-900 mt-2 break-keep">시흥 관내 주요 고등학교 입시 지형 완벽 해부</h3>
+                <p class="mt-4 text-base text-gray-500 break-keep">
+                    각 학교마다 개설되는 과목 편제와 내신 출제 스타일, 면학 분위기는 완전히 다릅니다. 우리 아이에게 딱 맞는 최고의 선택지를 확인하세요.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {schools.map((school) => (
+                    <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class={`${school.bgColor} text-xs font-bold px-2.5 py-1 rounded`}>{school.type}</span>
+                            <span class="text-gray-400 text-xs">{school.tag}</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">{school.name}</h4>
+                        <div class="space-y-2 text-xs text-gray-600 break-keep">
+                            <p><strong>• 학업 특징:</strong> {school.desc}</p>
+                            <p><strong>• 내신 특징:</strong> {school.exam}</p>
+                            <p><strong>• 추천 타겟:</strong> {school.target}</p>
+                        </div>
+                    </div>
+                ))}
+
+                <div class="bg-hero text-white rounded-2xl p-6 border border-gray-800 hover:shadow-lg transition flex flex-col justify-between">
+                    <div>
+                        <span class="text-accent text-xs font-bold tracking-widest block mb-2">MY SIHEUNG HIGH CHOICE</span>
+                        <h4 class="text-xl font-bold mb-3">나에게 어울리는 고교는?</h4>
+                        <p class="text-xs text-gray-300 leading-relaxed break-keep">
+                            중학교 성적표 속 절대평가 A등급에 속지 마세요. 시흥 관내 주요 고교 지망 시 가상 내신 백분율을 예측하는 정교한 진단평가를 확인해 보세요.
+                        </p>
+                    </div>
+                    <button id="navigate-to-diagnostic" class="mt-4 block w-full text-center bg-yellow-500 text-gray-900 text-xs font-bold py-3 rounded-xl hover:bg-yellow-400 transition">
+                        고교선택 진단평가 바로 알아보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- 특목·자사·마이스터고 안내 배너 -->
+            <div class="mt-12 bg-blue-50 rounded-3xl p-6 sm:p-10 border border-blue-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-md">🏆</div>
+                    <div>
+                        <h5 class="text-base sm:text-lg font-bold text-gray-900 break-keep">특목고·자사고·외고·국제고 및 마이스터고 진학을 원하시나요?</h5>
+                        <p class="text-xs text-gray-600 mt-1 leading-relaxed break-keep">
+                            대치프라임에는 최상위권의 합격률을 증명하는 프라이빗 <strong>[1:1 자기소개서 설계 및 실전 모의 면접 대비 프로그램]</strong>이 특별하게 가동되고 있습니다.<br />
+                            개별 면담과 프라이빗 매칭이 필요하신 학부모님 및 학생은 학원 행정실로 직접 문의 주시면 맞춤 상담 및 시간표를 안내해 드립니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0 text-center">
+                    <a href="tel:031-313-0979" class="bg-blue-900 text-white px-5 py-3 rounded-xl text-xs font-bold hover:bg-blue-950 transition flex items-center justify-center gap-1.5 shadow-sm">
+                        📞 능곡관 전화상담
+                    </a>
+                    <a href="tel:031-804-24950" class="bg-blue-900 text-white px-5 py-3 rounded-xl text-xs font-bold hover:bg-blue-950 transition flex items-center justify-center gap-1.5 shadow-sm">
+                        📞 장곡관 전화상담
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 대치프라임 시스템 -->
+    <section id="features" class="py-20 px-4 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Daechi Prime Academic Strengths</span>
+                <h3 class="text-3xl font-bold text-gray-900 mt-2 break-keep">대치프라임만의 예비고1 고등 전과목 극상위권 몰입 시스템</h3>
+                <p class="mt-4 text-base text-gray-500 break-keep">
+                    단순한 시간 채우기 공부가 아닙니다. 고등학교 첫 시험에서 최고 성적을 얻기 위한 정교한 훈련입니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {strengths.map((item) => (
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition">
+                        <div class={`w-10 h-10 ${item.iconBg} rounded-lg flex items-center justify-center mb-6 text-lg`}>{item.icon}</div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-3 break-keep">{item.title}</h4>
+                        <p class="text-gray-600 text-xs leading-relaxed break-keep" set:html={item.desc}></p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 예약 폼 -->
     <section id="reservation" class="py-20 px-4 bg-gray-900 text-white relative">
         <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
             <!-- 좌측: 일정 안내 -->
             <div class="lg:sticky lg:top-24">
                 <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-white break-keep">
-                    한정된 좌석으로<br>
+                    한정된 좌석으로<br />
                     <span class="text-yellow-400">조기 마감</span>될 수 있습니다.
                 </h3>
 
                 <div class="space-y-4 mb-10">
                     <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
                         <h4 class="text-xl font-bold text-white flex items-center mb-2">
-                            <span class="text-2xl mr-2">📍</span> 능곡관
+                            <span class="text-2xl mr-2">📍</span> 장곡관
                         </h4>
-                        <p class="text-gray-300 text-lg ml-8">7월 10일 (금) 오후 7:00</p>
+                        <p class="text-gray-300 text-lg ml-8">8월 28일 (금) 오후 7:00</p>
                     </div>
                     <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
                         <h4 class="text-xl font-bold text-white flex items-center mb-2">
-                            <span class="text-2xl mr-2">📍</span> 장곡관
+                            <span class="text-2xl mr-2">📍</span> 능곡관
                         </h4>
-                        <p class="text-gray-300 text-lg ml-8">7월 17일 (금) 오후 2:00 <span class="text-sm text-gray-400 ml-1">(제헌절 휴일)</span></p>
+                        <p class="text-gray-300 text-lg ml-8">8월 29일 (토) 오후 2:00</p>
                     </div>
                 </div>
 
@@ -251,11 +503,11 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
                     <ul class="text-blue-100 space-y-3 font-medium">
                         <li class="flex items-start">
                             <span class="mr-2 text-yellow-400">✓</span>
-                            <span class="break-keep">우리 아이를 정밀하게 들여다봅니다 — 1:1 개별 면담 및 학부모님 차담회 실시</span>
+                            <span class="break-keep">2027학년도 시흥 예비고1 고교선택 핵심 분석 가이드북 (고교별 과목 편제 일람표 수록) 100% 증정</span>
                         </li>
                         <li class="flex items-start">
                             <span class="mr-2 text-yellow-400">✓</span>
-                            <span class="break-keep">이후 진단 결과 기반 로드맵이 담긴 리포트 제공</span>
+                            <span class="break-keep">희망 시 설명회 당일 1:1 개별 면담 진행 가능</span>
                         </li>
                     </ul>
                 </div>
@@ -264,40 +516,72 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
             <!-- 우측: 예약 폼 -->
             <div class="bg-white text-gray-900 p-8 md:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 to-yellow-400"></div>
-                <h3 class="text-2xl font-bold mb-8 text-center">설명회 사전 예약 신청</h3>
+                <h3 class="text-2xl font-bold mb-8 text-center">고교선택 전략 설명회 좌석 신청</h3>
 
                 <form id="bookingForm" class="space-y-6">
-                    <div>
-                        <label for="studentName" class="block text-sm font-bold text-gray-700 mb-2">학생 이름 <span class="text-red-500">*</span></label>
-                        <input type="text" id="studentName" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 홍길동">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label for="studentName" class="block text-sm font-bold text-gray-700 mb-2">학생 성명 <span class="text-red-500">*</span></label>
+                            <input type="text" id="studentName" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 홍길동" />
+                        </div>
+                        <div>
+                            <label for="middleSchool" class="block text-sm font-bold text-gray-700 mb-2">현재 재학 중학교 <span class="text-red-500">*</span></label>
+                            <input type="text" id="middleSchool" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 장곡중학교" />
+                        </div>
                     </div>
-                    <div>
-                        <label for="schoolGrade" class="block text-sm font-bold text-gray-700 mb-2">학교 / 학년 <span class="text-red-500">*</span></label>
-                        <input type="text" id="schoolGrade" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="예: 대치중학교 2학년">
-                    </div>
+
                     <div>
                         <label for="parentPhone" class="block text-sm font-bold text-gray-700 mb-2">학부모 연락처 <span class="text-red-500">*</span></label>
-                        <input type="tel" id="parentPhone" required pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="010-0000-0000">
+                        <input type="tel" id="parentPhone" required pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition" placeholder="010-0000-0000" />
                     </div>
+
                     <div>
-                        <label for="branchSelect" class="block text-sm font-bold text-gray-700 mb-2">참석 희망 지점 <span class="text-red-500">*</span></label>
-                        <select id="branchSelect" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition appearance-none">
-                            <option value="">지점을 선택해주세요</option>
-                            <option value="능곡관 (7/10)">능곡관 (7월 10일 금요일 오후 7시)</option>
-                            <option value="장곡관 (7/17)">장곡관 (7월 17일 금요일 오후 2시)</option>
+                        <label for="targetHigh" class="block text-sm font-bold text-gray-700 mb-2">관심 고등학교</label>
+                        <select id="targetHigh" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition appearance-none">
+                            <option value="">선택해 주세요 (선택)</option>
+                            <option value="능곡고">시흥능곡고등학교</option>
+                            <option value="장곡고">장곡고등학교</option>
+                            <option value="시흥고">시흥고등학교</option>
+                            <option value="소래고">소래고등학교</option>
+                            <option value="함현고">함현고등학교</option>
+                            <option value="특목자사">특목·자사·마이스터고</option>
+                            <option value="기타">기타 관외 및 미정</option>
                         </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-3">설명회 일정 선택 (택 1) <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
+                                <input type="radio" name="selectedSeminar" value="장곡관 (8/28)" required class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                                <div>
+                                    <span class="text-sm font-bold text-gray-800 block">[장곡관] 고교선택 설명회</span>
+                                    <span class="text-xs text-gray-500 block mt-0.5">8월 28일(금) 오후 7:00</span>
+                                </div>
+                            </label>
+                            <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
+                                <input type="radio" name="selectedSeminar" value="능곡관 (8/29)" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                                <div>
+                                    <span class="text-sm font-bold text-gray-800 block">[능곡관] 고교선택 설명회</span>
+                                    <span class="text-xs text-gray-500 block mt-0.5">8월 29일(토) 오후 2:00</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2">
+                        <input type="checkbox" id="privacy" required class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                        <label for="privacy" class="text-xs text-gray-500">개인정보 수집 및 안내 문자 전송에 동의합니다. (필수)</label>
                     </div>
 
                     <p id="formError" class="text-sm text-red-500 hidden"></p>
 
-                    <div class="pt-4">
+                    <div class="pt-2">
                         <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-lg flex justify-center items-center disabled:opacity-50">
-                            <span>신청 완료하기</span>
-                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <span>설명회 좌석 예약 완료하기</span>
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500 text-center flex items-center justify-center mt-4">
-                        <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <p class="text-xs text-gray-500 text-center mt-4 break-keep">
                         입력하신 정보는 상담 및 예약 확인 목적으로만 사용됩니다.
                     </p>
                 </form>
@@ -323,9 +607,9 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">예약이 완료되었습니다!</h3>
-                <p class="text-gray-600 mb-6">
-                    담당 데스크에서 입력하신 연락처로 곧 안내드리겠습니다. 설명회에서 뵙겠습니다.
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">설명회 신청이 완료되었습니다!</h3>
+                <p class="text-gray-600 mb-6 break-keep">
+                    입력해 주신 번호로 담당 실장님이 확인 문자를 발송해 드릴 예정입니다. 대치프라임을 신뢰해 주셔서 고맙습니다.
                 </p>
                 <button id="modalCloseBtn" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-3 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                     확인
@@ -338,6 +622,43 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
     <script>
         import { supabase } from '../lib/supabase';
 
+        // ── 탭 전환 ──
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+
+                tabPanes.forEach(pane => {
+                    pane.classList.add('hidden');
+                    pane.classList.remove('block');
+                });
+
+                const targetPane = document.getElementById(`${tabId}-content`);
+                if (targetPane) {
+                    targetPane.classList.remove('hidden');
+                    targetPane.classList.add('block');
+                }
+
+                tabButtons.forEach(button => {
+                    button.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                    button.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-200', 'shadow-sm');
+                });
+
+                btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-200', 'shadow-sm');
+                btn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+            });
+        });
+
+        // ── "나에게 어울리는 고교는?" → 진단평가(tab2)로 이동 ──
+        const navigateBtn = document.getElementById('navigate-to-diagnostic');
+        navigateBtn?.addEventListener('click', () => {
+            (document.getElementById('btn-tab2') as HTMLButtonElement | null)?.click();
+            document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // ── 예약 폼 ──
         const form = document.getElementById('bookingForm') as HTMLFormElement | null;
         const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
         const errorEl = document.getElementById('formError');
@@ -385,11 +706,13 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
             errorEl?.classList.add('hidden');
 
             const name = (document.getElementById('studentName') as HTMLInputElement).value.trim();
-            const grade = (document.getElementById('schoolGrade') as HTMLInputElement).value.trim();
+            const middleSchool = (document.getElementById('middleSchool') as HTMLInputElement).value.trim();
             const phone = (document.getElementById('parentPhone') as HTMLInputElement).value.trim();
-            const campus = (document.getElementById('branchSelect') as HTMLSelectElement).value;
+            const targetHigh = (document.getElementById('targetHigh') as HTMLSelectElement).value;
+            const campus = (document.querySelector('input[name="selectedSeminar"]:checked') as HTMLInputElement | null)?.value;
+            const privacyChecked = (document.getElementById('privacy') as HTMLInputElement).checked;
 
-            if (!name || !grade || !phone || !campus) {
+            if (!name || !middleSchool || !phone || !campus || !privacyChecked) {
                 showError('필수 항목을 모두 입력해주세요.');
                 return;
             }
@@ -412,9 +735,9 @@ const pageTitle = "대치프라임학원 | 초4~중2 여름방학 설명회";
             const { error } = await supabase.from('seminar_bookings').insert({
                 campus,
                 name,
-                grade,
+                grade: `${middleSchool} (중3)`,
                 phone,
-                memo: null,
+                memo: targetHigh ? `관심고교: ${targetHigh}` : null,
                 agree_privacy: true,
             });
 
