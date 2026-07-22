@@ -2,12 +2,33 @@
 import Layout from '../components/layout/Layout.astro';
 
 const subjects = [
-  { label: '국어',      id: 'korean',   key: 'curriculum_korean' },
-  { label: '영어',      id: 'english',  key: 'curriculum_english' },
-  { label: '수학',      id: 'math',     key: 'curriculum_math' },
-  { label: '과학',      id: 'science',  key: 'curriculum_science' },
-  { label: '탐독',      id: 'tamdoq',   key: 'curriculum_tamdoq' },
-  { label: '입시와 대치', id: 'entrance', key: 'curriculum_entrance' },
+  { label: '국어',       id: 'korean',   key: 'curriculum_korean' },
+  { label: '영어',       id: 'english',  key: 'curriculum_english' },
+  { label: '수학',       id: 'math',     key: 'curriculum_math' },
+  { label: '과학',       id: 'science',  key: 'curriculum_science' },
+  { label: '탐독',       id: 'tamdoq',   key: 'curriculum_tamdoq' },
+  { label: 'Management', id: 'entrance', key: 'curriculum_entrance' },
+];
+
+// Management 탭: 설명회 슬라이드(24~28p) 구성을 그대로 코드에 반영
+const MGMT_SUBJECTS = [
+  { subject: '수학', tag: '서술형 및 수준별 극심화', desc: '서술형 집중 연습과 실력에 따른 연산부터 극심화(응용문제 풀이)까지 완벽 마스터' },
+  { subject: '영어', tag: '내신 대비 및 영작·서술형', desc: '시험 중심의 문법/독해/어휘는 기본, 서술형 글쓰기 및 영작문 완벽 훈련' },
+  { subject: '국어', tag: '나랑국어 및 수능·내신', desc: '초중등 나랑국어 전문 프로그램 독서논술 및 국어 문제풀이력 향상, 고등 수능/내신 완벽 대비' },
+  { subject: '과학', tag: '스토리텔링 및 내신·수능', desc: '흥미를 자극하는 스토리텔링형 과학(예정)과 고등 내신·수능으로 이어지는 체계적 연계' },
+];
+
+const MGMT_SYSTEM = [
+  { num: '01', title: '스마트폰 전면 격리', desc: '등원 즉시 전용 수거함에 스마트폰을 반납하여 집중을 저해하는 요소를 원천 차단합니다.' },
+  { num: '02', title: '방학 집중 몰입 [10to10]', desc: '오전 10시부터 밤 10시까지, 대치프라임 전용 몰입관을 가동하여 흐트러짐 없는 학습 환경을 제공합니다.' },
+  { num: '03', title: '당일 과제 인증 시스템', desc: '"숙제는 내일해야지"는 통하지 않습니다. 당일 배운 핵심 개념과 과제는 반드시 오늘 스스로 완벽하게 처리합니다.' },
+  { num: '04', title: 'Better Than Yesterday', desc: '주말 강제자습 — 평일 테스트 미달자 및 과제 미흡자는 주말 강제 소환 밀착 보강으로 스스로 집중할 수밖에 없는 견고한 시스템에 아이를 맡기십시오.' },
+];
+
+const MGMT_ASSESS = [
+  { title: 'WT (Weekly Test)', items: ['매주 금요일/주말', '한 주간 배운 핵심 개념 응용 및 고난도 심화 평가'] },
+  { title: '다양한 모의고사', items: ['고교선택 진단평가', '내신대비 모의평가', '자체 중간고사/기말고사', '시대인재/대성 사설고사'] },
+  { title: '추가 서비스', items: ['자료제공 서비스: 수학/영어/국어/과학/역사/사회/기가까지', '주말 시험대비 자습'] },
 ];
 
 // 정규반 시간표: 선생님들이 직접 편집하는 구글시트에서 불러옴 (탭 이름 = 과목명)
@@ -58,6 +79,71 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
 
           {TIMETABLE_SHEET_NAMES[s.id] && (
             <div id={`timetable-${s.id}`} class="mt-12"></div>
+          )}
+
+          {s.id === 'entrance' && (
+            <div class="mt-4 space-y-16">
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">대치프라임과의 노력이 성적으로 전이되는 순간</h3>
+                <p class="text-sm text-gray-500 mb-6">"지식을 단순히 주입하는 것과, 내 것으로 만들어 쏟아내는 것은 완전히 다른 기술입니다."</p>
+                <div class="grid grid-cols-2 gap-4">
+                  {MGMT_SUBJECTS.map((item) => (
+                    <div class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                      <h4 class="font-bold text-gray-900 mb-2">{item.subject}</h4>
+                      <p class="text-xs font-semibold text-brand mb-2">{item.tag}</p>
+                      <p class="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">아이의 의지를 탓하지 마십시오. '환경'이 지배합니다</h3>
+                <p class="text-sm text-gray-500 mb-6">"의지는 원래 약합니다. 스스로 몰입하도록 판을 짜는 것이 진짜 관리입니다."</p>
+                <div class="grid grid-cols-2 gap-4">
+                  {MGMT_SYSTEM.map((item) => (
+                    <div class="rounded-xl border border-gray-200 p-5">
+                      <span class="text-2xl font-black text-gray-200">{item.num}</span>
+                      <h4 class="font-bold text-gray-900 mt-1 mb-2">{item.title}</h4>
+                      <p class="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">합격의 궤도를 걷는 선배들과의 강력한 동맹</h3>
+                <p class="text-sm text-gray-500 mb-6">"엄마의 백 마디 잔소리보다, 가슴 뛰게 만드는 선배의 진짜 한 마디가 아이를 움직입니다."</p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <div class="rounded-xl border border-gray-200 p-6">
+                    <h4 class="font-bold text-gray-900 mb-3">선배들과의 실시간 LIVE TALK</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">방학 기간 중 생생한 과목별 필기법, 멘탈 관리법, 고등학교 생존 비법 전수 [고교 간담회]</p>
+                  </div>
+                  <div class="rounded-xl border border-gray-200 p-6">
+                    <h4 class="font-bold text-gray-900 mb-3">Daechi Connect Alliance</h4>
+                    <ul class="text-xs text-gray-600 leading-relaxed list-disc pl-4 space-y-1">
+                      <li>SKY, 의치한, 전국단위 특목고에 진학한 대치프라임 졸업생 라인업 구축</li>
+                      <li>막연한 동경을 넘어, 실제 선배들을 통한 합격 궤도 동기부여</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">실력을 입증하는 빈틈없는 평가 시스템</h3>
+                <p class="text-sm text-gray-500 mb-6">"평가는 단순히 점수를 내는 과정이 아닌, 학습의 빈틈을 가장 빠르게 메우는 핵심 치료제입니다."</p>
+                <div class="grid sm:grid-cols-3 gap-4">
+                  {MGMT_ASSESS.map((block) => (
+                    <div class="rounded-xl border border-gray-200 p-5">
+                      <h4 class="font-bold text-gray-900 mb-3">{block.title}</h4>
+                      <ul class="text-xs text-gray-600 leading-relaxed list-disc pl-4 space-y-1">
+                        {block.items.map((line) => <li>{line}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
       ))}
