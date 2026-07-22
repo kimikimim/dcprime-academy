@@ -60,7 +60,11 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
               data-key={s.key}
               class={`cur-tab py-4 text-sm font-medium border-r border-gray-200 transition-colors
                 ${i < 4 ? 'border-b' : ''}
-                ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                ${i === 0
+                  ? 'bg-brand text-white'
+                  : s.id === 'entrance'
+                    ? 'bg-brand-light text-brand font-bold hover:bg-brand-light'
+                    : 'bg-white text-gray-500 hover:bg-gray-50'}`}
             >
               {s.label}
             </button>
@@ -197,12 +201,16 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
 
     function activate(id: string) {
       tabs.forEach(t => {
-        t.classList.remove('bg-brand', 'text-white');
-        t.classList.add('bg-white', 'text-gray-500');
+        t.classList.remove('bg-brand', 'text-white', 'bg-brand-light', 'text-brand', 'font-bold');
+        if (t.dataset.tab === 'entrance') {
+          t.classList.add('bg-brand-light', 'text-brand', 'font-bold');
+        } else {
+          t.classList.add('bg-white', 'text-gray-500');
+        }
       });
       const active = document.querySelector<HTMLButtonElement>(`.cur-tab[data-tab="${id}"]`);
+      active?.classList.remove('bg-white', 'text-gray-500', 'bg-brand-light', 'text-brand', 'font-bold');
       active?.classList.add('bg-brand', 'text-white');
-      active?.classList.remove('bg-white', 'text-gray-500');
       panels.forEach(p => p.classList.add('hidden'));
       document.getElementById(`panel-${id}`)?.classList.remove('hidden');
     }
