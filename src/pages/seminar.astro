@@ -4,33 +4,33 @@ const pageTitle = "대치프라임학원 | 예비고1 특별관 - 시흥 고교�
 const schools = [
     {
         name: '시흥능곡고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '능곡관 인근',
-        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
-        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
-        target: '[추천 대상 학생 유형을 입력하세요]',
+        desc: '진로·진학 프로그램과 생활기록부 관리가 체계적이고, 교내 행사가 활발한 편입니다.',
+        exam: '입학생들의 중학 내신 폭이 넓어, 상위권과 중위권 사이 등급 격차가 뚜렷하게 나뉘는 편입니다.',
+        target: '학생부 활동을 꾸준히 쌓아 교과 전형으로 상위권 대학을 노리는 학생',
     },
     {
         name: '장곡고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '장곡관 인근',
-        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
-        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
-        target: '[추천 대상 학생 유형을 입력하세요]',
+        desc: '마을연계형 혁신학교로, 학생 자율성을 존중하는 자유로운 학교 분위기가 특징입니다.',
+        exam: '자유로운 분위기 속에서도 상위권과 중하위권 사이 내신 변별력은 유지되는 편입니다.',
+        target: '자기주도적으로 학습 습관을 스스로 세워야 하는 학생',
     },
     {
         name: '시흥고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
-        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
-        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
-        target: '[추천 대상 학생 유형을 입력하세요]',
+        desc: '표준적인 교육과정과 다양한 방과후 프로그램을 운영하는 일반고입니다.',
+        exam: '입학생 구성이 다양한 편이라, 개인별 학습 전략과 꾸준한 내신 관리가 중요합니다.',
+        target: '폭넓은 진로 선택지를 열어두고 내실 있게 내신을 준비하려는 학생',
     },
     {
         name: '소래고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
-        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
-        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
-        target: '[추천 대상 학생 유형을 입력하세요]',
+        desc: '면학 분위기가 잘 잡혀 있고, 야간자율학습·보충수업 등 학습 관리 체계가 탄탄한 편입니다.',
+        exam: '인근 중학교 상위권 학생들이 많이 진학해, 내신 경쟁이 치열한 편입니다.',
+        target: '치열한 내신 경쟁 속에서도 꾸준한 학습 루틴을 유지할 수 있는 학생',
     },
     {
         name: '함현고등학교', type: '일반고', bgColor: 'bg-blue-100 text-blue-700', tag: '시흥시',
-        desc: '[학교 학업 분위기 및 특징을 입력하세요]',
-        exam: '[내신 출제 스타일 및 난이도 특징을 입력하세요]',
-        target: '[추천 대상 학생 유형을 입력하세요]',
+        desc: '자율공립고로 동아리·특색 교육과정이 활발하고, 기숙사도 함께 운영합니다.',
+        exam: '모의고사 실력과 내신 성취가 비례하는 경향이 있어, 실전 문제풀이력이 중요합니다.',
+        target: '정시형 학업 역량을 함께 쌓으며 기숙형 환경에서 몰입하고 싶은 학생',
     },
 ];
 
@@ -228,15 +228,17 @@ const strengths = [
                             </div>
                         </div>
 
-                        <div class="mt-6 bg-blue-900 text-white rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-8 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <span class="text-lg">📍</span>
-                                <span class="text-base sm:text-lg"><strong class="font-extrabold">장곡관</strong> <span class="text-blue-200">8월 28일(금) 오후 7:00</span></span>
+                        <div class="mt-6 bg-blue-900 text-white rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-8">
+                            <div class="flex items-center justify-center gap-2 whitespace-nowrap">
+                                <span class="text-base sm:text-lg shrink-0">📍</span>
+                                <span class="text-sm sm:text-lg font-extrabold shrink-0">장곡관</span>
+                                <span class="text-sm sm:text-lg text-blue-200">8월 28일(금) 오후 7:00</span>
                             </div>
                             <div class="hidden sm:block w-px h-6 bg-blue-700"></div>
-                            <div class="flex items-center justify-center gap-2">
-                                <span class="text-lg">📍</span>
-                                <span class="text-base sm:text-lg"><strong class="font-extrabold">능곡관</strong> <span class="text-blue-200">8월 29일(토) 오후 2:00</span></span>
+                            <div class="flex items-center justify-center gap-2 whitespace-nowrap">
+                                <span class="text-base sm:text-lg shrink-0">📍</span>
+                                <span class="text-sm sm:text-lg font-extrabold shrink-0">능곡관</span>
+                                <span class="text-sm sm:text-lg text-blue-200">8월 29일(토) 오후 2:00</span>
                             </div>
                         </div>
                     </div>
