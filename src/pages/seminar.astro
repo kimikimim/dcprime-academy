@@ -36,9 +36,9 @@ const schools = [
 
 const strengths = [
     {
-        icon: '📖', iconBg: 'bg-blue-100 text-blue-700',
-        title: '탐독(耽讀) 학업매니지먼트',
-        desc: '자기주도학습 관리 시스템으로 <strong>학습 계획-실행-피드백</strong>을 매일 점검합니다.',
+        icon: '📐', iconBg: 'bg-blue-100 text-blue-700',
+        title: '국·수·영·과 전문 시스템',
+        desc: '과목별 전문 강사진이 고1 첫 시험을 목표로 <strong>전과목 몰입 커리큘럼</strong>을 설계합니다.',
     },
     {
         icon: '📵', iconBg: 'bg-blue-100 text-blue-700',
@@ -46,14 +46,14 @@ const strengths = [
         desc: '원내 스마트폰 사용을 전면 통제하여 <strong>몰입 가능한 학습 환경</strong>을 만듭니다.',
     },
     {
-        icon: '📐', iconBg: 'bg-blue-100 text-blue-700',
-        title: '국·수·영·과 전문 시스템',
-        desc: '과목별 전문 강사진이 고1 첫 시험을 목표로 <strong>전과목 몰입 커리큘럼</strong>을 설계합니다.',
+        icon: '🗓️', iconBg: 'bg-blue-100 text-blue-700',
+        title: '12월~2월 예비고1 집중 FOCUS',
+        desc: '선배 튜터와 전담 예비고1 강사진이 <strong>12월부터 2월까지 밀도 높은 관리</strong>를 함께합니다.',
     },
     {
         icon: '🌙', iconBg: 'bg-blue-100 text-blue-700',
-        title: '텐투텐(10 to 10) 관리',
-        desc: '등원부터 하원까지 학습 시간을 <strong>밀착 관리</strong>하여 학습 공백을 최소화합니다.',
+        title: '방학특강 & 텐투텐(10 to 10)',
+        desc: '방학특강부터 텐투텐까지, <strong>고등 과정 예습은 물론 부족한 부분까지</strong> 꼼꼼히 보완합니다.',
     },
 ];
 ---
@@ -228,9 +228,16 @@ const strengths = [
                             </div>
                         </div>
 
-                        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row justify-between gap-1 text-xs text-gray-500">
-                            <div><strong>장곡관:</strong> 8월 28일(금) 오후 7:00</div>
-                            <div><strong>능곡관:</strong> 8월 29일(토) 오후 2:00</div>
+                        <div class="mt-6 bg-blue-900 text-white rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-8 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="text-lg">📍</span>
+                                <span class="text-base sm:text-lg"><strong class="font-extrabold">장곡관</strong> <span class="text-blue-200">8월 28일(금) 오후 7:00</span></span>
+                            </div>
+                            <div class="hidden sm:block w-px h-6 bg-blue-700"></div>
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="text-lg">📍</span>
+                                <span class="text-base sm:text-lg"><strong class="font-extrabold">능곡관</strong> <span class="text-blue-200">8월 29일(토) 오후 2:00</span></span>
+                            </div>
                         </div>
                     </div>
 
@@ -287,7 +294,7 @@ const strengths = [
                                 <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">실제 시험장 풍경</span>
                                 <h5 class="font-bold text-gray-800 text-xs mt-2">고교 진단평가 응시 현장</h5>
                                 <p class="text-[11px] text-gray-500 leading-normal break-keep">
-                                    학원 고사실에서 마킹과 타이머 조절 훈련을 실전 수능 및 내신 고사 환경과 똑같이 이행합니다.
+                                    실제 학생들이 교복을 입고 각자의 자리에서 조용히 시험에 집중하고 있는 진단평가 현장입니다.
                                 </p>
                             </div>
                             <div class="relative rounded-xl overflow-hidden h-36">
@@ -504,10 +511,6 @@ const strengths = [
                         <li class="flex items-start">
                             <span class="mr-2 text-yellow-400">✓</span>
                             <span class="break-keep">2027학년도 시흥 예비고1 고교선택 핵심 분석 가이드북 (고교별 과목 편제 일람표 수록) 100% 증정</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-yellow-400">✓</span>
-                            <span class="break-keep">희망 시 설명회 당일 1:1 개별 면담 진행 가능</span>
                         </li>
                     </ul>
                 </div>
