@@ -29,7 +29,7 @@ src/
 │   ├── curriculum.astro      # 커리큘럼 (2×3 그리드 탭: 국어/영어/수학/과학/탐독/입시와 대치)
 │   ├── faculty.astro         # 강사소개 (탭: 초등부/중등부/고등부/입시와대치)
 │   ├── results.astro         # 명예의 전당 (DB에서 연도별 합격자 집계)
-│   ├── notice.astro          # 공지사항 목록
+│   ├── notice.astro          # 소식 목록 (설명회/평가/공지 카테고리)
 │   ├── notice/[id].astro     # 공지 상세
 │   ├── inquiry.astro         # 상담 신청
 │   ├── branches.astro        # 오시는 길 안내 (능곡관/장곡관)
@@ -49,7 +49,7 @@ src/
 │   │   └── InquiryForm.astro
 │   ├── layout/
 │   │   ├── Layout.astro       # 공통 레이아웃 (OG태그, sitemap, canonical 포함)
-│   │   ├── Header.astro       # 헤더/네비게이션 (대치프라임/커리큘럼/강사소개/명예의 전당/공지사항/상담 신청)
+│   │   ├── Header.astro       # 헤더/네비게이션 (대치프라임/커리큘럼/강사소개/명예의 전당/소식/상담 신청)
 │   │   └── Footer.astro
 │   ├── sections/              # 메인페이지 섹션들
 │   │   ├── HeroSection.astro       # DB(hero_slides) 없으면 기본 배너
@@ -81,7 +81,7 @@ src/
 
 | 테이블 | 용도 |
 |--------|------|
-| `notices` | 공지사항 (title, content, views, created_at) |
+| `notices` | 소식 (구 공지사항, title, content, category(설명회/평가/공지), views, created_at) |
 | `inquiries` | 상담 신청 (student_name, student_phone, parent_name, parent_phone, school, track, grade, branch[], subjects[], other_detail, agree_privacy, agree_marketing, status, assigned_to, admin_note, contacted_at) |
 | `results` | 명예의 전당 (year, category, school, name, university, dept) |
 | `admin_config` | 관리자 비밀번호 (`key='admin_password'`, `value='Prime0979!'`), RLS로 anon 직접 조회 불가 (RPC로만 검증) |
@@ -117,7 +117,7 @@ src/
 관리자는 이 JSON을 "출제 경향" 탭 텍스트박스에 직접 입력/수정함 (구조화 폼 아님).
 
 ### Storage 버킷
-- `notice-images`: Quill 에디터 이미지 삽입 기본 버킷 (공지사항, 학원소개, 커리큘럼 등에서 공용 사용)
+- `notice-images`: Quill 에디터 이미지 삽입 기본 버킷 (소식, 학원소개, 커리큘럼 등에서 공용 사용)
 - `faculty-images`: 강사 프로필 사진
 - `hero-images`: 메인 배너 이미지
 - `space-images`: 학원소개 SPACE 탭 교육환경 사진
@@ -134,7 +134,7 @@ src/
 
 탭 구성:
 1. **메인페이지 관리** - 히어로 배너 슬라이드 CRUD (`hero_slides`)
-2. **공지사항 관리** - Quill 에디터로 작성/수정/삭제
+2. **소식 관리** - 카테고리(설명회/평가/공지) 지정 + Quill 에디터로 작성/수정/삭제
 3. **상담 신청 목록** - 상태/담당자/메모 관리, 필터(상태·분원·학년·과목·고가치)
 4. **대치프라임** - 학원특징/HISTORY/SPACE(사진 CRUD)/학원생활 관리규정 Quill 편집
 5. **커리큘럼** - 국어/영어/수학/과학/탐독/입시와 대치 Quill 편집

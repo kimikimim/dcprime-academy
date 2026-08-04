@@ -31,7 +31,7 @@ import Layout from '../components/layout/Layout.astro';
           </button>
           <span class="w-px h-4 bg-gray-200 flex-shrink-0"></span>
           <button data-tab="hero"       class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">메인페이지 관리</button>
-          <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">공지사항 관리</button>
+          <button data-tab="notices"    class="admin-tab py-3 text-sm font-medium border-b-2 border-brand text-brand whitespace-nowrap">소식 관리</button>
           <button data-tab="inquiries"  class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">상담 신청 목록</button>
           <button data-tab="about"      class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">대치프라임</button>
           <button data-tab="curriculum" class="admin-tab py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-gray-700 whitespace-nowrap">커리큘럼</button>
@@ -102,11 +102,18 @@ import Layout from '../components/layout/Layout.astro';
           </div>
         </div>
 
-        <!-- ── 공지사항 탭 ── -->
+        <!-- ── 소식 탭 ── -->
         <div id="panel-notices">
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            <h2 id="form-title" class="text-base font-bold text-gray-900 mb-4">새 공지 작성</h2>
-            <input id="notice-title-input" type="text" placeholder="제목" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <h2 id="form-title" class="text-base font-bold text-gray-900 mb-4">새 소식 작성</h2>
+            <div class="flex gap-3 mb-3">
+              <select id="notice-category-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="설명회">설명회</option>
+                <option value="평가">평가</option>
+                <option value="공지" selected>공지</option>
+              </select>
+              <input id="notice-title-input" type="text" placeholder="제목" class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
             <div class="quill-wrapper mb-3 border border-gray-300 rounded-lg overflow-hidden">
               <div id="quill-notices"></div>
             </div>
@@ -117,7 +124,7 @@ import Layout from '../components/layout/Layout.astro';
             </div>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-6">
-            <h2 class="text-base font-bold text-gray-900 mb-4">공지 목록</h2>
+            <h2 class="text-base font-bold text-gray-900 mb-4">소식 목록</h2>
             <div id="notice-list" class="divide-y divide-gray-100">
               <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
             </div>
@@ -1499,24 +1506,31 @@ import Layout from '../components/layout/Layout.astro';
     loadSketchAdmin();
   });
 
-  // ── 공지사항 ──
+  // ── 소식 ──
   let editingId: string | null = null;
+  const NOTICE_CATEGORY_STYLE: Record<string, string> = {
+    설명회: 'bg-blue-50 text-blue-600',
+    평가: 'bg-amber-50 text-amber-600',
+    공지: 'bg-gray-100 text-gray-500',
+  };
 
   function resetNoticeForm() {
     editingId = null;
     (document.getElementById('notice-title-input') as HTMLInputElement).value = '';
+    (document.getElementById('notice-category-input') as HTMLSelectElement).value = '공지';
     quills['quill-notices']?.setContents([]);
-    document.getElementById('form-title')!.textContent = '새 공지 작성';
+    document.getElementById('form-title')!.textContent = '새 소식 작성';
     document.getElementById('submit-notice-btn')!.textContent = '등록';
     document.getElementById('cancel-edit-btn')!.classList.add('hidden');
   }
 
-  function startEdit(id: string, title: string, content: string) {
+  function startEdit(id: string, title: string, content: string, category: string) {
     editingId = id;
     (document.getElementById('notice-title-input') as HTMLInputElement).value = title;
+    (document.getElementById('notice-category-input') as HTMLSelectElement).value = category || '공지';
     const q = quills['quill-notices'];
     if (q) { q.setContents(q.clipboard.convert({ html: content })); }
-    document.getElementById('form-title')!.textContent = '공지 수정';
+    document.getElementById('form-title')!.textContent = '소식 수정';
     document.getElementById('submit-notice-btn')!.textContent = '수정 완료';
     document.getElementById('cancel-edit-btn')!.classList.remove('hidden');
     document.getElementById('notice-title-input')!.scrollIntoView({ behavior: 'smooth' });
@@ -1525,7 +1539,8 @@ import Layout from '../components/layout/Layout.astro';
   document.getElementById('cancel-edit-btn')?.addEventListener('click', resetNoticeForm);
 
   document.getElementById('submit-notice-btn')?.addEventListener('click', async () => {
-    const title   = (document.getElementById('notice-title-input') as HTMLInputElement).value.trim();
+    const title    = (document.getElementById('notice-title-input') as HTMLInputElement).value.trim();
+    const category = (document.getElementById('notice-category-input') as HTMLSelectElement).value;
     const q       = quills['quill-notices'];
     const content = q ? q.root.innerHTML : '';
     const isEmpty = !q || q.getText().trim() === '';
@@ -1539,9 +1554,9 @@ import Layout from '../components/layout/Layout.astro';
 
     let error;
     if (editingId) {
-      ({ error } = await supabase.from('notices').update({ title, content }).eq('id', editingId));
+      ({ error } = await supabase.from('notices').update({ title, content, category }).eq('id', editingId));
     } else {
-      ({ error } = await supabase.from('notices').insert({ title, content, views: 0 }));
+      ({ error } = await supabase.from('notices').insert({ title, content, category, views: 0 }));
     }
     btn.disabled = false;
     btn.textContent = editingId ? '수정 완료' : '등록';
@@ -1556,28 +1571,34 @@ import Layout from '../components/layout/Layout.astro';
     const container = document.getElementById('notice-list')!;
     const { data, error } = await supabase.from('notices').select('*').order('created_at', { ascending: false }).limit(50);
     if (error || !data || data.length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">공지사항이 없습니다.</p>'; return;
+      container.innerHTML = '<p class="text-sm text-gray-400 py-4 text-center">소식이 없습니다.</p>'; return;
     }
-    container.innerHTML = data.map(n => `
+    container.innerHTML = data.map(n => {
+      const category = n.category || '공지';
+      const catStyle = NOTICE_CATEGORY_STYLE[category] ?? NOTICE_CATEGORY_STYLE['공지'];
+      return `
       <div class="py-4 flex items-start justify-between gap-4">
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-gray-900 truncate">${escHtml(n.title)}</p>
+          <p class="text-sm font-medium text-gray-900 truncate">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded mr-1.5 ${catStyle}">${category}</span>${escHtml(n.title)}
+          </p>
           <p class="text-xs text-gray-400 mt-1">${new Date(n.created_at).toLocaleDateString('ko-KR')} · 조회 ${(n.views ?? 0).toLocaleString()}</p>
         </div>
         <div class="flex items-center gap-3 flex-shrink-0">
-          <button data-id="${n.id}" data-title="${escAttr(n.title)}" data-content="${escAttr(n.content ?? '')}"
+          <button data-id="${n.id}" data-title="${escAttr(n.title)}" data-content="${escAttr(n.content ?? '')}" data-category="${escAttr(category)}"
             class="edit-notice-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
           <button data-id="${n.id}" class="del-notice-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     container.querySelectorAll<HTMLButtonElement>('.edit-notice-btn').forEach(btn => {
-      btn.addEventListener('click', () => startEdit(btn.dataset.id!, btn.dataset.title!, btn.dataset.content!));
+      btn.addEventListener('click', () => startEdit(btn.dataset.id!, btn.dataset.title!, btn.dataset.content!, btn.dataset.category!));
     });
     container.querySelectorAll<HTMLButtonElement>('.del-notice-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('이 공지를 삭제할까요?')) return;
+        if (!confirm('이 소식을 삭제할까요?')) return;
         await supabase.from('notices').delete().eq('id', btn.dataset.id!);
         loadNotices();
       });

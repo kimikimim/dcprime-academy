@@ -11,12 +11,13 @@
 
 
 -- ────────────────────────────────────────────
--- 1. notices — 공지사항
+-- 1. notices — 소식 (구 공지사항, category: 설명회/평가/공지)
 -- ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS notices (
   id         bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title      text NOT NULL,
   content    text NOT NULL,
+  category   text NOT NULL DEFAULT '공지' CHECK (category IN ('설명회', '평가', '공지')),
   views      integer DEFAULT 0,
   created_at timestamptz DEFAULT now()
 );

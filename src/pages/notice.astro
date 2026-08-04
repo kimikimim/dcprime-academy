@@ -2,15 +2,24 @@
 import Layout from '../components/layout/Layout.astro';
 ---
 
-<Layout title="공지사항 - 대치프라임" description="대치프라임 공지사항입니다.">
+<Layout title="소식 - 대치프라임" description="대치프라임 소식(설명회·평가·공지)입니다.">
   <div class="min-h-screen bg-white">
     <div class="container mx-auto px-4 py-12 max-w-4xl">
 
-      <h1 class="text-3xl font-bold text-gray-900 mb-10">공지사항</h1>
+      <h1 class="text-3xl font-bold text-gray-900 mb-6">소식</h1>
+
+      <!-- 카테고리 탭 -->
+      <div class="flex gap-2 mb-8">
+        <button data-cat="" class="notice-cat-btn px-4 py-2 rounded-full text-sm font-medium bg-brand text-white transition-colors">전체</button>
+        <button data-cat="설명회" class="notice-cat-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">설명회</button>
+        <button data-cat="평가" class="notice-cat-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">평가</button>
+        <button data-cat="공지" class="notice-cat-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">공지</button>
+      </div>
 
       <!-- 테이블 헤더 -->
-      <div class="grid grid-cols-[60px_1fr_110px_80px] text-sm text-gray-400 font-medium border-b border-gray-200 pb-3 mb-1 hidden md:grid">
+      <div class="grid grid-cols-[60px_80px_1fr_110px_80px] text-sm text-gray-400 font-medium border-b border-gray-200 pb-3 mb-1 hidden md:grid">
         <span>NO.</span>
+        <span>분류</span>
         <span>제목</span>
         <span class="text-right">작성일</span>
         <span class="text-right">조회수</span>
@@ -19,25 +28,39 @@ import Layout from '../components/layout/Layout.astro';
       <!-- 로딩 -->
       <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
 
-      <!-- 공지 목록 -->
+      <!-- 소식 목록 -->
       <ul id="notice-list" class="hidden"></ul>
 
       <!-- 빈 상태 -->
-      <div id="empty-msg" class="hidden text-center py-24 text-gray-400 text-sm">등록된 공지사항이 없습니다.</div>
+      <div id="empty-msg" class="hidden text-center py-24 text-gray-400 text-sm">등록된 소식이 없습니다.</div>
 
     </div>
   </div>
 </Layout>
 
+<style>
+  .notice-cat-btn.active { background-color: var(--color-brand, #6B4EE6); color: #fff; }
+  .notice-cat-btn:not(.active) { background-color: #f3f4f6; color: #4b5563; }
+</style>
+
 <script>
   import { supabase } from '../lib/supabase';
+
+  const CATEGORY_STYLE: Record<string, string> = {
+    설명회: 'bg-blue-50 text-blue-600',
+    평가: 'bg-amber-50 text-amber-600',
+    공지: 'bg-gray-100 text-gray-500',
+  };
+
+  let allNotices: any[] = [];
+  let activeCat = '';
 
   async function load() {
     if (!document.getElementById('notice-list')) return;
 
     const { data, error } = await supabase
       .from('notices')
-      .select('id, title, created_at, views')
+      .select('id, title, created_at, views, category')
       .order('created_at', { ascending: false });
 
     document.getElementById('loading')?.classList.add('hidden');
@@ -47,21 +70,40 @@ import Layout from '../components/layout/Layout.astro';
       return;
     }
 
+    allNotices = data;
+    render();
+  }
+
+  function render() {
+    const filtered = activeCat ? allNotices.filter(n => n.category === activeCat) : allNotices;
     const list = document.getElementById('notice-list')!;
+    const emptyMsg = document.getElementById('empty-msg')!;
+
+    if (filtered.length === 0) {
+      list.classList.add('hidden');
+      emptyMsg.classList.remove('hidden');
+      return;
+    }
+    emptyMsg.classList.add('hidden');
     list.classList.remove('hidden');
 
-    list.innerHTML = data.map((n, i) => {
-      const no = data.length - i;
+    list.innerHTML = filtered.map((n, i) => {
+      const no = filtered.length - i;
       const date = new Date(n.created_at).toLocaleDateString('ko-KR', {
         year: 'numeric', month: '2-digit', day: '2-digit'
       }).replace(/\. /g, '.').replace(/\.$/, '');
       const views = (n.views ?? 0) >= 9999 ? '9,999+' : (n.views ?? 0).toLocaleString();
+      const category = n.category || '공지';
+      const catStyle = CATEGORY_STYLE[category] ?? CATEGORY_STYLE['공지'];
 
       return `
         <li>
-          <a href="/notice/${n.id}" class="grid md:grid-cols-[60px_1fr_110px_80px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
+          <a href="/notice/${n.id}" class="grid md:grid-cols-[60px_80px_1fr_110px_80px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
             <span class="text-sm text-gray-400 hidden md:block">${no}</span>
-            <span class="text-sm md:text-base font-medium text-gray-800 group-hover:text-brand transition-colors">${escHtml(n.title)}</span>
+            <span class="hidden md:block"><span class="text-xs font-semibold px-2 py-1 rounded ${catStyle}">${category}</span></span>
+            <span class="text-sm md:text-base font-medium text-gray-800 group-hover:text-brand transition-colors">
+              <span class="md:hidden text-xs font-semibold px-1.5 py-0.5 rounded mr-1.5 ${catStyle}">${category}</span>${escHtml(n.title)}
+            </span>
             <span class="text-sm text-gray-400 md:text-right">${date}</span>
             <span class="text-sm text-gray-400 md:text-right hidden md:block">${views}</span>
           </a>
@@ -74,5 +116,23 @@ import Layout from '../components/layout/Layout.astro';
     return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  document.addEventListener('astro:page-load', load);
+  function initTabs() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.notice-cat-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat || '';
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+      });
+    });
+    buttons[0]?.classList.add('active');
+  }
+
+  function init() {
+    initTabs();
+    load();
+  }
+
+  document.addEventListener('astro:page-load', init);
 </script>

@@ -8,19 +8,20 @@ export function getStaticPaths() {
 const { id } = Astro.params;
 ---
 
-<Layout title="공지사항 - 대치프라임" description="대치프라임 공지사항">
+<Layout title="소식 - 대치프라임" description="대치프라임 소식">
   <div class="min-h-screen bg-white">
     <div class="container mx-auto px-4 py-12 max-w-3xl">
 
       <!-- 로딩 -->
       <div id="loading" class="py-24 text-center text-gray-400 text-sm">불러오는 중...</div>
 
-      <!-- 공지 내용 -->
+      <!-- 소식 내용 -->
       <div id="notice-content" class="hidden">
         <div class="mb-8">
           <a href="/notice" class="text-sm text-gray-400 hover:text-brand transition-colors">← 목록으로</a>
         </div>
 
+        <span id="notice-category" class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3"></span>
         <h1 id="notice-title" class="text-2xl font-bold text-gray-900 mb-4"></h1>
 
         <div class="flex items-center gap-4 text-sm text-gray-400 pb-6 border-b border-gray-200 mb-8">
@@ -42,7 +43,7 @@ const { id } = Astro.params;
 
       <!-- 에러 -->
       <div id="notice-error" class="hidden py-24 text-center text-gray-400 text-sm">
-        공지사항을 찾을 수 없습니다.
+        소식을 찾을 수 없습니다.
         <div class="mt-4">
           <a href="/notice" class="text-brand hover:underline">목록으로 돌아가기</a>
         </div>
@@ -89,6 +90,16 @@ const { id } = Astro.params;
     }
 
     await supabase.from('notices').update({ views: (data.views ?? 0) + 1 }).eq('id', id);
+
+    const CATEGORY_STYLE: Record<string, string> = {
+      설명회: 'bg-blue-50 text-blue-600',
+      평가: 'bg-amber-50 text-amber-600',
+      공지: 'bg-gray-100 text-gray-500',
+    };
+    const category = data.category || '공지';
+    const catEl = document.getElementById('notice-category')!;
+    catEl.textContent = category;
+    catEl.className = `inline-block text-xs font-semibold px-2 py-1 rounded mb-3 ${CATEGORY_STYLE[category] ?? CATEGORY_STYLE['공지']}`;
 
     document.getElementById('notice-title')!.textContent = data.title;
     document.getElementById('notice-date')!.textContent = new Date(data.created_at)
