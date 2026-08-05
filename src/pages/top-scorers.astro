@@ -55,7 +55,7 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
     const { data, error } = await supabase
       .from('top_scorers')
-      .select('id, name, image_url')
+      .select('id, image_url')
       .eq('year', year)
       .eq('semester', semester)
       .eq('is_active', true)
@@ -76,16 +76,12 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
     areaEl.innerHTML = data.map(d => `
       <div class="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
         <div class="aspect-[3/4] bg-gray-100">
-          <img src="${escAttr(d.image_url)}" alt="${escAttr(d.name || '성적우수자')}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+          <img src="${escAttr(d.image_url)}" alt="성적우수자" loading="lazy" decoding="async" class="w-full h-full object-cover" />
         </div>
-        ${d.name ? `<p class="text-center text-sm text-gray-700 py-2 truncate px-2">${escHtml(d.name)}</p>` : ''}
       </div>
     `).join('');
   }
 
-  function escHtml(str: string) {
-    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
   function escAttr(str: string) {
     return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
