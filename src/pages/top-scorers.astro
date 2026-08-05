@@ -109,7 +109,7 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
       photoArea.classList.remove('hidden');
       photoArea.innerHTML = photos.map(d => `
         <div class="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
-          <div class="aspect-[3/4] bg-gray-100">
+          <div class="aspect-[210/297] bg-gray-100">
             <img src="${escAttr(d.image_url)}" alt="성적우수자" loading="lazy" decoding="async" class="w-full h-full object-cover" />
           </div>
         </div>

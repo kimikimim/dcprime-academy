@@ -387,65 +387,23 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 성적우수자 탭 ── -->
         <div id="panel-topscorers" class="hidden">
-          <!-- 일괄 업로드 -->
+          <!-- 대표 사진 2x2 고정 슬롯 -->
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            <h3 class="text-base font-bold text-gray-900 mb-1">대표 사진 업로드</h3>
-            <p class="text-xs text-gray-500 mb-4">사이트에는 <strong class="text-gray-700">사진이 최대 4명(2x2)만</strong> 노출됩니다 (순서 기준 앞 4명). 여러 장 선택해도 순서대로 전부 저장은 되지만, 실제 화면엔 4명까지만 보여요. (jpg, jpeg, png, pdf 지원 — pdf는 첫 페이지를 사진으로 변환해서 저장합니다)</p>
-            <div class="grid grid-cols-2 gap-3 mb-3">
-              <select id="ts-bulk-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+            <h3 class="text-base font-bold text-gray-900 mb-1">대표 사진 (2x2 고정)</h3>
+            <p class="text-xs text-gray-500 mb-4">4칸 고정입니다. <strong class="text-gray-700">A4 비율</strong>로 올려주세요. 칸을 클릭하면 사진을 올리거나 바꿀 수 있습니다. (jpg, jpeg, png, pdf 지원 — pdf는 첫 페이지를 사진으로 변환합니다)</p>
+            <div class="grid grid-cols-2 gap-3 mb-4 max-w-sm">
+              <select id="ts-slot-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="2024">2024</option>
                 <option value="2025">2025</option>
                 <option value="2026" selected>2026</option>
               </select>
-              <select id="ts-bulk-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+              <select id="ts-slot-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="1학기">1학기</option>
                 <option value="2학기">2학기</option>
               </select>
             </div>
-            <input type="file" id="ts-bulk-input" accept="image/*,application/pdf" multiple webkitdirectory directory
-              class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer mb-1" />
-            <p class="text-xs text-gray-400 mb-4">폴더 선택 창이 뜨지 않으면 브라우저가 지원하지 않는 경우입니다 — 사진 여러 개를 직접 선택해도 됩니다.</p>
-            <div class="flex items-center gap-3">
-              <button id="submit-ts-bulk-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">일괄 업로드</button>
-              <p id="ts-bulk-msg" class="text-sm text-gray-500 hidden"></p>
-            </div>
-            <div id="ts-bulk-progress" class="hidden mt-3">
-              <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                <div id="ts-bulk-progress-bar" class="bg-brand h-full transition-all" style="width:0%"></div>
-              </div>
-              <p id="ts-bulk-progress-text" class="text-xs text-gray-400 mt-1"></p>
-            </div>
-          </div>
-
-          <!-- 한 장씩 추가/수정 -->
-          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-            <h3 id="ts-form-title" class="text-base font-bold text-gray-900 mb-4">성적우수자 사진 추가</h3>
-            <input type="hidden" id="ts-edit-id" />
-            <div class="grid grid-cols-3 gap-3 mb-3">
-              <select id="ts-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-              </select>
-              <select id="ts-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="1학기">1학기</option>
-                <option value="2학기">2학기</option>
-              </select>
-              <input id="ts-sort-input" type="number" placeholder="순서 (0)" value="0" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
-            </div>
-            <div class="mb-4">
-              <p class="text-xs text-gray-500 mb-2">사진</p>
-              <input type="file" id="ts-image-input" accept="image/*,application/pdf" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
-              <img id="ts-image-preview" class="hidden mt-2 w-24 h-32 object-cover rounded-lg border border-gray-200" />
-            </div>
-            <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer mb-4">
-              <input type="checkbox" id="ts-active-input" class="accent-brand" checked /> 노출
-            </label>
-            <div class="flex items-center gap-3">
-              <button id="submit-ts-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">추가</button>
-              <button id="cancel-ts-btn" class="hidden border border-gray-300 text-gray-600 rounded-lg px-6 py-2.5 text-sm font-semibold hover:bg-gray-50 transition-colors">취소</button>
-              <p id="ts-msg" class="text-sm text-gray-500 hidden"></p>
-            </div>
+            <div id="ts-slots" class="grid grid-cols-2 gap-4 max-w-sm"></div>
+            <p id="ts-slot-msg" class="text-sm text-gray-500 hidden mt-3"></p>
           </div>
 
           <!-- 이름 명단 일괄 추가 -->
@@ -472,7 +430,7 @@ import Layout from '../components/layout/Layout.astro';
 
           <div class="bg-white rounded-2xl shadow-sm p-6">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-base font-bold text-gray-900">성적우수자 목록</h2>
+              <h2 class="text-base font-bold text-gray-900">이름 명단</h2>
               <div class="flex gap-2">
                 <select id="ts-list-year-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
                   <option value="2024">2024</option>
@@ -486,12 +444,6 @@ import Layout from '../components/layout/Layout.astro';
               </div>
             </div>
 
-            <h3 class="text-sm font-bold text-gray-700 mb-3">사진 (앞 4명만 사이트에 노출)</h3>
-            <div id="ts-photo-list" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-              <p class="col-span-full text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
-            </div>
-
-            <h3 class="text-sm font-bold text-gray-700 mb-3">이름 명단</h3>
             <div id="ts-name-list" class="divide-y divide-gray-100">
               <p class="text-sm text-gray-400 py-4 text-center">불러오는 중...</p>
             </div>
@@ -851,7 +803,7 @@ import Layout from '../components/layout/Layout.astro';
       if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
-      if (tab === 'topscorers') loadTopScorers();
+      if (tab === 'topscorers') { loadSlots(); loadTopScorers(); }
       if (tab === 'reports')    { loadReportsAdmin(); loadReportNotice(); }
     }
   }
@@ -1405,94 +1357,135 @@ import Layout from '../components/layout/Layout.astro';
     });
   }
 
-  // ── 성적우수자 ──
-  let tsEditId: string | null = null;
+  // ── 성적우수자: 대표 사진 2x2 고정 슬롯 ──
+  let tsSlotPhotos: any[] = [null, null, null, null];
 
-  function resetTsForm() {
-    tsEditId = null;
-    (document.getElementById('ts-edit-id') as HTMLInputElement).value = '';
-    (document.getElementById('ts-sort-input') as HTMLInputElement).value = '0';
-    (document.getElementById('ts-active-input') as HTMLInputElement).checked = true;
-    (document.getElementById('ts-image-input') as HTMLInputElement).value = '';
-    const preview = document.getElementById('ts-image-preview') as HTMLImageElement;
-    preview.src = ''; preview.classList.add('hidden');
-    document.getElementById('ts-form-title')!.textContent = '성적우수자 사진 추가';
-    document.getElementById('submit-ts-btn')!.textContent = '추가';
-    document.getElementById('cancel-ts-btn')!.classList.add('hidden');
+  async function loadSlots() {
+    const year = (document.getElementById('ts-slot-year-input') as HTMLSelectElement).value;
+    const semester = (document.getElementById('ts-slot-semester-input') as HTMLSelectElement).value;
+    const { data } = await supabase
+      .from('top_scorers')
+      .select('*')
+      .eq('year', year)
+      .eq('semester', semester)
+      .eq('type', 'photo')
+      .order('sort_order', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(4);
+
+    tsSlotPhotos = [0, 1, 2, 3].map(i => (data && data[i]) ? data[i] : null);
+    renderSlots();
   }
 
+  function renderSlots() {
+    const container = document.getElementById('ts-slots');
+    if (!container) return;
+    container.innerHTML = [0, 1, 2, 3].map(i => {
+      const p = tsSlotPhotos[i];
+      return `
+        <div class="relative">
+          <div data-slot="${i}" class="ts-slot-box aspect-[210/297] bg-gray-100 rounded-xl border-2 ${p ? 'border-gray-200' : 'border-dashed border-gray-300'} overflow-hidden flex items-center justify-center cursor-pointer">
+            ${p
+              ? `<img src="${escAttr(p.image_url || '')}" alt="슬롯 ${i + 1}" class="w-full h-full object-cover" />`
+              : `<span class="text-xs text-gray-400 text-center px-2">슬롯 ${i + 1}<br/>클릭해서 업로드</span>`}
+          </div>
+          ${p ? `<button data-slot="${i}" data-id="${p.id}" class="ts-slot-del absolute top-1.5 right-1.5 bg-white/90 text-red-500 text-[11px] rounded px-1.5 py-0.5 shadow hover:bg-white">삭제</button>` : ''}
+          <input type="file" data-slot="${i}" accept="image/*,application/pdf" class="ts-slot-file hidden" />
+        </div>
+      `;
+    }).join('');
+
+    container.querySelectorAll<HTMLElement>('.ts-slot-box').forEach(box => {
+      box.addEventListener('click', () => {
+        const slot = box.dataset.slot!;
+        container.querySelector<HTMLInputElement>(`.ts-slot-file[data-slot="${slot}"]`)?.click();
+      });
+    });
+
+    container.querySelectorAll<HTMLButtonElement>('.ts-slot-del').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm('이 사진을 삭제할까요?')) return;
+        await supabase.from('top_scorers').delete().eq('id', btn.dataset.id!);
+        loadSlots();
+      });
+    });
+
+    container.querySelectorAll<HTMLInputElement>('.ts-slot-file').forEach(input => {
+      input.addEventListener('change', async (e) => {
+        const slot = parseInt(input.dataset.slot!, 10);
+        let file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+
+        const msg = document.getElementById('ts-slot-msg')!;
+        msg.textContent = '업로드 중...'; msg.classList.remove('hidden');
+
+        if (isPdfFile(file)) {
+          msg.textContent = 'pdf 변환 중...';
+          try {
+            file = await pdfFirstPageToImageFile(file);
+          } catch (err: any) {
+            msg.textContent = 'pdf 변환 실패: ' + (err?.message || '알 수 없는 오류');
+            return;
+          }
+        }
+
+        const year = (document.getElementById('ts-slot-year-input') as HTMLSelectElement).value;
+        const semester = (document.getElementById('ts-slot-semester-input') as HTMLSelectElement).value;
+        const ext = file.name.split('.').pop();
+        const path = `ts-slot-${year}-${semester}-${slot}-${Date.now()}.${ext}`;
+
+        const { error: upErr } = await supabase.storage.from('top-scorers-images').upload(path, file);
+        if (upErr) {
+          msg.textContent = '업로드 실패: ' + upErr.message;
+          return;
+        }
+        const { data: urlData } = supabase.storage.from('top-scorers-images').getPublicUrl(path);
+
+        const existing = tsSlotPhotos[slot];
+        let error;
+        if (existing) {
+          ({ error } = await supabase.from('top_scorers').update({ image_url: urlData.publicUrl }).eq('id', existing.id));
+        } else {
+          ({ error } = await supabase.from('top_scorers').insert({
+            year, semester, type: 'photo', image_url: urlData.publicUrl, sort_order: slot + 1, is_active: true,
+          }));
+        }
+
+        if (error) { msg.textContent = '저장 실패: ' + error.message; return; }
+
+        msg.textContent = '저장되었습니다.';
+        setTimeout(() => msg.classList.add('hidden'), 2000);
+        loadSlots();
+      });
+    });
+  }
+
+  document.getElementById('ts-slot-year-input')?.addEventListener('change', () => loadSlots());
+  document.getElementById('ts-slot-semester-input')?.addEventListener('change', () => loadSlots());
+
+  // ── 성적우수자: 이름 명단 ──
   async function loadTopScorers() {
     const yearFilter = (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value;
     const semesterFilter = (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value;
-    const photoContainer = document.getElementById('ts-photo-list');
     const nameContainer = document.getElementById('ts-name-list');
-    if (!photoContainer || !nameContainer) return;
+    if (!nameContainer) return;
 
     const { data, error } = await supabase
       .from('top_scorers')
       .select('*')
       .eq('year', yearFilter)
       .eq('semester', semesterFilter)
+      .eq('type', 'text')
       .order('sort_order', { ascending: true })
       .order('id', { ascending: true });
 
     if (error) {
-      photoContainer.innerHTML = `<p class="col-span-full text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
-      nameContainer.innerHTML = '';
+      nameContainer.innerHTML = `<p class="text-sm text-red-400 py-4 text-center">불러오기 오류: ${escHtml(error.message)}</p>`;
       return;
     }
 
-    const photos = (data ?? []).filter((d: any) => d.type !== 'text');
-    const names = (data ?? []).filter((d: any) => d.type === 'text');
-
-    // ── 사진 목록 ──
-    if (photos.length === 0) {
-      photoContainer.innerHTML = '<p class="col-span-full text-sm text-gray-400 py-4 text-center">등록된 사진이 없습니다.</p>';
-    } else {
-      photoContainer.innerHTML = photos.map((p: any, i: number) => `
-        <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <div class="aspect-[3/4] bg-gray-100">
-            <img src="${escAttr(p.image_url || '')}" alt="성적우수자" loading="lazy" class="w-full h-full object-cover" onerror="this.style.opacity='0.2'" />
-          </div>
-          <div class="p-2.5">
-            <p class="text-xs font-medium text-gray-800 truncate">
-              순서 ${p.sort_order}
-              ${!p.is_active ? '<span class="text-gray-400 font-normal">(숨김)</span>' : i < 4 ? '<span class="text-green-600 font-normal">(노출됨)</span>' : '<span class="text-amber-500 font-normal">(4명 초과·비노출)</span>'}
-            </p>
-            <div class="flex gap-2 mt-1">
-              <button data-id="${p.id}" data-year="${escAttr(p.year)}" data-semester="${escAttr(p.semester)}"
-                data-sort="${p.sort_order}" data-active="${p.is_active ? '1' : '0'}" data-image="${escAttr(p.image_url ?? '')}"
-                class="edit-ts-btn text-[11px] text-blue-400 hover:text-blue-600 transition-colors">수정</button>
-              <button data-id="${p.id}" class="del-ts-btn text-[11px] text-red-400 hover:text-red-600 transition-colors">삭제</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-
-      photoContainer.querySelectorAll<HTMLButtonElement>('.edit-ts-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          tsEditId = btn.dataset.id!;
-          (document.getElementById('ts-year-input') as HTMLSelectElement).value = btn.dataset.year ?? '2026';
-          (document.getElementById('ts-semester-input') as HTMLSelectElement).value = btn.dataset.semester ?? '1학기';
-          (document.getElementById('ts-sort-input') as HTMLInputElement).value = btn.dataset.sort ?? '0';
-          (document.getElementById('ts-active-input') as HTMLInputElement).checked = btn.dataset.active === '1';
-          const preview = document.getElementById('ts-image-preview') as HTMLImageElement;
-          if (btn.dataset.image) { preview.src = btn.dataset.image; preview.classList.remove('hidden'); }
-          document.getElementById('ts-form-title')!.textContent = '성적우수자 사진 수정';
-          document.getElementById('submit-ts-btn')!.textContent = '수정 완료';
-          document.getElementById('cancel-ts-btn')!.classList.remove('hidden');
-          document.getElementById('ts-form-title')!.scrollIntoView({ behavior: 'smooth' });
-        });
-      });
-
-      photoContainer.querySelectorAll<HTMLButtonElement>('.del-ts-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('이 사진을 삭제할까요?')) return;
-          await supabase.from('top_scorers').delete().eq('id', btn.dataset.id!);
-          loadTopScorers();
-        });
-      });
-    }
+    const names = data ?? [];
 
     // ── 이름 명단 ──
     if (names.length === 0) {
@@ -1529,175 +1522,8 @@ import Layout from '../components/layout/Layout.astro';
     }
   }
 
-  document.getElementById('ts-image-input')?.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const preview = document.getElementById('ts-image-preview') as HTMLImageElement;
-      preview.src = ev.target?.result as string;
-      preview.classList.remove('hidden');
-    };
-    reader.readAsDataURL(file);
-  });
-
   document.getElementById('ts-list-year-filter')?.addEventListener('change', () => loadTopScorers());
   document.getElementById('ts-list-semester-filter')?.addEventListener('change', () => loadTopScorers());
-  document.getElementById('cancel-ts-btn')?.addEventListener('click', resetTsForm);
-
-  document.getElementById('submit-ts-btn')?.addEventListener('click', async () => {
-    const year     = (document.getElementById('ts-year-input') as HTMLSelectElement).value;
-    const semester = (document.getElementById('ts-semester-input') as HTMLSelectElement).value;
-    const sortOrder = parseInt((document.getElementById('ts-sort-input') as HTMLInputElement).value, 10) || 0;
-    const isActive = (document.getElementById('ts-active-input') as HTMLInputElement).checked;
-    const fileInput = document.getElementById('ts-image-input') as HTMLInputElement;
-    let file = fileInput.files?.[0];
-    const msg = document.getElementById('ts-msg')!;
-
-    if (!tsEditId && !file) {
-      msg.textContent = '사진을 선택하세요.'; msg.classList.remove('hidden');
-      setTimeout(() => msg.classList.add('hidden'), 3000);
-      return;
-    }
-
-    const btn = document.getElementById('submit-ts-btn') as HTMLButtonElement;
-    btn.disabled = true; btn.textContent = '처리 중...';
-
-    if (file && isPdfFile(file)) {
-      btn.textContent = 'pdf 변환 중...';
-      try {
-        file = await pdfFirstPageToImageFile(file);
-      } catch (e: any) {
-        msg.textContent = 'pdf 변환 실패: ' + (e?.message || '알 수 없는 오류');
-        msg.classList.remove('hidden');
-        btn.disabled = false; btn.textContent = tsEditId ? '수정 완료' : '추가';
-        return;
-      }
-      btn.textContent = '처리 중...';
-    }
-
-    let image_url: string | undefined;
-    if (file) {
-      const ext = file.name.split('.').pop();
-      const path = `ts-${Date.now()}.${ext}`;
-      const { data: up, error: upErr } = await supabase.storage.from('top-scorers-images').upload(path, file, { upsert: true });
-      if (upErr) {
-        msg.textContent = '이미지 업로드 실패: ' + upErr.message; msg.classList.remove('hidden');
-        btn.disabled = false; btn.textContent = tsEditId ? '수정 완료' : '추가';
-        return;
-      }
-      if (up) {
-        const { data: urlData } = supabase.storage.from('top-scorers-images').getPublicUrl(path);
-        image_url = urlData.publicUrl;
-      }
-    }
-
-    const payload: any = { year, semester, type: 'photo', sort_order: sortOrder, is_active: isActive };
-    if (image_url) payload.image_url = image_url;
-
-    let error;
-    if (tsEditId) {
-      ({ error } = await supabase.from('top_scorers').update(payload).eq('id', tsEditId));
-    } else {
-      ({ error } = await supabase.from('top_scorers').insert(payload));
-    }
-
-    btn.disabled = false;
-    btn.textContent = tsEditId ? '수정 완료' : '추가';
-
-    if (error) { msg.textContent = '오류: ' + error.message; }
-    else {
-      msg.textContent = tsEditId ? '수정되었습니다.' : '추가되었습니다.';
-      (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value = year;
-      (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value = semester;
-      resetTsForm();
-      loadTopScorers();
-    }
-    msg.classList.remove('hidden');
-    setTimeout(() => msg.classList.add('hidden'), 3000);
-  });
-
-  document.getElementById('submit-ts-bulk-btn')?.addEventListener('click', async () => {
-    const year     = (document.getElementById('ts-bulk-year-input') as HTMLSelectElement).value;
-    const semester = (document.getElementById('ts-bulk-semester-input') as HTMLSelectElement).value;
-    const fileInput = document.getElementById('ts-bulk-input') as HTMLInputElement;
-    const files = fileInput.files
-      ? Array.from(fileInput.files).filter(f => f.type.startsWith('image/') || isPdfFile(f))
-      : [];
-    const msg = document.getElementById('ts-bulk-msg')!;
-    const progressWrap = document.getElementById('ts-bulk-progress')!;
-    const progressBar = document.getElementById('ts-bulk-progress-bar')!;
-    const progressText = document.getElementById('ts-bulk-progress-text')!;
-
-    if (files.length === 0) {
-      msg.textContent = '사진이 담긴 폴더(또는 사진 여러 장)를 선택하세요.'; msg.classList.remove('hidden');
-      setTimeout(() => msg.classList.add('hidden'), 3000);
-      return;
-    }
-
-    // 파일명 기준 정렬 (1.jpg, 2.jpg ... 순서 보장)
-    files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-
-    // 현재 해당 년도/학기의 마지막 순서 다음부터 이어서 저장
-    const { data: existing } = await supabase
-      .from('top_scorers')
-      .select('sort_order')
-      .eq('year', year)
-      .eq('semester', semester)
-      .order('sort_order', { ascending: false })
-      .limit(1);
-    let nextSort = (existing && existing[0] ? existing[0].sort_order : 0) + 1;
-
-    const btn = document.getElementById('submit-ts-bulk-btn') as HTMLButtonElement;
-    btn.disabled = true;
-    progressWrap.classList.remove('hidden');
-    msg.classList.add('hidden');
-
-    let successCount = 0;
-    let failCount = 0;
-
-    for (let i = 0; i < files.length; i++) {
-      let file = files[i];
-      progressText.textContent = `${i + 1} / ${files.length} 업로드 중... (${file.name})`;
-      progressBar.style.width = `${Math.round(((i) / files.length) * 100)}%`;
-
-      if (isPdfFile(file)) {
-        progressText.textContent = `${i + 1} / ${files.length} pdf 변환 중... (${file.name})`;
-        try {
-          file = await pdfFirstPageToImageFile(file);
-        } catch {
-          failCount++;
-          continue;
-        }
-      }
-
-      const ext = file.name.split('.').pop();
-      const path = `ts-bulk-${Date.now()}-${i}.${ext}`;
-      const { error: upErr } = await supabase.storage.from('top-scorers-images').upload(path, file);
-
-      if (upErr) {
-        failCount++;
-      } else {
-        const { data: urlData } = supabase.storage.from('top-scorers-images').getPublicUrl(path);
-        const { error: insErr } = await supabase.from('top_scorers').insert({
-          year, semester, type: 'photo', image_url: urlData.publicUrl, sort_order: nextSort, is_active: true,
-        });
-        if (insErr) failCount++; else successCount++;
-        nextSort++;
-      }
-    }
-
-    progressBar.style.width = '100%';
-    progressText.textContent = `완료: ${successCount}장 업로드${failCount > 0 ? `, ${failCount}장 실패` : ''}`;
-    btn.disabled = false;
-    fileInput.value = '';
-    msg.textContent = `${successCount}장 업로드되었습니다.${failCount > 0 ? ` (${failCount}장 실패)` : ''}`;
-    msg.classList.remove('hidden');
-
-    (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value = year;
-    (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value = semester;
-    loadTopScorers();
-  });
 
   document.getElementById('submit-ts-names-btn')?.addEventListener('click', async () => {
     const year     = (document.getElementById('ts-name-year-input') as HTMLSelectElement).value;
