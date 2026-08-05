@@ -1,0 +1,113 @@
+---
+import Layout from '../components/layout/Layout.astro';
+
+const YEARS = ['2024', '2025', '2026'];
+const SEMESTERS = ['1학기', '2학기'];
+const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, id: `${y}-${s}` })));
+---
+
+<Layout title="성적우수자 - 대치프라임" description="대치프라임 성적우수자 명단입니다.">
+  <div class="min-h-screen bg-white">
+
+    <div class="py-14 text-center border-b border-gray-100">
+      <h1 class="text-4xl font-bold text-gray-900">성적우수자</h1>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+      <div class="grid grid-cols-3 sm:grid-cols-6 border border-gray-200 rounded-sm overflow-hidden mb-10">
+        {TABS.map((t, i) => (
+          <button
+            data-tab={t.id}
+            data-year={t.year}
+            data-semester={t.semester}
+            class={`ts-tab py-3 text-sm font-medium border-b border-r border-gray-200 transition-colors
+              ${i === TABS.length - 1 ? 'sm:border-r-0' : ''}
+              ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+          >
+            {t.year} {t.semester}
+          </button>
+        ))}
+      </div>
+
+      <div id="grid-area" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 min-h-[200px]">
+        <p class="col-span-full text-center text-gray-400 py-24 text-sm">불러오는 중...</p>
+      </div>
+    </div>
+
+  </div>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const cache: Record<string, any[]> = {};
+
+  async function loadTab(year: string, semester: string) {
+    const key = `${year}-${semester}`;
+    const areaEl = document.getElementById('grid-area')!;
+
+    if (cache[key]) {
+      render(cache[key]);
+      return;
+    }
+
+    areaEl.innerHTML = '<p class="col-span-full text-center text-gray-400 py-24 text-sm">불러오는 중...</p>';
+
+    const { data, error } = await supabase
+      .from('top_scorers')
+      .select('id, name, image_url')
+      .eq('year', year)
+      .eq('semester', semester)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .order('id', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      areaEl.innerHTML = '<p class="col-span-full text-center text-gray-400 py-24 text-sm">등록된 성적우수자가 없습니다.</p>';
+      return;
+    }
+
+    cache[key] = data;
+    render(data);
+  }
+
+  function render(data: any[]) {
+    const areaEl = document.getElementById('grid-area')!;
+    areaEl.innerHTML = data.map(d => `
+      <div class="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+        <div class="aspect-[3/4] bg-gray-100">
+          <img src="${escAttr(d.image_url)}" alt="${escAttr(d.name || '성적우수자')}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+        </div>
+        ${d.name ? `<p class="text-center text-sm text-gray-700 py-2 truncate px-2">${escHtml(d.name)}</p>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function escHtml(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escAttr(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
+  function init() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.ts-tab');
+    if (tabs.length === 0) return;
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('bg-brand', 'text-white');
+          t.classList.add('bg-white', 'text-gray-500');
+        });
+        tab.classList.add('bg-brand', 'text-white');
+        tab.classList.remove('bg-white', 'text-gray-500');
+        loadTab(tab.dataset.year!, tab.dataset.semester!);
+      });
+    });
+
+    loadTab(tabs[0].dataset.year!, tabs[0].dataset.semester!);
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>

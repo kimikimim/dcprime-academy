@@ -329,21 +329,50 @@ CREATE POLICY "anon select diagnosis_logs" ON diagnosis_logs FOR SELECT TO anon 
 
 
 -- ────────────────────────────────────────────
--- 13. Storage 버킷 + 정책
+-- 13. top_scorers — 성적우수자 (년도/학기별 사진 갤러리)
+-- ────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS top_scorers (
+  id         bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  year       text NOT NULL CHECK (year IN ('2024', '2025', '2026')),
+  semester   text NOT NULL CHECK (semester IN ('1학기', '2학기')),
+  name       text,
+  image_url  text NOT NULL,
+  sort_order integer DEFAULT 0,
+  is_active  boolean DEFAULT true,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE top_scorers ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "anon select top_scorers" ON top_scorers;
+DROP POLICY IF EXISTS "anon insert top_scorers" ON top_scorers;
+DROP POLICY IF EXISTS "anon update top_scorers" ON top_scorers;
+DROP POLICY IF EXISTS "anon delete top_scorers" ON top_scorers;
+
+CREATE POLICY "anon select top_scorers" ON top_scorers FOR SELECT TO anon USING (true);
+CREATE POLICY "anon insert top_scorers" ON top_scorers FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "anon update top_scorers" ON top_scorers FOR UPDATE TO anon USING (true);
+CREATE POLICY "anon delete top_scorers" ON top_scorers FOR DELETE TO anon USING (true);
+
+CREATE INDEX IF NOT EXISTS idx_top_scorers_year_semester ON top_scorers (year, semester, sort_order);
+
+
+-- ────────────────────────────────────────────
+-- 14. Storage 버킷 + 정책
 -- ────────────────────────────────────────────
 INSERT INTO storage.buckets (id, name, public) VALUES
   ('notice-images', 'notice-images', true),
   ('faculty-images', 'faculty-images', true),
   ('hero-images', 'hero-images', true),
   ('space-images', 'space-images', true),
-  ('exam-sketch', 'exam-sketch', true)
+  ('exam-sketch', 'exam-sketch', true),
+  ('top-scorers-images', 'top-scorers-images', true)
 ON CONFLICT (id) DO NOTHING;
 
 DO $$
 DECLARE
   bucket text;
 BEGIN
-  FOREACH bucket IN ARRAY ARRAY['notice-images', 'faculty-images', 'hero-images', 'space-images', 'exam-sketch']
+  FOREACH bucket IN ARRAY ARRAY['notice-images', 'faculty-images', 'hero-images', 'space-images', 'exam-sketch', 'top-scorers-images']
   LOOP
     EXECUTE format('DROP POLICY IF EXISTS %L ON storage.objects', 'public read ' || bucket);
     EXECUTE format('DROP POLICY IF EXISTS %L ON storage.objects', 'anon insert ' || bucket);

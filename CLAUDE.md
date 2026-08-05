@@ -29,6 +29,7 @@ src/
 │   ├── curriculum.astro      # 커리큘럼 (2×3 그리드 탭: 국어/영어/수학/과학/탐독/입시와 대치)
 │   ├── faculty.astro         # 강사소개 (탭: 초등부/중등부/고등부/입시와대치)
 │   ├── results.astro         # 명예의 전당 (DB에서 연도별 합격자 집계)
+│   ├── top-scorers.astro     # 성적우수자 (년도(2024~2026)×학기(1/2학기) 6탭, 탭별 지연 로딩 사진 갤러리)
 │   ├── notice.astro          # 소식 목록 (설명회/평가/공지 카테고리)
 │   ├── notice/[id].astro     # 공지 상세
 │   ├── inquiry.astro         # 상담 신청
@@ -49,7 +50,7 @@ src/
 │   │   └── InquiryForm.astro
 │   ├── layout/
 │   │   ├── Layout.astro       # 공통 레이아웃 (OG태그, sitemap, canonical 포함)
-│   │   ├── Header.astro       # 헤더/네비게이션 (대치프라임/커리큘럼/강사소개/명예의 전당/소식/상담 신청)
+│   │   ├── Header.astro       # 헤더/네비게이션 (대치프라임/커리큘럼/강사소개/명예의 전당/성적우수자/소식/상담 신청)
 │   │   └── Footer.astro
 │   ├── sections/              # 메인페이지 섹션들
 │   │   ├── HeroSection.astro       # DB(hero_slides) 없으면 기본 배너
@@ -84,6 +85,7 @@ src/
 | `notices` | 소식 (구 공지사항, title, content, category(설명회/평가/공지), views, created_at) |
 | `inquiries` | 상담 신청 (student_name, student_phone, parent_name, parent_phone, school, track, grade, branch[], subjects[], other_detail, agree_privacy, agree_marketing, status, assigned_to, admin_note, contacted_at) |
 | `results` | 명예의 전당 (year, category, school, name, university, dept) |
+| `top_scorers` | 성적우수자 (year(2024~2026), semester(1학기/2학기), name, image_url, sort_order, is_active) — 학기당 최대 150여장, 페이지는 탭 클릭 시에만 해당 학기 쿼리 (지연 로딩) |
 | `admin_config` | 관리자 비밀번호 (`key='admin_password'`, `value='Prime0979!'`), RLS로 anon 직접 조회 불가 (RPC로만 검증) |
 | `page_content` | Quill 에디터로 편집하는 텍스트 콘텐츠 (key, value) — 아래 키 목록 참고 |
 | `faculty` | 강사 정보 (name, subject, motto, image_url, sort_order, divisions[], role) |
@@ -122,6 +124,7 @@ src/
 - `hero-images`: 메인 배너 이미지
 - `space-images`: 학원소개 SPACE 탭 교육환경 사진
 - `exam-sketch`: in_house_exam.astro 자체 기말고사 스케치 사진 — 학기 구분 없이 계속 누적, 관리자에서 개별 삭제만 가능 (전체 초기화 버튼 없음)
+- `top-scorers-images`: 성적우수자 사진 (학기당 최대 150여장 예상)
 
 ### RPC 함수
 - `verify_admin_password(pw text)`: 관리자 로그인 검증
@@ -140,6 +143,7 @@ src/
 5. **커리큘럼** - 국어/영어/수학/과학/탐독/입시와 대치 Quill 편집
 6. **강사소개** - CRUD (divisions 체크박스, 사진 업로드)
 7. **명예의 전당** - 연도별 합격자 추가/삭제
+7.5. **성적우수자** - 년도(2024~2026)×학기(1/2학기)별 사진 CRUD (`top_scorers`), 목록도 년도·학기 필터로 조회 (전체 로드 아님)
 8. **출제 경향** - `in_house_exam.astro` 관리
    - 페이지 안내 문구 편집 (`page_content.in_house_exam_notice`)
    - 학년×과목별 리포트 CRUD (`exam_reports`, sections는 JSON 텍스트로 직접 입력)
