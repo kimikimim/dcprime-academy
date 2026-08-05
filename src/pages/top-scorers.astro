@@ -13,7 +13,7 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
       <h1 class="text-4xl font-bold text-gray-900">성적우수자</h1>
     </div>
 
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
       <div class="grid grid-cols-3 sm:grid-cols-6 border border-gray-200 rounded-sm overflow-hidden mb-10">
         {TABS.map((t, i) => (
           <button
@@ -29,9 +29,12 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
         ))}
       </div>
 
-      <div id="grid-area" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 min-h-[200px]">
-        <p class="col-span-full text-center text-gray-400 py-24 text-sm">불러오는 중...</p>
-      </div>
+      <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
+      <div id="empty-msg" class="hidden text-center py-24 text-gray-400 text-sm">등록된 성적우수자가 없습니다.</div>
+
+      <div id="photo-area" class="hidden grid grid-cols-2 gap-4 max-w-md mx-auto mb-14"></div>
+
+      <div id="name-area" class="hidden"></div>
     </div>
 
   </div>
@@ -42,28 +45,46 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
   const cache: Record<string, any[]> = {};
 
+  function maskName(name: string) {
+    const n = String(name ?? '').trim();
+    const len = n.length;
+    if (len <= 1) return n;
+    if (len === 2) return n[0] + 'O';
+    const mid = Math.floor(len / 2);
+    return n.slice(0, mid) + 'O' + n.slice(mid + 1);
+  }
+
   async function loadTab(year: string, semester: string) {
     const key = `${year}-${semester}`;
-    const areaEl = document.getElementById('grid-area')!;
+    const loading = document.getElementById('loading')!;
+    const emptyMsg = document.getElementById('empty-msg')!;
+    const photoArea = document.getElementById('photo-area')!;
+    const nameArea = document.getElementById('name-area')!;
+
+    photoArea.classList.add('hidden');
+    nameArea.classList.add('hidden');
+    emptyMsg.classList.add('hidden');
 
     if (cache[key]) {
       render(cache[key]);
       return;
     }
 
-    areaEl.innerHTML = '<p class="col-span-full text-center text-gray-400 py-24 text-sm">불러오는 중...</p>';
+    loading.classList.remove('hidden');
 
     const { data, error } = await supabase
       .from('top_scorers')
-      .select('id, image_url')
+      .select('id, type, name, image_url')
       .eq('year', year)
       .eq('semester', semester)
       .eq('is_active', true)
       .order('sort_order', { ascending: true })
       .order('id', { ascending: true });
 
+    loading.classList.add('hidden');
+
     if (error || !data || data.length === 0) {
-      areaEl.innerHTML = '<p class="col-span-full text-center text-gray-400 py-24 text-sm">등록된 성적우수자가 없습니다.</p>';
+      emptyMsg.classList.remove('hidden');
       return;
     }
 
@@ -72,16 +93,54 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
   }
 
   function render(data: any[]) {
-    const areaEl = document.getElementById('grid-area')!;
-    areaEl.innerHTML = data.map(d => `
-      <div class="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
-        <div class="aspect-[3/4] bg-gray-100">
-          <img src="${escAttr(d.image_url)}" alt="성적우수자" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+    const photoArea = document.getElementById('photo-area')!;
+    const nameArea = document.getElementById('name-area')!;
+    const emptyMsg = document.getElementById('empty-msg')!;
+
+    const photos = data.filter(d => d.type !== 'text' && d.image_url).slice(0, 4);
+    const names = data.filter(d => d.type === 'text' && d.name);
+
+    if (photos.length === 0 && names.length === 0) {
+      emptyMsg.classList.remove('hidden');
+      return;
+    }
+
+    if (photos.length > 0) {
+      photoArea.classList.remove('hidden');
+      photoArea.innerHTML = photos.map(d => `
+        <div class="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+          <div class="aspect-[3/4] bg-gray-100">
+            <img src="${escAttr(d.image_url)}" alt="성적우수자" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+          </div>
         </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
+
+    if (names.length > 0) {
+      nameArea.classList.remove('hidden');
+      const half = Math.ceil(names.length / 2);
+      const cols = [names.slice(0, half), names.slice(half)];
+      nameArea.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10">
+          ${cols.map(col => `
+            <table class="w-full text-sm border-t-2 border-gray-800">
+              <tbody>
+                ${col.map(d => `
+                  <tr class="border-b border-gray-100">
+                    <td class="py-3 px-3 text-center text-gray-700">${escHtml(maskName(d.name))}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `).join('')}
+        </div>
+      `;
+    }
   }
 
+  function escHtml(str: string) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
   function escAttr(str: string) {
     return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }

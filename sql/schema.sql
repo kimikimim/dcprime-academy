@@ -329,14 +329,15 @@ CREATE POLICY "anon select diagnosis_logs" ON diagnosis_logs FOR SELECT TO anon 
 
 
 -- ────────────────────────────────────────────
--- 13. top_scorers — 성적우수자 (년도/학기별 사진 갤러리)
+-- 13. top_scorers — 성적우수자 (년도/학기별 사진 4명(2x2) + 나머지는 이름만 마스킹 표시)
 -- ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS top_scorers (
   id         bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   year       text NOT NULL CHECK (year IN ('2024', '2025', '2026')),
   semester   text NOT NULL CHECK (semester IN ('1학기', '2학기')),
-  name       text,
-  image_url  text NOT NULL,
+  type       text NOT NULL DEFAULT 'photo' CHECK (type IN ('photo', 'text')), -- photo: 사진(최대 4명 2x2 노출) / text: 이름만(마스킹 표시)
+  name       text,       -- type='text'일 때 실명 (화면엔 중간 글자를 O로 마스킹해서 표시)
+  image_url  text,       -- type='photo'일 때만 사용
   sort_order integer DEFAULT 0,
   is_active  boolean DEFAULT true,
   created_at timestamptz DEFAULT now()
