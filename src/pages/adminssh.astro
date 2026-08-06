@@ -409,7 +409,7 @@ import Layout from '../components/layout/Layout.astro';
           <!-- 이름 명단 일괄 추가 -->
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <h3 class="text-base font-bold text-gray-900 mb-1">이름 명단 일괄 추가</h3>
-            <p class="text-xs text-gray-500 mb-4">한 줄에 <strong class="text-gray-700">구분,학교,이름,과목,등급</strong> 순서로 콤마로 구분해서 입력하세요. 구분은 초등부/중등부/고등부 중 하나입니다. 화면에는 이름 가운데 글자만 O로 가려져서, 구분·과목별로 섹션이 나뉘어 표시됩니다 (예: 고등부,장곡고3,정민아,영어,전교 1등 → "고등부 영어" 섹션에 장곡고3 정O아 전교 1등).</p>
+            <p class="text-xs text-gray-500 mb-4">한 줄에 <strong class="text-gray-700">구분,학교,이름,과목,등급</strong> 순서로 콤마로 구분해서 입력하세요. 구분은 중등부/고등부 중 하나입니다. 화면에는 이름 가운데 글자만 O로 가려져서, 구분·과목별로 섹션이 나뉘어 표시됩니다 (예: 고등부,장곡고3,정민아,영어,전교 1등 → "고등부 영어" 섹션에 장곡고3 정O아 전교 1등).</p>
             <div class="grid grid-cols-2 gap-3 mb-3">
               <select id="ts-name-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="2024">2024</option>
@@ -1508,12 +1508,12 @@ import Layout from '../components/layout/Layout.astro';
 
       nameContainer.querySelectorAll<HTMLButtonElement>('.rename-ts-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const next = prompt('구분,학교,이름,과목,등급 순서로 수정하세요. (구분: 초등부/중등부/고등부)', btn.dataset.line ?? '');
+          const next = prompt('구분,학교,이름,과목,등급 순서로 수정하세요. (구분: 중등부/고등부)', btn.dataset.line ?? '');
           if (next === null) return;
           const [division, school, name, subject, grade] = next.split(',').map(s => s.trim());
           if (!name) return;
-          if (division && !['초등부', '중등부', '고등부'].includes(division)) {
-            alert('구분은 초등부/중등부/고등부 중 하나여야 합니다.');
+          if (division && !['중등부', '고등부'].includes(division)) {
+            alert('구분은 중등부/고등부 중 하나여야 합니다.');
             return;
           }
           await supabase.from('top_scorers').update({
@@ -1564,9 +1564,9 @@ import Layout from '../components/layout/Layout.astro';
       setTimeout(() => msg.classList.add('hidden'), 4000);
       return;
     }
-    const invalidDivision = parsed.filter(p => p.division && !['초등부', '중등부', '고등부'].includes(p.division));
+    const invalidDivision = parsed.filter(p => p.division && !['중등부', '고등부'].includes(p.division));
     if (invalidDivision.length > 0) {
-      msg.textContent = `구분이 잘못된 줄이 ${invalidDivision.length}개 있습니다. 구분은 초등부/중등부/고등부 중 하나여야 합니다.`;
+      msg.textContent = `구분이 잘못된 줄이 ${invalidDivision.length}개 있습니다. 구분은 중등부/고등부 중 하나여야 합니다.`;
       msg.classList.remove('hidden');
       setTimeout(() => msg.classList.add('hidden'), 4000);
       return;
