@@ -409,7 +409,7 @@ import Layout from '../components/layout/Layout.astro';
           <!-- 이름 명단 일괄 추가 -->
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <h3 class="text-base font-bold text-gray-900 mb-1">이름 명단 일괄 추가</h3>
-            <p class="text-xs text-gray-500 mb-4">한 줄에 이름 하나씩 입력하세요. 화면에는 이름 가운데 글자가 O로 가려져서 표시됩니다 (예: 한보람 → 한O람).</p>
+            <p class="text-xs text-gray-500 mb-4">한 줄에 <strong class="text-gray-700">학교,이름,과목,등급</strong> 순서로 콤마로 구분해서 입력하세요. 화면에는 이름 가운데 글자만 O로 가려져서 표시됩니다 (예: 장곡고3,정민아,영어,전교 1등 → 장곡고3 정O아 영어 전교 1등).</p>
             <div class="grid grid-cols-2 gap-3 mb-3">
               <select id="ts-name-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="2024">2024</option>
@@ -421,7 +421,7 @@ import Layout from '../components/layout/Layout.astro';
                 <option value="2학기">2학기</option>
               </select>
             </div>
-            <textarea id="ts-name-textarea" rows="6" placeholder="한보람&#10;김세민&#10;이희세" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
+            <textarea id="ts-name-textarea" rows="6" placeholder="장곡고3,정민아,영어,전교 1등&#10;능곡고2,김세민,수학,전교 3등&#10;능곡고3,이희세,확통,100점" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
             <div class="flex items-center gap-3">
               <button id="submit-ts-names-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">명단 추가</button>
               <p id="ts-names-msg" class="text-sm text-gray-500 hidden"></p>
@@ -1494,9 +1494,13 @@ import Layout from '../components/layout/Layout.astro';
     } else {
       nameContainer.innerHTML = names.map((n: any) => `
         <div class="py-2.5 flex items-center justify-between gap-3">
-          <p class="text-sm text-gray-800">${escHtml(n.name)} ${!n.is_active ? '<span class="text-xs text-gray-400">(숨김)</span>' : ''}</p>
+          <p class="text-sm text-gray-800">
+            ${[n.school, n.name, n.subject, n.grade].filter(Boolean).map((s: string) => escHtml(s)).join(' ')}
+            ${!n.is_active ? '<span class="text-xs text-gray-400">(숨김)</span>' : ''}
+          </p>
           <div class="flex gap-3 flex-shrink-0">
-            <button data-id="${n.id}" data-name="${escAttr(n.name ?? '')}" class="rename-ts-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
+            <button data-id="${n.id}" data-line="${escAttr([n.school, n.name, n.subject, n.grade].map((s: string) => s ?? '').join(','))}"
+              class="rename-ts-btn text-xs text-blue-400 hover:text-blue-600 transition-colors">수정</button>
             <button data-id="${n.id}" class="del-ts-name-btn text-xs text-red-400 hover:text-red-600 transition-colors">삭제</button>
           </div>
         </div>
@@ -1504,11 +1508,13 @@ import Layout from '../components/layout/Layout.astro';
 
       nameContainer.querySelectorAll<HTMLButtonElement>('.rename-ts-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const next = prompt('이름을 수정하세요.', btn.dataset.name ?? '');
+          const next = prompt('학교,이름,과목,등급 순서로 수정하세요.', btn.dataset.line ?? '');
           if (next === null) return;
-          const trimmed = next.trim();
-          if (!trimmed) return;
-          await supabase.from('top_scorers').update({ name: trimmed }).eq('id', btn.dataset.id!);
+          const [school, name, subject, grade] = next.split(',').map(s => s.trim());
+          if (!name) return;
+          await supabase.from('top_scorers').update({
+            school: school || null, name, subject: subject || null, grade: grade || null,
+          }).eq('id', btn.dataset.id!);
           loadTopScorers();
         });
       });
@@ -1532,14 +1538,26 @@ import Layout from '../components/layout/Layout.astro';
     const textarea = document.getElementById('ts-name-textarea') as HTMLTextAreaElement;
     const msg = document.getElementById('ts-names-msg')!;
 
-    const names = textarea.value
+    const lines = textarea.value
       .split('\n')
       .map(s => s.trim())
       .filter(s => s.length > 0);
 
-    if (names.length === 0) {
-      msg.textContent = '이름을 한 줄에 하나씩 입력하세요.'; msg.classList.remove('hidden');
+    if (lines.length === 0) {
+      msg.textContent = '학교,이름,과목,등급 형식으로 한 줄에 하나씩 입력하세요.'; msg.classList.remove('hidden');
       setTimeout(() => msg.classList.add('hidden'), 3000);
+      return;
+    }
+
+    const parsed = lines.map(line => {
+      const [school, name, subject, grade] = line.split(',').map(s => s.trim());
+      return { school, name, subject, grade };
+    });
+    const invalid = parsed.filter(p => !p.name);
+    if (invalid.length > 0) {
+      msg.textContent = `이름이 비어있는 줄이 ${invalid.length}개 있습니다. 형식을 확인하세요 (학교,이름,과목,등급).`;
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 4000);
       return;
     }
 
@@ -1556,8 +1574,10 @@ import Layout from '../components/layout/Layout.astro';
       .limit(1);
     let nextSort = (existing && existing[0] ? existing[0].sort_order : 0) + 1;
 
-    const rows = names.map((name, i) => ({
-      year, semester, type: 'text', name, sort_order: nextSort + i, is_active: true,
+    const rows = parsed.map((p, i) => ({
+      year, semester, type: 'text',
+      school: p.school || null, name: p.name, subject: p.subject || null, grade: p.grade || null,
+      sort_order: nextSort + i, is_active: true,
     }));
 
     const { error } = await supabase.from('top_scorers').insert(rows);
@@ -1568,7 +1588,7 @@ import Layout from '../components/layout/Layout.astro';
     if (error) {
       msg.textContent = '오류: ' + error.message;
     } else {
-      msg.textContent = `${names.length}명 추가되었습니다.`;
+      msg.textContent = `${parsed.length}명 추가되었습니다.`;
       textarea.value = '';
       (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value = year;
       (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value = semester;

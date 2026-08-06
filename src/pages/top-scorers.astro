@@ -74,7 +74,7 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
     const { data, error } = await supabase
       .from('top_scorers')
-      .select('id, type, name, image_url')
+      .select('id, type, name, school, subject, grade, image_url')
       .eq('year', year)
       .eq('semester', semester)
       .eq('is_active', true)
@@ -123,11 +123,13 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
       nameArea.innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10">
           ${cols.map(col => `
-            <table class="w-full text-sm border-t-2 border-gray-800">
+            <table class="w-full text-base border-t-2 border-gray-800">
               <tbody>
                 ${col.map(d => `
                   <tr class="border-b border-gray-100">
-                    <td class="py-3 px-3 text-center text-gray-700">${escHtml(maskName(d.name))}</td>
+                    <td class="py-3.5 px-3 text-center font-semibold text-gray-800 tracking-tight">
+                      ${[d.school, maskName(d.name), d.subject, d.grade].filter(Boolean).map(escHtml).join(' ')}
+                    </td>
                   </tr>
                 `).join('')}
               </tbody>
