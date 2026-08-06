@@ -25,9 +25,9 @@ import SectionTitle from '../ui/SectionTitle.astro';
         <p class="text-xs text-gray-400 mt-1">개원 이래 전체 기준</p>
       </div>
       <div class="p-6 rounded-xl bg-gray-50 border border-gray-100">
-        <p class="text-2xl md:text-3xl font-bold text-brand mb-1">98%</p>
-        <p class="text-sm font-semibold text-gray-800">학부모 만족도</p>
-        <p class="text-xs text-gray-400 mt-1">재원생 설문 기준</p>
+        <p id="stat-topscorers" class="text-2xl md:text-3xl font-bold text-brand mb-1">-명</p>
+        <p class="text-sm font-semibold text-gray-800">성적우수자</p>
+        <p class="text-xs text-gray-400 mt-1">과목 수강생 기준</p>
       </div>
     </div>
     <div class="text-center mt-10">
@@ -81,6 +81,32 @@ import SectionTitle from '../ui/SectionTitle.astro';
         .select('*', { count: 'exact', head: true })
         .eq('category', '대입');
       if (count != null && count > 0) totalEl.textContent = `${count}명`;
+    }
+
+    // 성적우수자 수 (현재 노출 기간에 해당하는 년도/학기 자동 판별)
+    // 1학기 노출: 8/1 ~ 익년 1/31 (해당 연도 1학기 데이터)
+    // 2학기 노출: 2/1 ~ 7/31 (전년도 2학기 데이터)
+    const topScorersEl = document.getElementById('stat-topscorers');
+    if (topScorersEl) {
+      const now = new Date();
+      const month = now.getMonth() + 1;
+      const y = now.getFullYear();
+      let activeYear: string, activeSemester: string;
+      if (month >= 8) {
+        activeYear = String(y); activeSemester = '1학기';
+      } else if (month === 1) {
+        activeYear = String(y - 1); activeSemester = '1학기';
+      } else {
+        activeYear = String(y - 1); activeSemester = '2학기';
+      }
+
+      const { count } = await supabase
+        .from('top_scorers')
+        .select('*', { count: 'exact', head: true })
+        .eq('year', activeYear)
+        .eq('semester', activeSemester)
+        .eq('is_active', true);
+      if (count != null && count > 0) topScorersEl.textContent = `${count}명`;
     }
   }
 
