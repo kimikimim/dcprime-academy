@@ -1,14 +1,5 @@
 ---
 import Layout from '../components/layout/Layout.astro';
-
-const TABS = [
-  { year: '2026', semester: '1학기' },
-  { year: '2025', semester: '2학기' },
-  { year: '2025', semester: '1학기' },
-  { year: '2024', semester: '2학기' },
-  { year: '2024', semester: '1학기' },
-  { year: '2023', semester: '2학기' },
-].map((t) => ({ ...t, id: `${t.year}-${t.semester}` }));
 ---
 
 <Layout title="성적우수자 - 대치프라임" description="대치프라임 성적우수자 명단입니다.">
@@ -19,20 +10,7 @@ const TABS = [
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-3xl">
-      <div class="grid grid-cols-3 sm:grid-cols-6 border border-gray-200 rounded-sm overflow-hidden mb-10">
-        {TABS.map((t, i) => (
-          <button
-            data-tab={t.id}
-            data-year={t.year}
-            data-semester={t.semester}
-            class={`ts-tab py-3 text-sm font-medium border-b border-r border-gray-200 transition-colors
-              ${i === TABS.length - 1 ? 'sm:border-r-0' : ''}
-              ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
-          >
-            {t.year} {t.semester}
-          </button>
-        ))}
-      </div>
+      <div id="tab-area" class="grid grid-cols-3 sm:grid-cols-6 border border-gray-200 rounded-sm overflow-hidden mb-10"></div>
 
       <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
       <div id="empty-msg" class="hidden text-center py-24 text-gray-400 text-sm">등록된 성적우수자가 없습니다.</div>
@@ -49,6 +27,38 @@ const TABS = [
   import { supabase } from '../lib/supabase';
 
   const cache: Record<string, any[]> = {};
+
+  // ── 탭 컨베이어: adminssh에서 지정한 "기준 학기"부터 과거 6개 학기를 자동으로 노출 ──
+  const TAB_COUNT = 6;
+  const DEFAULT_ANCHOR = { year: '2026', semester: '1학기' };
+
+  function prevSemester(year: string, semester: string) {
+    if (semester === '2학기') return { year, semester: '1학기' };
+    return { year: String(Number(year) - 1), semester: '2학기' };
+  }
+
+  function buildTabs(anchor: { year: string; semester: string }) {
+    const tabs: { year: string; semester: string; id: string }[] = [];
+    let cur = { ...anchor };
+    for (let i = 0; i < TAB_COUNT; i++) {
+      tabs.push({ ...cur, id: `${cur.year}-${cur.semester}` });
+      cur = prevSemester(cur.year, cur.semester);
+    }
+    return tabs;
+  }
+
+  async function fetchAnchor() {
+    const { data } = await supabase
+      .from('page_content')
+      .select('value')
+      .eq('key', 'top_scorers_latest_semester')
+      .single();
+
+    const raw = (data?.value ?? '').trim();
+    const [year, semester] = raw.split(',').map(s => s.trim());
+    if (year && (semester === '1학기' || semester === '2학기')) return { year, semester };
+    return DEFAULT_ANCHOR;
+  }
 
   const DIVISION_ORDER = ['고등부', '중등부'];
   const SUBJECT_ORDER = ['수학', '영어', '국어', '과학'];
@@ -183,10 +193,22 @@ const TABS = [
     return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
 
-  function init() {
-    const tabs = document.querySelectorAll<HTMLButtonElement>('.ts-tab');
-    if (tabs.length === 0) return;
+  function renderTabs(tabList: { year: string; semester: string; id: string }[]) {
+    const tabArea = document.getElementById('tab-area');
+    if (!tabArea) return;
 
+    tabArea.innerHTML = tabList.map((t, i) => `
+      <button
+        data-tab="${t.id}" data-year="${escAttr(t.year)}" data-semester="${escAttr(t.semester)}"
+        class="ts-tab py-3 text-sm font-medium border-b border-r border-gray-200 transition-colors
+          ${i === tabList.length - 1 ? 'sm:border-r-0' : ''}
+          ${i === 0 ? 'bg-brand text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}"
+      >
+        ${escHtml(t.year)} ${escHtml(t.semester)}
+      </button>
+    `).join('');
+
+    const tabs = tabArea.querySelectorAll<HTMLButtonElement>('.ts-tab');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
@@ -199,7 +221,13 @@ const TABS = [
       });
     });
 
-    loadTab(tabs[0].dataset.year!, tabs[0].dataset.semester!);
+    loadTab(tabList[0].year, tabList[0].semester);
+  }
+
+  async function init() {
+    if (!document.getElementById('tab-area')) return;
+    const anchor = await fetchAnchor();
+    renderTabs(buildTabs(anchor));
   }
 
   document.addEventListener('astro:page-load', init);

@@ -387,17 +387,27 @@ import Layout from '../components/layout/Layout.astro';
 
         <!-- ── 성적우수자 탭 ── -->
         <div id="panel-topscorers" class="hidden">
+          <!-- 페이지 탭 기준 학기 (컨베이어 설정) -->
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <h3 class="text-base font-bold text-gray-900 mb-1">페이지 탭 기준 학기</h3>
+            <p class="text-xs text-gray-500 mb-4">/top-scorers 페이지에 표시되는 6개 탭 중 <strong class="text-gray-700">가장 최근(맨 왼쪽)</strong> 학기입니다. 여기서 지정한 학기부터 과거 6개 학기가 자동으로 탭에 노출되고, 그보다 오래된 학기는 탭에서만 빠집니다 (데이터는 삭제되지 않고 이 관리자 페이지에서는 계속 조회·수정할 수 있습니다). 새 학기가 시작되면 이 값만 바꿔주면 탭이 자동으로 밀립니다.</p>
+            <div class="flex items-center gap-3">
+              <input id="ts-anchor-year-input" type="number" min="2020" max="2100" class="w-28 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <select id="ts-anchor-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="1학기">1학기</option>
+                <option value="2학기">2학기</option>
+              </select>
+              <button id="submit-ts-anchor-btn" class="bg-brand text-white rounded-lg px-6 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">저장</button>
+              <p id="ts-anchor-msg" class="text-sm text-gray-500 hidden"></p>
+            </div>
+          </div>
+
           <!-- 대표 사진 2x2 고정 슬롯 -->
           <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <h3 class="text-base font-bold text-gray-900 mb-1">대표 사진 (4칸 고정)</h3>
             <p class="text-xs text-gray-500 mb-4">4칸 고정입니다. <strong class="text-gray-700">A4 비율</strong>로 올려주세요. 칸을 클릭하면 사진을 올리거나 바꿀 수 있습니다. (jpg, jpeg, png, pdf 지원 — pdf는 첫 페이지를 사진으로 변환합니다)</p>
             <div class="grid grid-cols-2 gap-3 mb-4 max-w-sm">
-              <select id="ts-slot-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-              </select>
+              <input id="ts-slot-year-input" type="number" min="2020" max="2100" value="2026" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
               <select id="ts-slot-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="1학기">1학기</option>
                 <option value="2학기">2학기</option>
@@ -412,12 +422,7 @@ import Layout from '../components/layout/Layout.astro';
             <h3 class="text-base font-bold text-gray-900 mb-1">이름 명단 일괄 추가</h3>
             <p class="text-xs text-gray-500 mb-4">한 줄에 <strong class="text-gray-700">구분,학교,이름,과목,등급</strong> 순서로 콤마로 구분해서 입력하세요. 구분은 중등부/고등부 중 하나입니다. 화면에는 이름 가운데 글자만 O로 가려져서, 구분·과목별로 섹션이 나뉘어 표시됩니다 (예: 고등부,장곡고3,정민아,영어,전교 1등 → "고등부 영어" 섹션에 장곡고3 정O아 전교 1등).</p>
             <div class="grid grid-cols-2 gap-3 mb-3">
-              <select id="ts-name-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-              </select>
+              <input id="ts-name-year-input" type="number" min="2020" max="2100" value="2026" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
               <select id="ts-name-semester-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
                 <option value="1학기">1학기</option>
                 <option value="2학기">2학기</option>
@@ -434,12 +439,7 @@ import Layout from '../components/layout/Layout.astro';
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-base font-bold text-gray-900">이름 명단</h2>
               <div class="flex gap-2">
-                <select id="ts-list-year-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
-                  <option value="2023">2023</option>
-                  <option value="2024">2024</option>
-                  <option value="2025">2025</option>
-                  <option value="2026" selected>2026</option>
-                </select>
+                <input id="ts-list-year-filter" type="number" min="2020" max="2100" value="2026" class="w-24 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand" />
                 <select id="ts-list-semester-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
                   <option value="1학기">1학기</option>
                   <option value="2학기">2학기</option>
@@ -806,7 +806,7 @@ import Layout from '../components/layout/Layout.astro';
       if (tab === 'hero')       loadHeroSlides();
       if (tab === 'faculty')    loadFaculty();
       if (tab === 'results')    loadResults();
-      if (tab === 'topscorers') { loadSlots(); loadTopScorers(); }
+      if (tab === 'topscorers') { loadTsAnchor(); loadSlots(); loadTopScorers(); }
       if (tab === 'reports')    { loadReportsAdmin(); loadReportNotice(); }
     }
   }
@@ -1360,11 +1360,51 @@ import Layout from '../components/layout/Layout.astro';
     });
   }
 
+  // ── 성적우수자: 탭 기준 학기 (컨베이어 설정) ──
+  async function loadTsAnchor() {
+    const { data } = await supabase
+      .from('page_content')
+      .select('value')
+      .eq('key', 'top_scorers_latest_semester')
+      .single();
+
+    const raw = (data?.value ?? '').trim();
+    const [year, semester] = raw.split(',').map(s => s.trim());
+    (document.getElementById('ts-anchor-year-input') as HTMLInputElement).value = year || '2026';
+    (document.getElementById('ts-anchor-semester-input') as HTMLSelectElement).value =
+      (semester === '1학기' || semester === '2학기') ? semester : '1학기';
+  }
+
+  document.getElementById('submit-ts-anchor-btn')?.addEventListener('click', async () => {
+    const year = (document.getElementById('ts-anchor-year-input') as HTMLInputElement).value.trim();
+    const semester = (document.getElementById('ts-anchor-semester-input') as HTMLSelectElement).value;
+    const msg = document.getElementById('ts-anchor-msg')!;
+
+    if (!/^\d{4}$/.test(year)) {
+      msg.textContent = '연도를 4자리 숫자로 입력하세요.';
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+      return;
+    }
+
+    const btn = document.getElementById('submit-ts-anchor-btn') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = '저장 중...';
+
+    const { error } = await supabase.from('page_content').upsert({
+      key: 'top_scorers_latest_semester', value: `${year},${semester}`, updated_at: new Date().toISOString(),
+    });
+
+    btn.disabled = false; btn.textContent = '저장';
+    msg.textContent = error ? '오류: ' + error.message : `저장되었습니다. (${year} ${semester} 기준으로 탭이 표시됩니다)`;
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  });
+
   // ── 성적우수자: 대표 사진 2x2 고정 슬롯 ──
   let tsSlotPhotos: any[] = [null, null, null, null];
 
   async function loadSlots() {
-    const year = (document.getElementById('ts-slot-year-input') as HTMLSelectElement).value;
+    const year = (document.getElementById('ts-slot-year-input') as HTMLInputElement).value;
     const semester = (document.getElementById('ts-slot-semester-input') as HTMLSelectElement).value;
     const { data } = await supabase
       .from('top_scorers')
@@ -1433,7 +1473,7 @@ import Layout from '../components/layout/Layout.astro';
           }
         }
 
-        const year = (document.getElementById('ts-slot-year-input') as HTMLSelectElement).value;
+        const year = (document.getElementById('ts-slot-year-input') as HTMLInputElement).value;
         const semester = (document.getElementById('ts-slot-semester-input') as HTMLSelectElement).value;
         const semesterTag = semester === '2학기' ? 's2' : 's1';
         const ext = file.name.split('.').pop();
@@ -1470,7 +1510,7 @@ import Layout from '../components/layout/Layout.astro';
 
   // ── 성적우수자: 이름 명단 ──
   async function loadTopScorers() {
-    const yearFilter = (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value;
+    const yearFilter = (document.getElementById('ts-list-year-filter') as HTMLInputElement).value;
     const semesterFilter = (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value;
     const nameContainer = document.getElementById('ts-name-list');
     if (!nameContainer) return;
@@ -1540,7 +1580,7 @@ import Layout from '../components/layout/Layout.astro';
   document.getElementById('ts-list-semester-filter')?.addEventListener('change', () => loadTopScorers());
 
   document.getElementById('submit-ts-names-btn')?.addEventListener('click', async () => {
-    const year     = (document.getElementById('ts-name-year-input') as HTMLSelectElement).value;
+    const year     = (document.getElementById('ts-name-year-input') as HTMLInputElement).value;
     const semester = (document.getElementById('ts-name-semester-input') as HTMLSelectElement).value;
     const textarea = document.getElementById('ts-name-textarea') as HTMLTextAreaElement;
     const msg = document.getElementById('ts-names-msg')!;
@@ -1604,7 +1644,7 @@ import Layout from '../components/layout/Layout.astro';
     } else {
       msg.textContent = `${parsed.length}명 추가되었습니다.`;
       textarea.value = '';
-      (document.getElementById('ts-list-year-filter') as HTMLSelectElement).value = year;
+      (document.getElementById('ts-list-year-filter') as HTMLInputElement).value = year;
       (document.getElementById('ts-list-semester-filter') as HTMLSelectElement).value = semester;
       loadTopScorers();
     }
