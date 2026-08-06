@@ -1432,8 +1432,9 @@ import Layout from '../components/layout/Layout.astro';
 
         const year = (document.getElementById('ts-slot-year-input') as HTMLSelectElement).value;
         const semester = (document.getElementById('ts-slot-semester-input') as HTMLSelectElement).value;
+        const semesterTag = semester === '2학기' ? 's2' : 's1';
         const ext = file.name.split('.').pop();
-        const path = `ts-slot-${year}-${semester}-${slot}-${Date.now()}.${ext}`;
+        const path = `ts-slot-${year}-${semesterTag}-${slot}-${Date.now()}.${ext}`;
 
         const { error: upErr } = await supabase.storage.from('top-scorers-images').upload(path, file);
         if (upErr) {
