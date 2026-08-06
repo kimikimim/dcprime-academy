@@ -393,6 +393,7 @@ import Layout from '../components/layout/Layout.astro';
             <p class="text-xs text-gray-500 mb-4">4칸 고정입니다. <strong class="text-gray-700">A4 비율</strong>로 올려주세요. 칸을 클릭하면 사진을 올리거나 바꿀 수 있습니다. (jpg, jpeg, png, pdf 지원 — pdf는 첫 페이지를 사진으로 변환합니다)</p>
             <div class="grid grid-cols-2 gap-3 mb-4 max-w-sm">
               <select id="ts-slot-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="2023">2023</option>
                 <option value="2024">2024</option>
                 <option value="2025">2025</option>
                 <option value="2026" selected>2026</option>
@@ -412,6 +413,7 @@ import Layout from '../components/layout/Layout.astro';
             <p class="text-xs text-gray-500 mb-4">한 줄에 <strong class="text-gray-700">구분,학교,이름,과목,등급</strong> 순서로 콤마로 구분해서 입력하세요. 구분은 중등부/고등부 중 하나입니다. 화면에는 이름 가운데 글자만 O로 가려져서, 구분·과목별로 섹션이 나뉘어 표시됩니다 (예: 고등부,장곡고3,정민아,영어,전교 1등 → "고등부 영어" 섹션에 장곡고3 정O아 전교 1등).</p>
             <div class="grid grid-cols-2 gap-3 mb-3">
               <select id="ts-name-year-input" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand">
+                <option value="2023">2023</option>
                 <option value="2024">2024</option>
                 <option value="2025">2025</option>
                 <option value="2026" selected>2026</option>
@@ -433,6 +435,7 @@ import Layout from '../components/layout/Layout.astro';
               <h2 class="text-base font-bold text-gray-900">이름 명단</h2>
               <div class="flex gap-2">
                 <select id="ts-list-year-filter" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-brand">
+                  <option value="2023">2023</option>
                   <option value="2024">2024</option>
                   <option value="2025">2025</option>
                   <option value="2026" selected>2026</option>

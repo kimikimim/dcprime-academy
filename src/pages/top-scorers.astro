@@ -1,9 +1,14 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
-const YEARS = ['2024', '2025', '2026'];
-const SEMESTERS = ['1학기', '2학기'];
-const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, id: `${y}-${s}` })));
+const TABS = [
+  { year: '2026', semester: '1학기' },
+  { year: '2025', semester: '2학기' },
+  { year: '2025', semester: '1학기' },
+  { year: '2024', semester: '2학기' },
+  { year: '2024', semester: '1학기' },
+  { year: '2023', semester: '2학기' },
+].map((t) => ({ ...t, id: `${t.year}-${t.semester}` }));
 ---
 
 <Layout title="성적우수자 - 대치프라임" description="대치프라임 성적우수자 명단입니다.">
