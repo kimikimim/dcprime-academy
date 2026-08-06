@@ -45,6 +45,27 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
   const cache: Record<string, any[]> = {};
 
+  const DIVISION_ORDER = ['고등부', '중등부', '초등부'];
+  const SUBJECT_ORDER = ['수학', '영어', '국어', '과학'];
+
+  function groupNames(names: any[]) {
+    const groups = new Map<string, { division: string; subject: string; items: any[] }>();
+    for (const d of names) {
+      const division = d.division || '기타';
+      const subject = d.subject || '기타';
+      const key = `${division}||${subject}`;
+      if (!groups.has(key)) groups.set(key, { division, subject, items: [] });
+      groups.get(key)!.items.push(d);
+    }
+    const divIndex = (v: string) => { const i = DIVISION_ORDER.indexOf(v); return i === -1 ? DIVISION_ORDER.length : i; };
+    const subIndex = (v: string) => { const i = SUBJECT_ORDER.indexOf(v); return i === -1 ? SUBJECT_ORDER.length : i; };
+    return [...groups.values()].sort((a, b) => {
+      const dd = divIndex(a.division) - divIndex(b.division);
+      if (dd !== 0) return dd;
+      return subIndex(a.subject) - subIndex(b.subject);
+    });
+  }
+
   function maskName(name: string) {
     const n = String(name ?? '').trim();
     const len = n.length;
@@ -74,7 +95,7 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
     const { data, error } = await supabase
       .from('top_scorers')
-      .select('id, type, name, school, subject, grade, image_url')
+      .select('id, type, name, school, subject, grade, division, image_url')
       .eq('year', year)
       .eq('semester', semester)
       .eq('is_active', true)
@@ -118,25 +139,35 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
 
     if (names.length > 0) {
       nameArea.classList.remove('hidden');
-      const half = Math.ceil(names.length / 2);
-      const cols = [names.slice(0, half), names.slice(half)];
-      nameArea.innerHTML = `
-        <div class="grid grid-cols-2 gap-x-3 sm:gap-x-10">
-          ${cols.map(col => `
-            <table class="w-full text-xs sm:text-base border-t-2 border-gray-800">
-              <tbody>
-                ${col.map(d => `
-                  <tr class="border-b border-gray-100">
-                    <td class="py-2.5 sm:py-3.5 px-1.5 sm:px-3 text-center font-semibold text-gray-800 tracking-tight">
-                      ${[d.school, maskName(d.name), d.subject, d.grade].filter(Boolean).map(escHtml).join(' ')}
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `).join('')}
-        </div>
-      `;
+      const groups = groupNames(names);
+      nameArea.innerHTML = groups.map(g => {
+        const label = [g.division !== '기타' ? g.division : '', g.subject !== '기타' ? g.subject : '']
+          .filter(Boolean).join(' ') || '기타';
+        const half = Math.ceil(g.items.length / 2);
+        const cols = [g.items.slice(0, half), g.items.slice(half)];
+        return `
+          <div class="mb-10 last:mb-0">
+            <h3 class="inline-block bg-gray-800 text-white text-xs sm:text-sm font-bold px-3 py-1.5 rounded-sm mb-3">
+              ${escHtml(label)}
+            </h3>
+            <div class="grid grid-cols-2 gap-x-3 sm:gap-x-10">
+              ${cols.map(col => `
+                <table class="w-full text-xs sm:text-base border-t-2 border-gray-800">
+                  <tbody>
+                    ${col.map(d => `
+                      <tr class="border-b border-gray-100">
+                        <td class="py-2.5 sm:py-3.5 px-1.5 sm:px-3 text-center font-semibold text-gray-800 tracking-tight">
+                          ${[d.school, maskName(d.name), d.grade].filter(Boolean).map(escHtml).join(' ')}
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
   }
 
