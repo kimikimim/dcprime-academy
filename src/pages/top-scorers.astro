@@ -121,13 +121,13 @@ const TABS = YEARS.flatMap((y) => SEMESTERS.map((s) => ({ year: y, semester: s, 
       const half = Math.ceil(names.length / 2);
       const cols = [names.slice(0, half), names.slice(half)];
       nameArea.innerHTML = `
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10">
+        <div class="grid grid-cols-2 gap-x-3 sm:gap-x-10">
           ${cols.map(col => `
-            <table class="w-full text-base border-t-2 border-gray-800">
+            <table class="w-full text-xs sm:text-base border-t-2 border-gray-800">
               <tbody>
                 ${col.map(d => `
                   <tr class="border-b border-gray-100">
-                    <td class="py-3.5 px-3 text-center font-semibold text-gray-800 tracking-tight">
+                    <td class="py-2.5 sm:py-3.5 px-1.5 sm:px-3 text-center font-semibold text-gray-800 tracking-tight">
                       ${[d.school, maskName(d.name), d.subject, d.grade].filter(Boolean).map(escHtml).join(' ')}
                     </td>
                   </tr>
