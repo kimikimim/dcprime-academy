@@ -602,7 +602,7 @@ import Layout from '../components/layout/Layout.astro';
     columns: [string, (r: any) => any][];
   }[] = [
     {
-      key: 'high3', label: '고3 면접대비 상담 신청', table: 'high3_consults', order: 'created_at',
+      key: 'high3', label: '고3 면접대비 상담 신청', table: 'high3_consults', order: 'created_at', canReset: true,
       columns: [
         ['신청일시', r => fmtDateTime(r.created_at)],
         ['학생 이름', r => r.name],
@@ -615,7 +615,7 @@ import Layout from '../components/layout/Layout.astro';
       ],
     },
     {
-      key: 'ques', label: '대입 전략 진단', table: 'diagnosis_logs', order: 'created_at',
+      key: 'ques', label: '대입 전략 진단', table: 'diagnosis_logs', order: 'created_at', canReset: true,
       columns: [
         ['일시', r => fmtDateTime(r.created_at)],
         ['내신등급', r => r.path?.answers?.gpa],
