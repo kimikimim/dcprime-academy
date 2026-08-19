@@ -602,15 +602,14 @@ import Layout from '../components/layout/Layout.astro';
     columns: [string, (r: any) => any][];
   }[] = [
     {
-      key: 'high3', label: '고3 상담 신청', table: 'high3_consults', order: 'created_at',
+      key: 'high3', label: '고3 면접대비 상담 신청', table: 'high3_consults', order: 'created_at',
       columns: [
         ['신청일시', r => fmtDateTime(r.created_at)],
-        ['이름', r => r.name],
+        ['학생 이름', r => r.name],
         ['연락처', r => r.phone],
-        ['학교/유형', r => r.school],
-        ['관심 프로그램', r => r.interest_program],
-        ['진단 결과', r => r.diagnostic_result],
-        ['문의사항', r => r.memo],
+        ['재학 학교 및 고교유형', r => r.school],
+        ['희망 트랙', r => r.interest_program],
+        ['기타 문의사항', r => r.memo],
         ['개인정보 동의', r => (r.agree_privacy ? 'Y' : 'N')],
         ['상태', r => r.status],
       ],
