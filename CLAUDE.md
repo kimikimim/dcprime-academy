@@ -77,6 +77,7 @@ src/
 - **프로젝트 ID**: `smnakhjdtbqgwocwlluz`
 - **URL**: `https://smnakhjdtbqgwocwlluz.supabase.co`
 - 이 프로젝트는 Claude Code에 연결된 Supabase MCP 계정 소유가 아니므로, SQL은 **Supabase SQL Editor에 직접 붙여넣어 수동 실행**해야 함 (MCP로 원격 실행 불가)
+- 같은 DB를 별도 레포 `kimikimim/dcprime-students`(교직원 전용 재원생 관리, students.dcprime.co.kr)와 공유해서 씀 — 그 레포는 `staff_` 접두사 테이블(`staff_students`, `staff_config`)만 사용하므로, 이 레포에서 새 테이블 만들 때 `staff_`로 시작하는 이름은 피할 것
 
 ### 테이블 목록
 
