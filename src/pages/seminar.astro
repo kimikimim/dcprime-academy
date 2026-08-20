@@ -241,13 +241,19 @@ const strengths = [
                         </div>
 
                         <div class="mt-6 rounded-xl border border-blue-100 divide-y divide-blue-100 overflow-hidden">
-                            <div class="flex items-center gap-3 px-5 py-3.5 bg-blue-50/60">
-                                <span class="text-blue-900 font-bold text-sm shrink-0">📍 장곡관</span>
-                                <span class="text-gray-700 text-sm">8월 28일(금) 오후 7:00</span>
+                            <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-blue-50/60">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-blue-900 font-bold text-sm shrink-0">📍 장곡관</span>
+                                    <span class="text-gray-700 text-sm">8월 28일(금) 오후 7:00</span>
+                                </div>
+                                <span class="bg-red-100 text-red-600 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">마감임박</span>
                             </div>
-                            <div class="flex items-center gap-3 px-5 py-3.5 bg-blue-50/60">
-                                <span class="text-blue-900 font-bold text-sm shrink-0">📍 능곡관</span>
-                                <span class="text-gray-700 text-sm">8월 29일(토) 오후 2:00</span>
+                            <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-gray-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-500 font-bold text-sm shrink-0">📍 능곡관</span>
+                                    <span class="text-gray-400 text-sm">8월 29일(토) 오후 2:00</span>
+                                </div>
+                                <span class="bg-gray-300 text-gray-700 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">예약마감 · 대기접수중</span>
                             </div>
                         </div>
                     </div>
@@ -505,16 +511,22 @@ const strengths = [
 
                 <div class="space-y-4 mb-10">
                     <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
-                        <h4 class="text-xl font-bold text-white flex items-center mb-2">
-                            <span class="text-2xl mr-2">📍</span> 장곡관
-                        </h4>
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xl font-bold text-white flex items-center">
+                                <span class="text-2xl mr-2">📍</span> 장곡관
+                            </h4>
+                            <span class="bg-red-500/20 text-red-300 text-xs font-bold px-2.5 py-1 rounded-full border border-red-500/30">마감임박</span>
+                        </div>
                         <p class="text-gray-300 text-lg ml-8">8월 28일 (금) 오후 7:00</p>
                     </div>
-                    <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
-                        <h4 class="text-xl font-bold text-white flex items-center mb-2">
-                            <span class="text-2xl mr-2">📍</span> 능곡관
-                        </h4>
-                        <p class="text-gray-300 text-lg ml-8">8월 29일 (토) 오후 2:00</p>
+                    <div class="bg-gray-800/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xl font-bold text-gray-400 flex items-center">
+                                <span class="text-2xl mr-2">📍</span> 능곡관
+                            </h4>
+                            <span class="bg-gray-600/40 text-gray-300 text-xs font-bold px-2.5 py-1 rounded-full border border-gray-500/30">예약마감 · 대기접수중</span>
+                        </div>
+                        <p class="text-gray-500 text-lg ml-8">8월 29일 (토) 오후 2:00</p>
                     </div>
                 </div>
 
@@ -574,15 +586,15 @@ const strengths = [
                             <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
                                 <input type="radio" name="selectedSeminar" value="장곡관 (8/28)" required class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
                                 <div>
-                                    <span class="text-sm font-bold text-gray-800 block">[장곡관] 고교선택 설명회</span>
+                                    <span class="text-sm font-bold text-gray-800 block">[장곡관] 고교선택 설명회 <span class="text-red-500">· 마감임박</span></span>
                                     <span class="text-xs text-gray-500 block mt-0.5">8월 28일(금) 오후 7:00</span>
                                 </div>
                             </label>
                             <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
-                                <input type="radio" name="selectedSeminar" value="능곡관 (8/29)" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                                <input type="radio" name="selectedSeminar" value="능곡관 (8/29) - 대기" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
                                 <div>
-                                    <span class="text-sm font-bold text-gray-800 block">[능곡관] 고교선택 설명회</span>
-                                    <span class="text-xs text-gray-500 block mt-0.5">8월 29일(토) 오후 2:00</span>
+                                    <span class="text-sm font-bold text-gray-800 block">[능곡관] 대기 신청 <span class="text-gray-500">· 좌석 마감</span></span>
+                                    <span class="text-xs text-gray-500 block mt-0.5">8월 29일(토) 오후 2:00 · 예약 마감, 대기자로 접수됩니다</span>
                                 </div>
                             </label>
                         </div>
