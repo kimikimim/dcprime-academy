@@ -80,9 +80,9 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
     const emptyEl = document.getElementById('empty-msg')!;
     const isExec  = division === '임원진';
 
-    const filtered = allFaculty
-      .filter(f => Array.isArray(f.divisions) && f.divisions.includes(division))
-      .sort((division === '입시와대치' || division === '임원진') ? roleSort : koreanSort);
+    // 임원진은 DB sort_order를 그대로 유지 (수동 배치), 입시와대치는 직책순, 나머지는 가나다순
+    const list = allFaculty.filter(f => Array.isArray(f.divisions) && f.divisions.includes(division));
+    const filtered = isExec ? list : list.sort(division === '입시와대치' ? roleSort : koreanSort);
 
     if (filtered.length === 0) {
       grid.classList.add('hidden');
