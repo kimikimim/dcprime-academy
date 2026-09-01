@@ -1,5 +1,29 @@
 ---
 import SectionTitle from '../ui/SectionTitle.astro';
+
+const executives = [
+  {
+    name: '신성호',
+    role: '원장',
+    image: 'https://smnakhjdtbqgwocwlluz.supabase.co/storage/v1/object/public/faculty-images/1783693029191.png',
+    tagline: '입시컨설턴트',
+    detail: '학원 전략 책임자',
+  },
+  {
+    name: '김응태',
+    role: '총원장',
+    image: 'https://smnakhjdtbqgwocwlluz.supabase.co/storage/v1/object/public/faculty-images/1783693163322.png',
+    tagline: '전 강남구청인강 대표강사',
+    detail: '송도 이명학원 과학원장 겸임',
+  },
+  {
+    name: '박주원',
+    role: '부원장',
+    image: 'https://smnakhjdtbqgwocwlluz.supabase.co/storage/v1/object/public/faculty-images/1785314795318.png',
+    tagline: '중등 최상위 수학',
+    detail: '고등 수학',
+  },
+];
 ---
 
 <section class="py-16 md:py-24 bg-gray-50">
@@ -9,24 +33,14 @@ import SectionTitle from '../ui/SectionTitle.astro';
       subtitle="강사소개"
     />
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
-        <img src="/images/faculty-placeholder-1.jpg" alt="강사" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" />
-        <h3 class="text-base font-bold text-gray-900 mb-1">수학 전문 강사</h3>
-        <p class="text-sm text-brand mb-2">수학 킬러 문항 전문</p>
-        <p class="text-sm text-gray-500">내용 준비 중</p>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
-        <img src="/images/faculty-placeholder-2.jpg" alt="강사" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" />
-        <h3 class="text-base font-bold text-gray-900 mb-1">국어 전문 강사</h3>
-        <p class="text-sm text-brand mb-2">국어 비문학 전문</p>
-        <p class="text-sm text-gray-500">내용 준비 중</p>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
-        <img src="/images/faculty-placeholder-3.jpg" alt="강사" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" />
-        <h3 class="text-base font-bold text-gray-900 mb-1">영어 전문 강사</h3>
-        <p class="text-sm text-brand mb-2">영어 절대평가 전문</p>
-        <p class="text-sm text-gray-500">내용 준비 중</p>
-      </div>
+      {executives.map((e) => (
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+          <img src={e.image} alt={e.name} class="w-24 h-24 rounded-full mx-auto mb-4 object-cover object-top" />
+          <h3 class="text-base font-bold text-gray-900 mb-1">{e.name} {e.role}</h3>
+          <p class="text-sm text-brand mb-2">{e.tagline}</p>
+          <p class="text-sm text-gray-500">{e.detail}</p>
+        </div>
+      ))}
     </div>
     <div class="text-center mt-8">
       <a href="/faculty" class="inline-block border border-gray-300 text-gray-700 text-sm font-semibold px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-all">
