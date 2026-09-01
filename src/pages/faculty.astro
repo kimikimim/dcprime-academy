@@ -1,7 +1,7 @@
 ---
 import Layout from '../components/layout/Layout.astro';
 
-const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
+const divisions = ['임원진', '초등부', '중등부', '고등부', '입시와대치'];
 ---
 
 <Layout title="강사소개 - 대치프라임" description="대치프라임 강사진을 소개합니다.">
@@ -57,7 +57,7 @@ const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
   };
 
   let allFaculty: any[] = [];
-  let currentDivision = '초등부';
+  let currentDivision = '임원진';
 
   function koreanSort(a: any, b: any) {
     return a.name.localeCompare(b.name, 'ko');
@@ -70,7 +70,7 @@ const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
 
     const filtered = allFaculty
       .filter(f => Array.isArray(f.divisions) && f.divisions.includes(division))
-      .sort(division === '입시와대치' ? roleSort : koreanSort);
+      .sort((division === '입시와대치' || division === '임원진') ? roleSort : koreanSort);
 
     if (filtered.length === 0) {
       grid.classList.add('hidden');
@@ -81,7 +81,7 @@ const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
     emptyEl.classList.add('hidden');
     grid.classList.remove('hidden');
     grid.innerHTML = filtered.map(f => {
-      const label = (division === '입시와대치' && f.role) ? f.role : f.subject;
+      const label = ((division === '입시와대치' || division === '임원진') && f.role) ? f.role : f.subject;
       const color = subjectColors[label] ?? 'text-gray-500';
       return `
         <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
@@ -133,7 +133,7 @@ const divisions = ['초등부', '중등부', '고등부', '입시와대치'];
     }
 
     allFaculty = data;
-    renderCards('초등부');
+    renderCards('임원진');
 
     // 탭 이벤트
     const tabs = document.querySelectorAll<HTMLButtonElement>('.division-tab');
