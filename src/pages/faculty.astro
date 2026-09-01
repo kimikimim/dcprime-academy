@@ -35,7 +35,7 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
 
     <div class="container mx-auto px-4 py-10">
       <div id="loading" class="text-center py-24 text-gray-400 text-sm">불러오는 중...</div>
-      <div id="faculty-grid" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"></div>
+      <div id="faculty-grid" class="hidden grid gap-4 max-w-4xl mx-auto"></div>
       <div id="empty-msg" class="hidden text-center py-20 text-gray-400 text-sm">해당 학부 강사 정보를 준비 중입니다.</div>
     </div>
 
@@ -51,6 +51,7 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
     '과학': 'text-orange-500',
     '국어': 'text-brand',
     '탐독': 'text-purple-500',
+    '총원장': 'text-brand-dark',
     '원장': 'text-gray-900',
     '부원장': 'text-gray-700',
     '연구원': 'text-gray-500',
@@ -63,10 +64,21 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
     return a.name.localeCompare(b.name, 'ko');
   }
 
+  function bioList(bio: string) {
+    const lines = String(bio ?? '').split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(Boolean);
+    if (lines.length === 0) return '';
+    return `
+      <ul class="mt-3 pt-3 border-t border-gray-100 space-y-1">
+        ${lines.map(l => `<li class="text-xs text-gray-500 leading-relaxed pl-3 relative before:content-['-'] before:absolute before:left-0 before:text-gray-300">${esc(l)}</li>`).join('')}
+      </ul>
+    `;
+  }
+
   function renderCards(division: string) {
     currentDivision = division;
     const grid    = document.getElementById('faculty-grid')!;
     const emptyEl = document.getElementById('empty-msg')!;
+    const isExec  = division === '임원진';
 
     const filtered = allFaculty
       .filter(f => Array.isArray(f.divisions) && f.divisions.includes(division))
@@ -80,6 +92,10 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
 
     emptyEl.classList.add('hidden');
     grid.classList.remove('hidden');
+    grid.className = isExec
+      ? 'grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto'
+      : 'grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto';
+
     grid.innerHTML = filtered.map(f => {
       const label = ((division === '입시와대치' || division === '임원진') && f.role) ? f.role : f.subject;
       const color = subjectColors[label] ?? 'text-gray-500';
@@ -94,18 +110,19 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
           </div>
-          <div class="px-4 py-3">
-            <p class="text-xs font-semibold mb-0.5 ${color}">${esc(label)}</p>
-            <p class="text-sm font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
+          <div class="${isExec ? 'px-5 py-4' : 'px-4 py-3'}">
+            <p class="${isExec ? 'text-sm' : 'text-xs'} font-semibold mb-0.5 ${color}">${esc(label)}</p>
+            <p class="${isExec ? 'text-base' : 'text-sm'} font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
             <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
+            ${isExec ? bioList(f.bio) : ''}
           </div>
         </div>
       `;
     }).join('');
   }
 
-  // 입시와대치는 원장 > 부원장 > 연구원 순
-  const roleOrder: Record<string, number> = { '원장': 0, '부원장': 1, '연구원': 2 };
+  // 입시와대치/임원진은 총원장 > 원장 > 부원장 > 연구원 순
+  const roleOrder: Record<string, number> = { '총원장': 0, '원장': 1, '부원장': 2, '연구원': 3 };
   function roleSort(a: any, b: any) {
     const ra = roleOrder[a.role] ?? 9;
     const rb = roleOrder[b.role] ?? 9;

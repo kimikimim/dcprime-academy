@@ -329,7 +329,8 @@ import Layout from '../components/layout/Layout.astro';
                 <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="입시와대치" /> 입시와대치</label>
               </div>
             </div>
-            <input id="faculty-role-input" type="text" placeholder="직책 (입시와대치만 해당: 원장/부원장/연구원)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <input id="faculty-role-input" type="text" placeholder="직책 (임원진/입시와대치만 해당: 총원장/원장/부원장/연구원)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <textarea id="faculty-bio-input" rows="3" placeholder="약력 (임원진 카드 하단에 표시. 한 줄에 하나씩 입력하면 자동으로 불릿 처리됩니다)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
             <div class="mb-4">
               <p class="text-xs text-gray-500 mb-2">프로필 사진</p>
               <input type="file" id="faculty-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
@@ -1027,6 +1028,7 @@ import Layout from '../components/layout/Layout.astro';
     (document.getElementById('faculty-name-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-motto-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-role-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = '';
     (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = '수학';
     (document.getElementById('faculty-image-input') as HTMLInputElement).value = '';
     document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => cb.checked = false);
@@ -1237,6 +1239,7 @@ import Layout from '../components/layout/Layout.astro';
         (document.getElementById('faculty-name-input') as HTMLInputElement).value = btn.dataset.name ?? '';
         (document.getElementById('faculty-motto-input') as HTMLInputElement).value = btn.dataset.motto ?? '';
         (document.getElementById('faculty-role-input') as HTMLInputElement).value = btn.dataset.role ?? '';
+        (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = data.find((x: any) => x.id === facultyEditId)?.bio ?? '';
         (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = btn.dataset.subject ?? '수학';
         const divs: string[] = JSON.parse(btn.dataset.divisions ?? '[]');
         document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => {
@@ -1277,6 +1280,7 @@ import Layout from '../components/layout/Layout.astro';
     const subject = (document.getElementById('faculty-subject-input') as HTMLSelectElement).value;
     const motto   = (document.getElementById('faculty-motto-input') as HTMLInputElement).value.trim();
     const role    = (document.getElementById('faculty-role-input') as HTMLInputElement).value.trim();
+    const bio     = (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value.trim();
     const divisions = Array.from(document.querySelectorAll<HTMLInputElement>('.faculty-div-check:checked')).map(cb => cb.value);
     const fileInput = document.getElementById('faculty-image-input') as HTMLInputElement;
     const file    = fileInput.files?.[0];
@@ -1301,11 +1305,11 @@ import Layout from '../components/layout/Layout.astro';
 
     let error;
     if (facultyEditId) {
-      const updateData: any = { name, subject, motto, role, divisions };
+      const updateData: any = { name, subject, motto, role, bio, divisions };
       if (image_url) updateData.image_url = image_url;
       ({ error } = await supabase.from('faculty').update(updateData).eq('id', facultyEditId));
     } else {
-      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, role, divisions, image_url: image_url ?? '' }));
+      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, role, bio, divisions, image_url: image_url ?? '' }));
     }
 
     btn.disabled = false;
