@@ -134,12 +134,19 @@ const strengths = [
     <!-- 1.5. 설명회 포스터 -->
     <section class="py-16 px-4 bg-gray-50">
         <div class="max-w-md mx-auto relative rounded-2xl overflow-hidden shadow-xl">
-            <img src="/images/seminar-poster-2.jpg" alt="대치프라임 2026 예비고1 고교선택 설명회 포스터" class="w-full h-auto block" />
-            <div class="absolute -right-4 -top-4 w-44 h-44 sm:w-56 sm:h-56 overflow-hidden pointer-events-none">
-                <span class="absolute top-[28%] right-[-34%] w-[190%] rotate-45 bg-red-600 text-white text-center font-extrabold text-2xl sm:text-4xl py-3 sm:py-4 shadow-lg animate-pulse">
-                    🔥 마감임박
+            <img src="/images/seminar-poster-2nd.jpg" alt="대치프라임 2026 예비고1 고교선택 설명회 2차 포스터" class="w-full h-auto block" />
+            <div class="absolute -right-4 -top-4 w-36 h-36 sm:w-44 sm:h-44 overflow-hidden pointer-events-none">
+                <span class="absolute top-[30%] right-[-34%] w-[190%] rotate-45 bg-red-600 text-white text-center font-extrabold text-lg sm:text-2xl py-2.5 sm:py-3 shadow-lg animate-pulse">
+                    각 25명 한정
                 </span>
             </div>
+        </div>
+        <div class="max-w-md mx-auto mt-4">
+            <a href="https://blog.naver.com/dcprime/224399658787" target="_blank" rel="noopener noreferrer"
+               class="flex items-center justify-between gap-3 bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-blue-300 hover:shadow-md transition">
+                <span class="text-sm text-gray-700"><strong class="text-blue-700">지난 설명회 리뷰</strong> 보러가기 — 실제 참석 후기를 확인하세요</span>
+                <span class="text-blue-600 text-lg shrink-0">→</span>
+            </a>
         </div>
     </section>
 
@@ -193,27 +200,20 @@ const strengths = [
                 <h3 class="text-3xl font-bold text-gray-900 mt-2 break-keep">대치프라임 하반기 3단계 고교선택 로드맵</h3>
             </div>
 
-            <!-- Tab Buttons -->
-            <div class="flex flex-wrap justify-center gap-2 mb-12">
-                <button id="btn-tab1" data-tab="tab1" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-blue-600 text-white shadow-md">
-                    STEP 1. 고교선택 설명회 (8월)
-                </button>
-                <button id="btn-tab2" data-tab="tab2" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-white text-gray-600 hover:bg-gray-200 shadow-sm">
-                    STEP 2. 고교선택 진단평가 (9월·11월)
-                </button>
-                <button id="btn-tab3" data-tab="tab3" class="tab-btn px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-white text-gray-600 hover:bg-gray-200 shadow-sm">
-                    STEP 3. 고교선택 간담회 (12월)
-                </button>
+            <!-- Step 1 -->
+            <div class="flex justify-center mb-6">
+                <span class="px-6 py-3 rounded-full font-bold text-sm bg-blue-600 text-white shadow-md">
+                    STEP 1. 고교선택 설명회 (11월)
+                </span>
             </div>
-
-            <!-- Tab 1: 설명회 -->
-            <div id="tab1-content" class="tab-pane block">
+            <div id="tab1-content" class="tab-pane block mb-16">
                 <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     <div class="lg:col-span-6">
                         <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">학부모 대상 대형 입시 설명회</span>
                         <h4 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-4 mb-4 break-keep">카더라 너머, 시흥 관내 고교의 실질 데이터 분석 3부작</h4>
                         <p class="text-gray-600 leading-relaxed mb-6 text-sm break-keep">
-                            단순한 대입 제도 요약을 넘어 시흥 관내 주요 고교(장곡, 능곡, 시흥, 소래, 함현고 등)의 고교학점제 선택 과목 개설 역량 및 최근 서울권 대입 실적의 특징을 철저하게 해부해 드립니다.
+                            단순한 대입 제도 요약을 넘어 시흥 관내 주요 고교(장곡, 능곡, 시흥, 소래, 함현고 등)의 고교학점제 선택 과목 개설 역량 및 최근 서울권 대입 실적의 특징을 철저하게 해부해 드립니다.<br /><br />
+                            이번 2차 설명회는 그사이에 업데이트된 각 학교의 최근 입시실적(공시) 및 아이들의 더 다채로운 후기를 들려드립니다.
                         </p>
 
                         <div class="space-y-4 border-t border-gray-100 pt-6">
@@ -244,16 +244,16 @@ const strengths = [
                             <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-blue-50/60">
                                 <div class="flex items-center gap-3">
                                     <span class="text-blue-900 font-bold text-sm shrink-0">📍 장곡관</span>
-                                    <span class="text-gray-700 text-sm">8월 28일(금) 오후 7:00</span>
+                                    <span class="text-gray-700 text-sm">11월 20일(금) 오후 2:00</span>
                                 </div>
-                                <span class="bg-red-100 text-red-600 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">마감임박</span>
+                                <span class="bg-red-100 text-red-600 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">선착순 25명</span>
                             </div>
-                            <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-gray-100">
+                            <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-blue-50/60">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-gray-500 font-bold text-sm shrink-0">📍 능곡관</span>
-                                    <span class="text-gray-400 text-sm">8월 29일(토) 오후 2:00</span>
+                                    <span class="text-blue-900 font-bold text-sm shrink-0">📍 능곡관</span>
+                                    <span class="text-gray-700 text-sm">11월 20일(금) 오후 7:00</span>
                                 </div>
-                                <span class="bg-gray-300 text-gray-700 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">신청 마감</span>
+                                <span class="bg-red-100 text-red-600 text-[11px] font-bold px-2 py-1 rounded-full shrink-0">선착순 25명</span>
                             </div>
                         </div>
                     </div>
@@ -269,7 +269,7 @@ const strengths = [
                         <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
                             <h5 class="font-bold text-gray-900 mb-1.5 text-sm">🎁 설명회 한정 특별 혜택</h5>
                             <p class="text-xs text-gray-600 leading-relaxed mb-3 break-keep">
-                                <strong>참석자 전원 100% 증정:</strong> 2027학년도 시흥 예비고1 고교선택 핵심 분석 가이드북 (고교별 과목 편제 일람표 수록)
+                                <strong>참석자 전원 증정:</strong> 능곡·장곡·시흥·함현·디미고 등 대치프라임 재원생들의 본인 학교에 대한 살아있는 후기 및 교육과정편제표, 학원 머천다이즈 상품(필기구·컵)
                             </p>
                             <a href="#reservation" class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs transition">설명회 좌석 예약 바로가기</a>
                         </div>
@@ -277,8 +277,13 @@ const strengths = [
                 </div>
             </div>
 
-            <!-- Tab 2: 진단평가 -->
-            <div id="tab2-content" class="tab-pane hidden">
+            <!-- Step 2 -->
+            <div class="flex justify-center mb-6">
+                <span class="px-6 py-3 rounded-full font-bold text-sm bg-blue-600 text-white shadow-md">
+                    STEP 2. 고교선택 진단평가 (9월·11월)
+                </span>
+            </div>
+            <div id="tab2-content" class="tab-pane block mb-16">
                 <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     <div class="lg:col-span-5">
                         <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">현 중3 학생 대상 진단평가</span>
@@ -291,7 +296,7 @@ const strengths = [
                             <div>
                                 <h5 class="font-bold text-gray-900 text-sm mb-1">📅 평가 일정</h5>
                                 <ul class="text-xs text-gray-500 space-y-1">
-                                    <li>• <strong class="text-gray-700">1차 진단평가:</strong> 9월 4일(금) ~ 9월 6일(일) (택 1회)</li>
+                                    <li>• <strong class="text-gray-700">1차 진단평가:</strong> 9월 4일(금) ~ 9월 6일(일) (완료)</li>
                                     <li>• <strong class="text-gray-700">2차 진단평가:</strong> 11월 27일(금) ~ 11월 29일(일) (예정)</li>
                                 </ul>
                             </div>
@@ -360,8 +365,13 @@ const strengths = [
                 </div>
             </div>
 
-            <!-- Tab 3: 간담회 -->
-            <div id="tab3-content" class="tab-pane hidden">
+            <!-- Step 3 -->
+            <div class="flex justify-center mb-6">
+                <span class="px-6 py-3 rounded-full font-bold text-sm bg-blue-600 text-white shadow-md">
+                    STEP 3. 고교선택 간담회 (12월)
+                </span>
+            </div>
+            <div id="tab3-content" class="tab-pane block">
                 <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     <div class="lg:col-span-6">
                         <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded">대치프라임 재원생 및 학부모</span>
@@ -389,6 +399,9 @@ const strengths = [
                     </div>
 
                     <div class="lg:col-span-6 space-y-6">
+                        <div class="rounded-2xl overflow-hidden shadow-md border border-gray-100">
+                            <img src="/images/seminar-alumni-talk.jpg" alt="대치프라임 예비고1 고교선택 재원생 간담회 포스터" class="w-full h-auto block" />
+                        </div>
                         <div class="relative rounded-2xl overflow-hidden shadow-md" style="height:13rem;">
                             <img src="/images/hero-seminar.jpg" alt="지난 예비고1 선배 간담회 모습" class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-5">
@@ -505,8 +518,8 @@ const strengths = [
             <!-- 좌측: 일정 안내 -->
             <div class="lg:sticky lg:top-24">
                 <h3 class="text-3xl md:text-4xl font-extrabold mb-8 text-white break-keep">
-                    한정된 좌석으로<br />
-                    <span class="text-yellow-400">조기 마감</span>될 수 있습니다.
+                    각 회차 <span class="text-yellow-400">25명 한정</span>,<br />
+                    조기 마감될 수 있습니다.
                 </h3>
 
                 <div class="space-y-4 mb-10">
@@ -515,18 +528,18 @@ const strengths = [
                             <h4 class="text-xl font-bold text-white flex items-center">
                                 <span class="text-2xl mr-2">📍</span> 장곡관
                             </h4>
-                            <span class="bg-red-500/20 text-red-300 text-xs font-bold px-2.5 py-1 rounded-full border border-red-500/30">마감임박</span>
+                            <span class="bg-red-500/20 text-red-300 text-xs font-bold px-2.5 py-1 rounded-full border border-red-500/30">선착순 25명</span>
                         </div>
-                        <p class="text-gray-300 text-lg ml-8">8월 28일 (금) 오후 7:00</p>
+                        <p class="text-gray-300 text-lg ml-8">11월 20일 (금) 오후 2:00</p>
                     </div>
-                    <div class="bg-gray-800/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700">
+                    <div class="bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-yellow-400/50 transition duration-300">
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-xl font-bold text-gray-400 flex items-center">
+                            <h4 class="text-xl font-bold text-white flex items-center">
                                 <span class="text-2xl mr-2">📍</span> 능곡관
                             </h4>
-                            <span class="bg-gray-600/40 text-gray-300 text-xs font-bold px-2.5 py-1 rounded-full border border-gray-500/30">신청 마감</span>
+                            <span class="bg-red-500/20 text-red-300 text-xs font-bold px-2.5 py-1 rounded-full border border-red-500/30">선착순 25명</span>
                         </div>
-                        <p class="text-gray-500 text-lg ml-8">8월 29일 (토) 오후 2:00</p>
+                        <p class="text-gray-300 text-lg ml-8">11월 20일 (금) 오후 7:00</p>
                     </div>
                 </div>
 
@@ -538,7 +551,11 @@ const strengths = [
                     <ul class="text-blue-100 space-y-3 font-medium">
                         <li class="flex items-start">
                             <span class="mr-2 text-yellow-400">✓</span>
-                            <span class="break-keep">2027학년도 시흥 예비고1 고교선택 핵심 분석 가이드북 (고교별 과목 편제 일람표 수록) 100% 증정</span>
+                            <span class="break-keep">능곡·장곡·시흥·함현·디미고 등 대치프라임 재원생들의 본인 학교에 대한 살아있는 후기 및 교육과정편제표</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-yellow-400">✓</span>
+                            <span class="break-keep">학원 머천다이즈 상품(필기구·컵) 증정</span>
                         </li>
                     </ul>
                 </div>
@@ -584,17 +601,17 @@ const strengths = [
                         <label class="block text-sm font-bold text-gray-700 mb-3">설명회 일정 선택 (택 1) <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
-                                <input type="radio" name="selectedSeminar" value="장곡관 (8/28)" required checked class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                                <input type="radio" name="selectedSeminar" value="장곡관 (11/20 14:00)" required checked class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
                                 <div>
-                                    <span class="text-sm font-bold text-gray-800 block">[장곡관] 고교선택 설명회 <span class="text-red-500">· 마감임박</span></span>
-                                    <span class="text-xs text-gray-500 block mt-0.5">8월 28일(금) 오후 7:00</span>
+                                    <span class="text-sm font-bold text-gray-800 block">[장곡관] 고교선택 설명회 <span class="text-red-500">· 선착순 25명</span></span>
+                                    <span class="text-xs text-gray-500 block mt-0.5">11월 20일(금) 오후 2:00</span>
                                 </div>
                             </label>
-                            <label class="relative flex items-start gap-3 p-4 rounded-xl border border-gray-200 opacity-50 cursor-not-allowed">
-                                <input type="radio" name="selectedSeminar" value="능곡관 (8/29)" disabled class="mt-1 h-4 w-4 text-gray-400" />
+                            <label class="relative flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 border border-gray-200 transition cursor-pointer">
+                                <input type="radio" name="selectedSeminar" value="능곡관 (11/20 19:00)" class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" />
                                 <div>
-                                    <span class="text-sm font-bold text-gray-500 block">[능곡관] 신청 마감</span>
-                                    <span class="text-xs text-gray-400 block mt-0.5">8월 29일(토) 오후 2:00 · 인원 초과로 신청이 마감되었습니다</span>
+                                    <span class="text-sm font-bold text-gray-800 block">[능곡관] 고교선택 설명회 <span class="text-red-500">· 선착순 25명</span></span>
+                                    <span class="text-xs text-gray-500 block mt-0.5">11월 20일(금) 오후 7:00</span>
                                 </div>
                             </label>
                         </div>
@@ -653,40 +670,10 @@ const strengths = [
     <script>
         import { supabase } from '../lib/supabase';
 
-        // ── 탭 전환 ──
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabPanes = document.querySelectorAll('.tab-pane');
-
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
-
-                tabPanes.forEach(pane => {
-                    pane.classList.add('hidden');
-                    pane.classList.remove('block');
-                });
-
-                const targetPane = document.getElementById(`${tabId}-content`);
-                if (targetPane) {
-                    targetPane.classList.remove('hidden');
-                    targetPane.classList.add('block');
-                }
-
-                tabButtons.forEach(button => {
-                    button.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-                    button.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-200', 'shadow-sm');
-                });
-
-                btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-200', 'shadow-sm');
-                btn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-            });
-        });
-
-        // ── "나에게 어울리는 고교는?" → 진단평가(tab2)로 이동 ──
+        // ── "나에게 어울리는 고교는?" → 진단평가(STEP 2) 섹션으로 스크롤 ──
         const navigateBtn = document.getElementById('navigate-to-diagnostic');
         navigateBtn?.addEventListener('click', () => {
-            (document.getElementById('btn-tab2') as HTMLButtonElement | null)?.click();
-            document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('tab2-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         // ── 예약 폼 ──
