@@ -86,11 +86,11 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
             <p class="text-sm text-gray-500">매회 같은 방식을 반복하지 않고, 회차마다 압박 강도를 높여가는 체계형 커리큘럼</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-brand">
                 <span class="inline-block px-2.5 py-1 rounded text-xs font-bold bg-brand-light text-brand-dark mb-4">전 지원자 필수 · 핵심 프로그램</span>
-                <h3 class="text-lg font-bold text-gray-900 mb-1 pb-4 border-b border-gray-100">Track A. 정규 1:1 심화 (5+1회)</h3>
-                <p class="text-xs text-gray-500 mt-4 mb-3"><strong class="text-gray-700">일정 :</strong> 주 1회 · 80분 (정규 5회 + 마무리 1회)</p>
+                <h3 class="text-lg font-bold text-gray-900 mb-1 pb-4 border-b border-gray-100">Track A. 정규 1:1 심화</h3>
+                <p class="text-xs text-gray-500 mt-4 mb-3"><strong class="text-gray-700">일정 :</strong> 주 1회 · 80분</p>
                 <ul class="space-y-2 text-sm text-gray-600">
                     <li class="flex gap-2"><span class="text-brand font-bold">·</span>80분 3단계 동선 — 원장 1:1 지도 30분 → 자율 수정 20분 → 튜터 1:1 실전 연습 30분</li>
                     <li class="flex gap-2"><span class="text-brand font-bold">·</span>회차마다 난도 상승 — 공통질문 → 개별질문 → 결합 → 꼬리질문 압박 → 심화 방어</li>
@@ -106,17 +106,6 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
                     <li class="flex gap-2"><span class="text-rose-400 font-bold">·</span>원장 + 튜터 2인이 실제 면접관으로 동석</li>
                     <li class="flex gap-2"><span class="text-rose-400 font-bold">·</span>10~15분 실전 면접(전 과정 녹음·녹화) + 15분 즉각 강평</li>
                     <li class="flex gap-2"><span class="text-rose-400 font-bold">·</span>수험번호 확인부터 마무리까지 실전과 동일한 흐름으로 진행</li>
-                </ul>
-            </div>
-
-            <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-emerald-400">
-                <span class="inline-block px-2.5 py-1 rounded text-xs font-bold bg-emerald-50 text-emerald-600 mb-4">정규 마무리 세션 · 자신감 강화</span>
-                <h3 class="text-lg font-bold text-gray-900 mb-1 pb-4 border-b border-gray-100">Track C. 안정감 리허설 (6회차)</h3>
-                <p class="text-xs text-gray-500 mt-4 mb-3"><strong class="text-gray-700">일정 :</strong> 정규 6회차 · 80분</p>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex gap-2"><span class="text-emerald-400 font-bold">·</span>압박 대신 장점을 극대화하는 코칭으로 전환</li>
-                    <li class="flex gap-2"><span class="text-emerald-400 font-bold">·</span>본인이 가장 자신 있는 핵심 질문 5개로 마무리 점검</li>
-                    <li class="flex gap-2"><span class="text-emerald-400 font-bold">·</span>고사장 입퇴실, 인사 예절까지 실전 감각 최종 확립</li>
                 </ul>
             </div>
         </div>
@@ -210,20 +199,9 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-2" for="school">재학 학교 및 고교유형</label>
-                        <input type="text" id="school" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-colors" placeholder="예: 능곡고 (일반고)" />
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-2" for="interest-program">희망 트랙</label>
-                        <select id="interest-program" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-colors">
-                            <option value="">-- 트랙 선택 (선택 안함시 전체상담) --</option>
-                            <option value="Track A. 정규 1:1 심화 (5+1회)">Track A. 정규 1:1 심화 (5+1회)</option>
-                            <option value="Track B. 실전 모의면접">Track B. 실전 모의면접</option>
-                            <option value="Track C. 안정감 리허설 (6회차)">Track C. 안정감 리허설 (6회차)</option>
-                        </select>
-                    </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-2" for="school">재학 학교 및 고교유형</label>
+                    <input type="text" id="school" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-colors" placeholder="예: 능곡고 (일반고)" />
                 </div>
 
                 <div>
@@ -303,8 +281,6 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
         const phone = val('parent-phone');
         const school = val('school') || null;
         const memo = val('memo') || null;
-        const sel = document.getElementById('interest-program') as HTMLSelectElement | null;
-        const interest = sel && sel.value ? sel.value : null;
         const agree = (document.getElementById('terms') as HTMLInputElement | null)?.checked ?? false;
 
         if (!name || !phone) { showError('이름과 연락처를 입력해주세요.'); return; }
@@ -316,7 +292,6 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
             name,
             phone,
             school,
-            interest_program: interest,
             memo,
             agree_privacy: agree,
         });
@@ -328,7 +303,7 @@ const pageDesc = "시흥 일반고 10년의 합격 역사. 1:1 밀착 면접대�
             return;
         }
 
-        const msg = `대치프라임학원 면접대비 프로그램 상담 신청이 접수되었습니다.<br><br><strong>학생명:</strong> ${name}<br>${interest ? `<strong>희망 트랙:</strong> ${interest}<br>` : ''}기재하신 연락처(${phone})로 담당 실장이 빠르게 연락드리겠습니다.`;
+        const msg = `대치프라임학원 면접대비 프로그램 상담 신청이 접수되었습니다.<br><br><strong>학생명:</strong> ${name}<br>기재하신 연락처(${phone})로 담당 실장이 빠르게 연락드리겠습니다.`;
         (window as any).openModal('신청 완료', msg);
         form.reset();
     });
