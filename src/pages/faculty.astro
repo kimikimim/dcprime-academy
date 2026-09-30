@@ -64,6 +64,28 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
     return a.name.localeCompare(b.name, 'ko');
   }
 
+  const ICON_INSTAGRAM = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>';
+  const ICON_BLOG = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+  const ICON_YOUTUBE = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>';
+
+  function snsIcons(f: any) {
+    const links: { url: string; label: string; icon: string }[] = [];
+    if (f.instagram_url) links.push({ url: f.instagram_url, label: '인스타그램', icon: ICON_INSTAGRAM });
+    if (f.blog_url) links.push({ url: f.blog_url, label: '블로그', icon: ICON_BLOG });
+    if (f.youtube_url) links.push({ url: f.youtube_url, label: '유튜브', icon: ICON_YOUTUBE });
+    if (links.length === 0) return '';
+    return `
+      <div class="flex items-center gap-2.5 mt-2">
+        ${links.map(l => `
+          <a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(l.label)}"
+             onclick="event.stopPropagation()" class="text-gray-400 hover:text-brand transition-colors">
+            ${l.icon}
+          </a>
+        `).join('')}
+      </div>
+    `;
+  }
+
   function bioList(bio: string) {
     const lines = String(bio ?? '').split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(Boolean);
     if (lines.length === 0) return '';
@@ -114,6 +136,7 @@ const divisions = ['임원진', '초등부', '중등부', '고등부', '입시�
             <p class="${isExec ? 'text-sm' : 'text-xs'} font-semibold mb-0.5 ${color}">${esc(label)}</p>
             <p class="${isExec ? 'text-base' : 'text-sm'} font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
             <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
+            ${snsIcons(f)}
             ${isExec ? bioList(f.bio) : ''}
           </div>
         </div>

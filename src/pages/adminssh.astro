@@ -331,6 +331,12 @@ import Layout from '../components/layout/Layout.astro';
             </div>
             <input id="faculty-role-input" type="text" placeholder="직책 (임원진/입시와대치만 해당: 총원장/원장/부원장/연구원)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
             <textarea id="faculty-bio-input" rows="3" placeholder="약력 (임원진 카드 하단에 표시. 한 줄에 하나씩 입력하면 자동으로 불릿 처리됩니다)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
+            <p class="text-xs text-gray-500 mb-2">SNS 링크 (선택, 입력한 것만 카드에 아이콘으로 표시)</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+              <input id="faculty-instagram-input" type="url" placeholder="인스타그램 URL" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="faculty-blog-input" type="url" placeholder="블로그 URL" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+              <input id="faculty-youtube-input" type="url" placeholder="유튜브 URL" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
+            </div>
             <div class="mb-4">
               <p class="text-xs text-gray-500 mb-2">프로필 사진</p>
               <input type="file" id="faculty-image-input" accept="image/*" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer" />
@@ -1029,6 +1035,9 @@ import Layout from '../components/layout/Layout.astro';
     (document.getElementById('faculty-motto-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-role-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('faculty-instagram-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-blog-input') as HTMLInputElement).value = '';
+    (document.getElementById('faculty-youtube-input') as HTMLInputElement).value = '';
     (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = '수학';
     (document.getElementById('faculty-image-input') as HTMLInputElement).value = '';
     document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => cb.checked = false);
@@ -1239,7 +1248,11 @@ import Layout from '../components/layout/Layout.astro';
         (document.getElementById('faculty-name-input') as HTMLInputElement).value = btn.dataset.name ?? '';
         (document.getElementById('faculty-motto-input') as HTMLInputElement).value = btn.dataset.motto ?? '';
         (document.getElementById('faculty-role-input') as HTMLInputElement).value = btn.dataset.role ?? '';
-        (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = data.find((x: any) => x.id === facultyEditId)?.bio ?? '';
+        const editingRow = data.find((x: any) => x.id === facultyEditId);
+        (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = editingRow?.bio ?? '';
+        (document.getElementById('faculty-instagram-input') as HTMLInputElement).value = editingRow?.instagram_url ?? '';
+        (document.getElementById('faculty-blog-input') as HTMLInputElement).value = editingRow?.blog_url ?? '';
+        (document.getElementById('faculty-youtube-input') as HTMLInputElement).value = editingRow?.youtube_url ?? '';
         (document.getElementById('faculty-subject-input') as HTMLSelectElement).value = btn.dataset.subject ?? '수학';
         const divs: string[] = JSON.parse(btn.dataset.divisions ?? '[]');
         document.querySelectorAll<HTMLInputElement>('.faculty-div-check').forEach(cb => {
@@ -1281,6 +1294,9 @@ import Layout from '../components/layout/Layout.astro';
     const motto   = (document.getElementById('faculty-motto-input') as HTMLInputElement).value.trim();
     const role    = (document.getElementById('faculty-role-input') as HTMLInputElement).value.trim();
     const bio     = (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value.trim();
+    const instagram_url = (document.getElementById('faculty-instagram-input') as HTMLInputElement).value.trim() || null;
+    const blog_url = (document.getElementById('faculty-blog-input') as HTMLInputElement).value.trim() || null;
+    const youtube_url = (document.getElementById('faculty-youtube-input') as HTMLInputElement).value.trim() || null;
     const divisions = Array.from(document.querySelectorAll<HTMLInputElement>('.faculty-div-check:checked')).map(cb => cb.value);
     const fileInput = document.getElementById('faculty-image-input') as HTMLInputElement;
     const file    = fileInput.files?.[0];
@@ -1305,11 +1321,11 @@ import Layout from '../components/layout/Layout.astro';
 
     let error;
     if (facultyEditId) {
-      const updateData: any = { name, subject, motto, role, bio, divisions };
+      const updateData: any = { name, subject, motto, role, bio, instagram_url, blog_url, youtube_url, divisions };
       if (image_url) updateData.image_url = image_url;
       ({ error } = await supabase.from('faculty').update(updateData).eq('id', facultyEditId));
     } else {
-      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, role, bio, divisions, image_url: image_url ?? '' }));
+      ({ error } = await supabase.from('faculty').insert({ name, subject, motto, role, bio, instagram_url, blog_url, youtube_url, divisions, image_url: image_url ?? '' }));
     }
 
     btn.disabled = false;
