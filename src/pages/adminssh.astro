@@ -638,10 +638,10 @@ import Layout from '../components/layout/Layout.astro';
       columns: [
         ['신청일시', r => fmtDateTime(r.created_at)],
         ['캠퍼스(일정)', r => r.campus],
-        ['이름', r => r.name],
-        ['재학중학교', r => r.grade],
+        ['자녀 이름', r => r.name],
+        ['재학학교(대상)', r => r.grade],
         ['연락처', r => r.phone],
-        ['관심 고등학교', r => r.memo],
+        ['학부모 / 질문', r => r.memo],
         ['개인정보 동의', r => (r.agree_privacy ? 'Y' : 'N')],
         ['상태', r => r.status],
       ],
