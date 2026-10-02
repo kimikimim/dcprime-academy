@@ -386,49 +386,12 @@ const slots = [
     </div>
 </div>
 
-<!-- 시작 팝업: 포스터 -->
-<div id="posterPopup" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-4">
-    <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-        <div class="max-h-[72vh] overflow-y-auto bg-gray-100">
-            <img src="/images/seminar-27-poster.jpg" alt="27학년도 대비 학부모 설명회 포스터" class="w-full h-auto block" />
-        </div>
-        <div class="grid grid-cols-3 text-sm border-t border-gray-100">
-            <button id="popupHideToday" class="py-3.5 text-gray-500 hover:bg-gray-50 transition text-xs">오늘 하루 보지 않기</button>
-            <a id="popupReserve" href="#reservation" class="py-3.5 text-center font-bold text-brand-dark hover:bg-brand-light transition">예약하기</a>
-            <button id="popupClose" class="py-3.5 text-gray-700 hover:bg-gray-50 transition font-medium">닫기</button>
-        </div>
-    </div>
-</div>
-
 <script is:inline>
     lucide.createIcons();
 </script>
 
 <script>
     import { supabase } from '../lib/supabase';
-
-    // ── 시작 팝업 ──
-    const POPUP_KEY = 'seminar27_popup_hide_until';
-    const popup = document.getElementById('posterPopup');
-
-    function openPopup() { popup?.classList.remove('hidden'); popup?.classList.add('flex'); }
-    function closePopup() { popup?.classList.add('hidden'); popup?.classList.remove('flex'); }
-
-    let hidden = false;
-    try { hidden = Number(localStorage.getItem(POPUP_KEY) || 0) > Date.now(); } catch {}
-    if (!hidden) openPopup();
-
-    document.getElementById('popupClose')?.addEventListener('click', closePopup);
-    document.getElementById('popupReserve')?.addEventListener('click', closePopup);
-    document.getElementById('popupHideToday')?.addEventListener('click', () => {
-        try {
-            const end = new Date(); end.setHours(23, 59, 59, 999);
-            localStorage.setItem(POPUP_KEY, String(end.getTime()));
-        } catch {}
-        closePopup();
-    });
-    popup?.addEventListener('click', (e) => { if (e.target === popup) closePopup(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
 
     // ── 예약 폼 ──
     const form = document.getElementById('bookingForm') as HTMLFormElement | null;
