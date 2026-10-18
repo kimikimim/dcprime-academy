@@ -1,0 +1,71 @@
+---
+const items = [
+  { src: '/images/academy-info/neunggok-license-1.jpg', label: '능곡관 학원설립·운영등록증', alt: '대치프라임학원 능곡관 학원설립운영등록증' },
+  { src: '/images/academy-info/neunggok-fee-1.png', label: '능곡관 교습비 (1)', alt: '대치프라임학원 능곡관 교습비 표 1' },
+  { src: '/images/academy-info/neunggok-fee-2.png', label: '능곡관 교습비 (2)', alt: '대치프라임학원 능곡관 교습비 표 2' },
+  { src: '/images/academy-info/janggok-license-1.jpg', label: '장곡관 학원설립·운영등록증', alt: '대치프라임장곡학원 학원설립운영등록증' },
+  { src: '/images/academy-info/janggok-fee-1.png', label: '장곡관 교습비 (1)', alt: '대치프라임장곡학원 교습비 표 1' },
+  { src: '/images/academy-info/janggok-fee-2.png', label: '장곡관 교습비 (2)', alt: '대치프라임장곡학원 교습비 표 2' },
+];
+---
+
+<section id="academy-info" class="py-16 md:py-20 bg-gray-50 border-t border-gray-100">
+  <div class="container mx-auto px-4 max-w-5xl">
+    <h2 class="text-center text-2xl md:text-3xl font-bold text-gray-900 mb-2">학원 정보</h2>
+    <p class="text-center text-sm text-gray-500 mb-10">학원 등록 및 교습비 정보를 투명하게 공개합니다. 이미지를 누르면 크게 볼 수 있습니다.</p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      {items.map((it, i) => (
+        <button type="button" data-info-idx={i} class="group text-left">
+          <div class="aspect-[3/4] bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm group-hover:shadow-md group-hover:border-brand transition">
+            <img src={it.src} alt={it.alt} loading="lazy" class="w-full h-full object-cover object-top" />
+          </div>
+          <p class="mt-2 text-xs sm:text-[13px] font-semibold text-gray-700 text-center leading-snug break-keep">{it.label}</p>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div id="info-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 px-4" role="dialog" aria-modal="true">
+    <button type="button" id="info-close" aria-label="닫기" class="absolute top-4 right-5 text-white text-3xl leading-none">&times;</button>
+    <button type="button" id="info-prev" aria-label="이전" class="absolute left-3 sm:left-8 text-white text-4xl px-2">&#8249;</button>
+    <div class="max-w-3xl max-h-[88vh] w-full flex flex-col items-center">
+      <img id="info-img" src="" alt="" class="max-h-[80vh] w-auto max-w-full bg-white rounded" />
+      <p id="info-caption" class="mt-3 text-white text-sm"></p>
+    </div>
+    <button type="button" id="info-next" aria-label="다음" class="absolute right-3 sm:right-8 text-white text-4xl px-2">&#8250;</button>
+  </div>
+</section>
+
+<script define:vars={{ items }}>
+  (function () {
+    const box = document.getElementById('info-lightbox');
+    if (!box) return;
+    const img = document.getElementById('info-img');
+    const cap = document.getElementById('info-caption');
+    let cur = 0;
+
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      img.src = items[cur].src;
+      img.alt = items[cur].alt;
+      cap.textContent = items[cur].label;
+    }
+    function open(i) { show(i); box.classList.remove('hidden'); box.classList.add('flex'); }
+    function close() { box.classList.add('hidden'); box.classList.remove('flex'); }
+
+    document.querySelectorAll('[data-info-idx]').forEach((b) =>
+      b.addEventListener('click', () => open(Number(b.getAttribute('data-info-idx'))))
+    );
+    document.getElementById('info-close').addEventListener('click', close);
+    document.getElementById('info-prev').addEventListener('click', () => show(cur - 1));
+    document.getElementById('info-next').addEventListener('click', () => show(cur + 1));
+    box.addEventListener('click', (e) => { if (e.target === box) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (box.classList.contains('hidden')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  })();
+</script>
