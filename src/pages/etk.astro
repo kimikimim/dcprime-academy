@@ -51,8 +51,6 @@ const promises = [
 
 const contacts = [
   { name: '대치프라임', note: '대표 · 하남관 · 능곡관 · 장곡관', tel: '031-313-0979', main: true },
-  { name: '이명학원', note: '송도', tel: '032-832-2510' },
-  { name: '목동 에듀포원', note: '목동', tel: '1670-5241' },
 ];
 
 const YOUTUBE = 'https://www.youtube.com/@%EA%B9%80%EC%9D%91%ED%83%9C-c3l';
@@ -346,7 +344,7 @@ const YOUTUBE = 'https://www.youtube.com/@%EA%B9%80%EC%9D%91%ED%83%9C-c3l';
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
     <h2 class="reveal serif text-3xl sm:text-5xl font-black leading-snug">2028 수능은 처음이지만,<br />김응태의 통합과학은<br class="sm:hidden" /> <span class="underline decoration-2 underline-offset-[10px]" style="color:var(--gold);text-decoration-color:var(--gold)">처음이 아닙니다.</span></h2>
 
-    <div class="mt-12 grid sm:grid-cols-3 gap-3 text-left">
+    <div class="mt-12 max-w-sm mx-auto text-left">
       {contacts.map((c, i) => (
         <a href={`tel:${c.tel.replace(/-/g, '')}`} class={`reveal d${i + 1} group block p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${c.main ? 'border-transparent' : 'border-white/15 hover:border-white/40'}`} style={c.main ? 'background:var(--wine)' : ''}>
           <p class={`text-[11px] font-bold ${c.main ? 'text-white/70' : 'text-white/40'}`}>{c.note}</p>
