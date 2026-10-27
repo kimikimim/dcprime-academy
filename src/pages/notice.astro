@@ -98,7 +98,7 @@ import Layout from '../components/layout/Layout.astro';
 
       return `
         <li>
-          <a href="/notice/${n.id}" class="grid md:grid-cols-[60px_80px_1fr_110px_80px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
+          <a href="/notice/view?id=${n.id}" class="grid md:grid-cols-[60px_80px_1fr_110px_80px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
             <span class="text-sm text-gray-400 hidden md:block">${no}</span>
             <span class="hidden md:block"><span class="text-xs font-semibold px-2 py-1 rounded ${catStyle}">${category}</span></span>
             <span class="text-sm md:text-base font-medium text-gray-800 group-hover:text-brand transition-colors">
