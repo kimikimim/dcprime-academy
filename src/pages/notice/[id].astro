@@ -2,7 +2,7 @@
 import Layout from '../../components/layout/Layout.astro';
 
 export function getStaticPaths() {
-  return Array.from({ length: 50 }, (_, i) => ({ params: { id: String(i + 1) } }));
+  return Array.from({ length: 300 }, (_, i) => ({ params: { id: String(i + 1) } }));
 }
 
 const { id } = Astro.params;
