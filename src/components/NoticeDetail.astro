@@ -76,7 +76,7 @@ import Layout from './layout/Layout.astro';
       .from('notices')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     document.getElementById('loading')?.classList.add('hidden');
 
