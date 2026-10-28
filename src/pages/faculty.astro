@@ -115,6 +115,19 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
 
     emptyEl.classList.add('hidden');
     grid.classList.remove('hidden');
+
+    // 데스크와 튜터: 사진 없이 이름 카드, 직책에 '튜터'가 들어가면 튜터 칸, 나머지는 데스크 칸
+    if (division === '데스크와 튜터') {
+      const tutors = filtered.filter(f => String(f.role ?? '').includes('튜터'));
+      const desks  = filtered.filter(f => !String(f.role ?? '').includes('튜터'));
+      grid.className = 'max-w-4xl mx-auto space-y-12';
+      grid.innerHTML = [
+        staffGroup('데스크', '상담 · 등록 · 출결 · 수납을 책임집니다.', desks, false),
+        staffGroup('튜터', '수업 밖에서도 질문과 과제를 1:1로 챙깁니다.', tutors, true),
+      ].join('');
+      return;
+    }
+
     grid.className = isExec
       ? 'grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto'
       : 'grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto';
@@ -143,6 +156,36 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
         </div>
       `;
     }).join('');
+  }
+
+  function staffGroup(title: string, desc: string, people: any[], isTutor: boolean) {
+    if (people.length === 0) return '';
+    return `
+      <section>
+        <div class="flex items-baseline gap-3 mb-4 pb-3 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-gray-900">${title}</h2>
+          <p class="text-xs text-gray-400">${desc}</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          ${people.map(f => {
+            const sub = isTutor && f.subject ? `<span class="text-[11px] font-semibold ${subjectColors[f.subject] ?? 'text-gray-500'}">${esc(f.subject)}</span>` : '';
+            return `
+              <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-white">
+                <div class="shrink-0 w-12 h-12 rounded-full bg-brand-light text-brand-dark flex items-center justify-center text-lg font-bold">${esc(String(f.name ?? '').charAt(0))}</div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <p class="text-sm font-bold text-gray-900">${esc(f.name)}</p>
+                    <span class="text-xs text-gray-500">${esc(f.role ?? '')}</span>
+                    ${sub}
+                  </div>
+                  ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed">${esc(f.motto)}</p>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </section>
+    `;
   }
 
   // 입시와대치/임원진은 총원장 > 원장 > 부원장 > 연구원 순
