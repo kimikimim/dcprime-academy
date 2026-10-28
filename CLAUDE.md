@@ -192,6 +192,12 @@ src/
 - OG 태그, canonical URL, robots 설정 완료
 - Google Search Console 등록 완료 (TXT 레코드 인증)
 
+## 방문자 분석
+- `src/components/Gtm.astro`: GTM(`GTM-WC6W34DC`) + GA4(`G-CHTRRBGMQP`)를 코드로 직접 로드. Layout.astro와 단독 페이지(etk/ques/high3/tamdoq/seminar)에 `<Gtm part="head"/>`, `<Gtm part="body"/>`로 삽입
+- GA4는 코드에서 직접 config하므로 **GTM 안에 GA4 태그를 또 만들면 중복 집계됨**
+- ClientRouter 페이지 전환은 GA4 향상된 측정(기록 변경)으로 page_view 자동 기록 (확인 완료)
+- 새 단독 페이지(Layout 미사용)를 만들면 Gtm 컴포넌트 두 줄을 꼭 넣을 것
+
 ---
 
 ## 미완료 / 할 일
