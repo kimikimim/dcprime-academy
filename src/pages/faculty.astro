@@ -117,9 +117,11 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
     grid.classList.remove('hidden');
 
     // 데스크와 튜터: 사진 없이 이름 카드, 직책에 '튜터'가 들어가면 튜터 칸, 나머지는 데스크 칸
+    // 직책에 '데스크'와 '튜터'가 둘 다 있으면 (예: "데스크 · 튜터") 양쪽 칸에 모두 표시
     if (division === '데스크와 튜터') {
-      const tutors = filtered.filter(f => String(f.role ?? '').includes('튜터'));
-      const desks  = filtered.filter(f => !String(f.role ?? '').includes('튜터'));
+      const roleOf = (f: any) => String(f.role ?? '');
+      const tutors = filtered.filter(f => roleOf(f).includes('튜터'));
+      const desks  = filtered.filter(f => !roleOf(f).includes('튜터') || roleOf(f).includes('데스크'));
       grid.className = 'max-w-4xl mx-auto space-y-12';
       grid.innerHTML = [
         staffGroup('데스크', '상담 · 등록 · 출결 · 수납을 책임집니다.', desks),
@@ -178,7 +180,7 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
                 <div class="shrink-0 w-12 h-12 rounded-full bg-brand-light text-brand-dark flex items-center justify-center text-lg font-bold">${esc(String(f.name ?? '').charAt(0))}</div>
                 <div class="min-w-0 flex-1">
                   <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <p class="text-base font-bold text-gray-900">${esc(f.name)} <span class="ml-1 text-sm font-medium text-brand">${esc(f.role ?? '')}</span></p>
+                    <p class="text-base font-bold text-gray-900">${esc(f.name)} <span class="ml-1 text-sm font-medium text-brand">${esc(String(f.role ?? '').includes('데스크') && String(f.role ?? '').includes('튜터') ? title : (f.role ?? ''))}</span></p>
                     ${CAMPUSES.filter(c => (f.divisions ?? []).includes(c)).map(c => `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${c === '능곡관' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}">${c}</span>`).join('')}
                   </div>
                   ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed break-keep">${esc(f.motto)}</p>` : ''}
