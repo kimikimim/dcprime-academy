@@ -90,7 +90,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
           data-tab="examprep"
           class="cur-tab w-full mb-2 py-4 text-sm font-bold rounded-sm border border-brand/30 bg-brand text-white transition-colors"
         >
-          {EXAM_PREP_TITLE}
+          <span id="examprep-tab-label">{EXAM_PREP_TITLE}</span>
         </button>
         <div class="grid grid-cols-2 border border-gray-200 rounded-sm overflow-hidden">
           {subjects.map((s, i) => (
@@ -236,8 +236,10 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
       ))}
 
       <div id="panel-examprep" class="cur-panel">
-        <h2 class="text-xl font-bold text-gray-900 mb-2">{EXAM_PREP_TITLE}</h2>
-        <p class="text-sm text-gray-500 mb-6">2026학년도 2학기 기말고사 대비 · 중1/중2 · 학교를 선택하면 해당 학교 일정만 볼 수 있습니다.</p>
+        <h2 id="examprep-title" class="text-xl font-bold text-gray-900 mb-2">{EXAM_PREP_TITLE}</h2>
+        <p class="text-sm text-gray-500 mb-6">학교를 선택하면 해당 학교 일정만 볼 수 있습니다.</p>
+
+        <div id="examprep-body">
 
         <div class="flex flex-wrap gap-2 mb-8" id="exam-school-filter">
           <button data-school="all" class="exam-school-btn px-4 py-2 rounded-full text-sm font-semibold bg-brand text-white">전체</button>
@@ -297,6 +299,8 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
               </div>
             </section>
           ))}
+        </div>
+
         </div>
 
         <p class="mt-10 text-xs text-gray-400">※ 일정은 학교 시험 일정에 따라 변동될 수 있습니다. 자세한 사항은 학원(031-313-0979)으로 문의해 주세요.</p>
@@ -367,11 +371,12 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
 
     tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
 
-    // 내신대비 시간표: 학교 필터
-    const schoolBtns = document.querySelectorAll<HTMLButtonElement>('.exam-school-btn');
-    schoolBtns.forEach(btn => btn.addEventListener('click', () => {
+    // 내신대비 시간표: 학교 필터 (시트에서 다시 그려도 동작하도록 위임)
+    document.getElementById('examprep-body')?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.exam-school-btn');
+      if (!btn) return;
       const sc = btn.dataset.school;
-      schoolBtns.forEach(b => {
+      document.querySelectorAll<HTMLButtonElement>('.exam-school-btn').forEach(b => {
         const on = b === btn;
         b.classList.toggle('bg-brand', on); b.classList.toggle('text-white', on);
         b.classList.toggle('bg-gray-100', !on); b.classList.toggle('text-gray-600', !on);
@@ -379,7 +384,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
       document.querySelectorAll<HTMLElement>('[data-exam-school]').forEach(sec => {
         sec.classList.toggle('hidden', sc !== 'all' && sec.dataset.examSchool !== sc);
       });
-    }));
+    });
 
     subjects.forEach(s => loadContent(s.key, `content-${s.id}`));
     loadTimetables();
@@ -475,7 +480,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
 
   async function loadTimetables() {
     const targets = Object.keys(SHEET_NAMES).filter(id => document.getElementById(`timetable-${id}`));
-    if (targets.length === 0) return;
+    if (targets.length === 0 && !document.getElementById('examprep-body')) return;
 
     try {
       await loadXlsxLib();
@@ -494,9 +499,101 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
         const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(1).filter((r: any[]) => r.some(c => c !== undefined && c !== ''));
         el.innerHTML = rows.length > 0 ? renderTimetable(rows) : '';
       });
+
+      renderExamPrep(wb.Sheets[EXAM_SHEET_NAME], XLSX);
     } catch {
       // 시간표 로드 실패는 조용히 무시 (Quill 본문 내용은 이미 표시됨)
     }
+  }
+
+  // ──────────────────────────────────────────
+  // 내신대비 시간표: 구글시트 '내신대비' 탭 (A1 = 제목, 2행 = 학교|학년|과목|진행관|시간|비고, 3행부터 데이터)
+  // 탭이 없거나 비어 있으면 페이지에 박혀 있는 기본 시간표를 그대로 둠
+  // ──────────────────────────────────────────
+  const EXAM_SHEET_NAME = '내신대비';
+  const EXAM_SUBJECTS = ['국어', '영어', '수학', '과학'];
+  const EXAM_COLORS: Record<string, string> = { '국어': 'text-brand', '영어': 'text-green-600', '수학': 'text-blue-600', '과학': 'text-orange-500' };
+
+  function examTimeCell(time: string) {
+    return time && time !== '학원 문의 요망'
+      ? escHtml(time)
+      : '<a href="tel:0313130979" class="text-brand underline">학원 문의 요망</a>';
+  }
+
+  function renderExamPrep(sheet: any, XLSX: any) {
+    const body = document.getElementById('examprep-body');
+    if (!sheet || !body) return;
+    const all: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+    const title = String(all[0]?.[0] ?? '').trim();
+    const rows = all.slice(2)
+      .map(r => r.slice(0, 6).map((c: any) => String(c ?? '').trim()))
+      .filter(r => r[0] && r[2]);
+    if (rows.length === 0) return;
+
+    if (title) {
+      const t = document.getElementById('examprep-title');
+      const l = document.getElementById('examprep-tab-label');
+      if (t) t.textContent = title;
+      if (l) l.textContent = title;
+    }
+
+    const schools = [...new Set(rows.map(r => r[0]))];
+    const subjIdx = (s: string) => { const i = EXAM_SUBJECTS.indexOf(s); return i < 0 ? 99 : i; };
+
+    const sections = schools.map(school => {
+      const grades = [...new Set(rows.filter(r => r[0] === school).map(r => r[1]))];
+      return `
+        <section data-exam-school="${escHtml(school)}">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-900">${escHtml(school)}</h3>
+          <div class="space-y-6">
+            ${grades.map(grade => {
+              const list = rows.filter(r => r[0] === school && r[1] === grade).sort((a, b) => subjIdx(a[2]) - subjIdx(b[2]));
+              return `
+                <div>
+                  <p class="text-sm font-bold text-brand-dark mb-2">${escHtml(grade)}</p>
+                  <table class="hidden sm:table w-full text-sm">
+                    <thead>
+                      <tr class="text-xs text-gray-400 border-b border-gray-200">
+                        <th class="text-left font-medium py-2 w-16">과목</th>
+                        <th class="text-left font-medium py-2 w-20">진행관</th>
+                        <th class="text-left font-medium py-2 w-40">시간</th>
+                        <th class="text-left font-medium py-2">비고</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${list.map(r => `
+                        <tr class="border-b border-gray-100">
+                          <td class="py-3 font-bold ${EXAM_COLORS[r[2]] ?? 'text-gray-700'}">${escHtml(r[2])}</td>
+                          <td class="py-3 text-gray-700">${escHtml(r[3])}</td>
+                          <td class="py-3 text-gray-900 font-medium">${examTimeCell(r[4])}</td>
+                          <td class="py-3 text-gray-500">${escHtml(r[5])}</td>
+                        </tr>`).join('')}
+                    </tbody>
+                  </table>
+                  <div class="sm:hidden space-y-2">
+                    ${list.map(r => `
+                      <div class="rounded-lg border border-gray-200 px-4 py-3">
+                        <div class="flex items-center justify-between">
+                          <span class="text-sm font-bold ${EXAM_COLORS[r[2]] ?? 'text-gray-700'}">${escHtml(r[2])}</span>
+                          <span class="text-xs text-gray-500">${escHtml(r[3])}</span>
+                        </div>
+                        <p class="mt-1 text-sm font-medium text-gray-900">${examTimeCell(r[4])}</p>
+                        ${r[5] ? `<p class="mt-0.5 text-xs text-gray-500">${escHtml(r[5])}</p>` : ''}
+                      </div>`).join('')}
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </section>`;
+    }).join('');
+
+    body.innerHTML = `
+      <div class="flex flex-wrap gap-2 mb-8">
+        <button data-school="all" class="exam-school-btn px-4 py-2 rounded-full text-sm font-semibold bg-brand text-white">전체</button>
+        ${schools.map(sc => `<button data-school="${escHtml(sc)}" class="exam-school-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200">${escHtml(sc)}</button>`).join('')}
+      </div>
+      <div class="space-y-10">${sections}</div>
+    `;
   }
 
   document.addEventListener('astro:page-load', init);
