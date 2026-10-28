@@ -1,0 +1,22 @@
+---
+// Google Tag Manager (방문자 분석). part="head"는 <head> 맨 위, part="body"는 <body> 바로 아래에 넣는다.
+interface Props { part: 'head' | 'body' }
+const { part } = Astro.props;
+const GTM_ID = 'GTM-WC6W34DC';
+---
+{part === 'head' ? (
+  <script is:inline define:vars={{ GTM_ID }}>
+    // ClientRouter 페이지 전환 시 중복 로드 방지 (전환 페이지뷰는 GA4 기록 변경 감지로 잡힘)
+    if (!window.__gtmLoaded) {
+      window.__gtmLoaded = true;
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',GTM_ID);
+    }
+  </script>
+) : (
+  <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+)}

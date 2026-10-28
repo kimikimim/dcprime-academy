@@ -1,4 +1,5 @@
 ---
+import Gtm from '../components/Gtm.astro';
 import '../styles/global.css';
 import Diagnosis from '../components/Diagnosis.jsx';
 ---
@@ -6,6 +7,7 @@ import Diagnosis from '../components/Diagnosis.jsx';
 <!doctype html>
 <html lang="ko">
   <head>
+    <Gtm part="head" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>대입 전략 진단 | 대치프라임</title>
@@ -20,6 +22,7 @@ import Diagnosis from '../components/Diagnosis.jsx';
     </style>
   </head>
   <body style="background: linear-gradient(160deg, #eef0f8 0%, #f5f6fb 60%, #ebe9f4 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; font-family: 'Noto Sans KR', sans-serif;">
+    <Gtm part="body" />
 
     <!-- 상단 브랜드 워터마크 -->
     <div class="mb-6 text-center" style="animation: fadeUp 0.4s ease-out forwards;">

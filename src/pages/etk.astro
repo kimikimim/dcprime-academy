@@ -1,4 +1,5 @@
 ---
+import Gtm from '../components/Gtm.astro';
 import '../styles/global.css';
 const pageTitle = "통합과학 김응태 | 여덟 과목을 꿰뚫는 눈 · 대치프라임";
 const pageDesc = "2028 수능부터 모두가 보는 통합과학. 물·화·생·지 I·II 25년, 김응태 원장의 통합과학 — 고1 내신부터 고3 수능까지.";
@@ -59,6 +60,7 @@ const YOUTUBE = 'https://www.youtube.com/@%EA%B9%80%EC%9D%91%ED%83%9C-c3l';
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
 <head>
+    <Gtm part="head" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
@@ -109,6 +111,7 @@ const YOUTUBE = 'https://www.youtube.com/@%EA%B9%80%EC%9D%91%ED%83%9C-c3l';
   </style>
 </head>
 <body class="font-sans text-white antialiased overflow-x-hidden">
+    <Gtm part="body" />
 
 <!-- Top bar -->
 <header id="topbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">

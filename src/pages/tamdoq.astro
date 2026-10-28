@@ -1,4 +1,5 @@
 ---
+import Gtm from '../components/Gtm.astro';
 import '../styles/global.css';
 // --- 데이터 정의 (포트폴리오 섹션) ---
 const zoneA = [
@@ -31,6 +32,7 @@ const extraGallery = [
 
 <html lang="ko">
 <head>
+    <Gtm part="head" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>대치프라임 탐독</title>
@@ -46,6 +48,7 @@ const extraGallery = [
   </style>
 </head>
 <body class="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
+    <Gtm part="body" />
 
   <!-- 헤더 -->
   <header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-50">

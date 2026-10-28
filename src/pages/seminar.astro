@@ -1,4 +1,5 @@
 ---
+import Gtm from '../components/Gtm.astro';
 import '../styles/global.css';
 const pageTitle = "대치프라임학원 | 27학년도 대비 학부모 설명회 (예비중1·예비고1)";
 const pageDesc = "내신 5등급제·통합형 수능·고교학점제 대비. 시흥 지역 12년 교육과정 지도 경험으로 예비중1(초6)·예비고1(중3) 학부모님께 학업 이정표를 제시합니다.";
@@ -63,6 +64,7 @@ const slots = [
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
 <head>
+    <Gtm part="head" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
@@ -71,6 +73,7 @@ const slots = [
     <script src="https://unpkg.com/lucide@latest" is:inline></script>
 </head>
 <body class="font-sans text-gray-800 bg-white antialiased">
+    <Gtm part="body" />
 
 <!-- Top Bar -->
 <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-100">

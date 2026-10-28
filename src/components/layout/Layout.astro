@@ -1,4 +1,5 @@
 ---
+import Gtm from '../Gtm.astro';
 import { ClientRouter } from "astro:transitions";
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
@@ -16,6 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://dcprime.co.kr').href;
 <!doctype html>
 <html lang="ko">
   <head>
+    <Gtm part="head" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon-circle.png" />
@@ -41,6 +43,7 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://dcprime.co.kr').href;
     <ClientRouter />
   </head>
   <body class="font-sans text-gray-800 bg-white">
+    <Gtm part="body" />
     <Header />
     <main>
       <slot />
