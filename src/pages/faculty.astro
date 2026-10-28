@@ -177,7 +177,9 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
             const duties = String(f.bio ?? '').split('\n').map((l: string) => l.replace(/^-\s*/, '').trim()).filter(Boolean);
             return `
               <div class="flex gap-4 p-5 rounded-xl border border-gray-200 bg-white">
-                <div class="shrink-0 w-12 h-12 rounded-full bg-brand-light text-brand-dark flex items-center justify-center text-lg font-bold">${esc(String(f.name ?? '').charAt(0))}</div>
+                <div class="shrink-0 w-14 h-14 rounded-full overflow-hidden bg-brand-light text-brand-dark flex items-center justify-center text-lg font-bold">${f.image_url
+                  ? `<img src="${esc(f.image_url)}" alt="${esc(f.name)}" class="w-full h-full object-cover object-top" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(String(f.name ?? '').charAt(0))}'))" />`
+                  : esc(String(f.name ?? '').charAt(0))}</div>
                 <div class="min-w-0 flex-1">
                   <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <p class="text-base font-bold text-gray-900">${esc(f.name)} <span class="ml-1 text-sm font-medium text-brand">${esc(String(f.role ?? '').includes('데스크') && String(f.role ?? '').includes('튜터') ? title : (f.role ?? ''))}</span></p>
