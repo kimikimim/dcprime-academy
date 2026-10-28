@@ -3,9 +3,10 @@
 interface Props { part: 'head' | 'body' }
 const { part } = Astro.props;
 const GTM_ID = 'GTM-WC6W34DC';
+const GA_ID = 'G-CHTRRBGMQP';
 ---
 {part === 'head' ? (
-  <script is:inline define:vars={{ GTM_ID }}>
+  <script is:inline define:vars={{ GTM_ID, GA_ID }}>
     // ClientRouter 페이지 전환 시 중복 로드 방지 (전환 페이지뷰는 GA4 기록 변경 감지로 잡힘)
     if (!window.__gtmLoaded) {
       window.__gtmLoaded = true;
@@ -14,6 +15,15 @@ const GTM_ID = 'GTM-WC6W34DC';
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer',GTM_ID);
+
+      // Google Analytics 4 (GTM 안에는 GA4 태그를 따로 만들지 말 것 — 중복 집계됨)
+      var ga = document.createElement('script');
+      ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(ga);
+      window.gtag = function(){ window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
     }
   </script>
 ) : (
