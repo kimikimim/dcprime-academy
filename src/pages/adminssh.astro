@@ -331,8 +331,15 @@ import Layout from '../components/layout/Layout.astro';
                 <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="입시와대치" /> 입시와대치</label>
               </div>
             </div>
+            <div class="mb-3">
+              <p class="text-xs text-gray-500 mb-2">근무 관 (데스크와 튜터 카드에 태그로 표시, 중복 선택 가능)</p>
+              <div class="flex flex-wrap gap-x-4 gap-y-2">
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="능곡관" /> 능곡관</label>
+                <label class="flex items-center gap-1.5 text-sm text-gray-700 cursor-pointer"><input type="checkbox" class="faculty-div-check accent-brand" value="장곡관" /> 장곡관</label>
+              </div>
+            </div>
             <input id="faculty-role-input" type="text" placeholder="직책 (임원진/입시와대치: 총원장/원장/부원장/연구원 · 데스크와 튜터: 예) 실장, 데스크 매니저, 수학 튜터 — '튜터'가 들어가면 튜터 칸에 표시)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
-            <textarea id="faculty-bio-input" rows="3" placeholder="약력 (임원진 카드 하단에 표시. 한 줄에 하나씩 입력하면 자동으로 불릿 처리됩니다)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
+            <textarea id="faculty-bio-input" rows="3" placeholder="약력 (임원진 카드 하단 / 데스크와 튜터는 하는 일. 한 줄에 하나씩 입력하면 자동으로 불릿 처리됩니다)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
             <p class="text-xs text-gray-500 mb-2">SNS 링크 (선택, 입력한 것만 카드에 아이콘으로 표시)</p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
               <input id="faculty-instagram-input" type="url" placeholder="인스타그램 URL" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />

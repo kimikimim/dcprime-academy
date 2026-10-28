@@ -122,8 +122,8 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
       const desks  = filtered.filter(f => !String(f.role ?? '').includes('튜터'));
       grid.className = 'max-w-4xl mx-auto space-y-12';
       grid.innerHTML = [
-        staffGroup('데스크', '상담 · 등록 · 출결 · 수납을 책임집니다.', desks, false),
-        staffGroup('튜터', '수업 밖에서도 질문과 과제를 1:1로 챙깁니다.', tutors, true),
+        staffGroup('데스크', '상담 · 등록 · 출결 · 수납을 책임집니다.', desks),
+        staffGroup('튜터', '수업 밖에서도 질문과 과제를 1:1로 챙깁니다.', tutors),
       ].join('');
       return;
     }
@@ -158,7 +158,11 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
     }).join('');
   }
 
-  function staffGroup(title: string, desc: string, people: any[], isTutor: boolean) {
+  // 근무 관 태그는 divisions 배열에 '능곡관'/'장곡관'으로 함께 저장 (DB 컬럼 추가 없이)
+  const CAMPUSES = ['능곡관', '장곡관'];
+
+  // 데스크와 튜터 카드: 이름·직책 / 한마디(motto)=학력 경로(중-고-대학) / 약력(bio)=하는 일 (한 줄에 하나)
+  function staffGroup(title: string, desc: string, people: any[]) {
     if (people.length === 0) return '';
     return `
       <section>
@@ -166,19 +170,22 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
           <h2 class="text-lg font-bold text-gray-900">${title}</h2>
           <p class="text-xs text-gray-400">${desc}</p>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           ${people.map(f => {
-            const sub = isTutor && f.subject ? `<span class="text-[11px] font-semibold ${subjectColors[f.subject] ?? 'text-gray-500'}">${esc(f.subject)}</span>` : '';
+            const duties = String(f.bio ?? '').split('\n').map((l: string) => l.replace(/^-\s*/, '').trim()).filter(Boolean);
             return `
-              <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-white">
+              <div class="flex gap-4 p-5 rounded-xl border border-gray-200 bg-white">
                 <div class="shrink-0 w-12 h-12 rounded-full bg-brand-light text-brand-dark flex items-center justify-center text-lg font-bold">${esc(String(f.name ?? '').charAt(0))}</div>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-2">
-                    <p class="text-sm font-bold text-gray-900">${esc(f.name)}</p>
-                    <span class="text-xs text-gray-500">${esc(f.role ?? '')}</span>
-                    ${sub}
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <p class="text-base font-bold text-gray-900">${esc(f.name)} <span class="ml-1 text-sm font-medium text-brand">${esc(f.role ?? '')}</span></p>
+                    ${CAMPUSES.filter(c => (f.divisions ?? []).includes(c)).map(c => `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${c === '능곡관' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}">${c}</span>`).join('')}
                   </div>
-                  ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed">${esc(f.motto)}</p>` : ''}
+                  ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed break-keep">${esc(f.motto)}</p>` : ''}
+                  ${duties.length ? `
+                    <ul class="mt-3 pt-3 border-t border-gray-100 space-y-1">
+                      ${duties.map((d: string) => `<li class="text-[13px] text-gray-700 leading-relaxed pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-brand">${esc(d)}</li>`).join('')}
+                    </ul>` : ''}
                 </div>
               </div>
             `;
