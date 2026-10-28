@@ -39,6 +39,39 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
   math: '수학',
   science: '과학',
 };
+// 2026 2학기 기말 내신대비 시간표 (다운로드 폴더 '홈페이지 적용' 시트 기준)
+const EXAM_PREP_TITLE = '26년 2학기 내신대비 시간표';
+const EXAM_PREP_SCHOOLS = ['응곡중', '가온중', '장곡중'];
+const EXAM_PREP = [
+  { school: '응곡중', grade: '중1', subject: '수학', campus: '장곡관', time: '월 · 수 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '가온중', grade: '중1', subject: '수학', campus: '장곡관', time: '월 · 수 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '장곡중', grade: '중1', subject: '수학', campus: '장곡관', time: '월 · 수 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '응곡중', grade: '중2', subject: '수학', campus: '장곡관', time: '화 · 목 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '가온중', grade: '중2', subject: '수학', campus: '장곡관', time: '화 · 목 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '장곡중', grade: '중2', subject: '수학', campus: '장곡관', time: '화 · 목 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '응곡중', grade: '중1', subject: '영어', campus: '장곡관', time: '화 · 목 17:00 ~', note: '금요일 주간테스트 별도' },
+  { school: '응곡중', grade: '중2', subject: '영어', campus: '장곡관', time: '월 · 수 18:00 ~', note: '1:1 개별 맞춤 진도 밀착 (18:00~21:00)' },
+  { school: '가온중', grade: '중2', subject: '영어', campus: '장곡관', time: '월 · 수 18:00 ~', note: '1:1 개별 맞춤 진도 밀착 (18:00~21:00)' },
+  { school: '장곡중', grade: '중2', subject: '영어', campus: '장곡관', time: '월 · 수 18:00 ~', note: '1:1 개별 맞춤 진도 밀착 (18:00~21:00)' },
+  { school: '응곡중', grade: '중1', subject: '국어', campus: '장곡관', time: '화요일 20:00', note: '평일 클리닉 별도' },
+  { school: '응곡중', grade: '중2', subject: '국어', campus: '장곡관', time: '목요일 20:00', note: '평일 클리닉 별도' },
+  { school: '가온중', grade: '중2', subject: '국어', campus: '능곡관', time: '토요일 16:30', note: '능곡관에서 수업 진행' },
+  { school: '장곡중', grade: '중2', subject: '국어', campus: '장곡관', time: '', note: '' },
+  { school: '응곡중', grade: '중1', subject: '과학', campus: '장곡관', time: '일요일 14:00', note: '평일 클리닉 별도' },
+  { school: '응곡중', grade: '중2', subject: '과학', campus: '장곡관', time: '일요일 11:00', note: '평일 클리닉 별도' },
+  { school: '가온중', grade: '중2', subject: '과학', campus: '능곡관', time: '토요일 14:00', note: '능곡관에서 수업 진행' },
+  { school: '장곡중', grade: '중2', subject: '과학', campus: '장곡관', time: '', note: '' },
+];
+const EXAM_SUBJECT_ORDER = ['국어', '영어', '수학', '과학'];
+const EXAM_SUBJECT_COLOR: Record<string, string> = { '국어': 'text-brand', '영어': 'text-green-600', '수학': 'text-blue-600', '과학': 'text-orange-500' };
+const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
+  school,
+  grades: ['중1', '중2'].map(grade => ({
+    grade,
+    rows: EXAM_PREP.filter(r => r.school === school && r.grade === grade)
+      .sort((a, b) => EXAM_SUBJECT_ORDER.indexOf(a.subject) - EXAM_SUBJECT_ORDER.indexOf(b.subject)),
+  })).filter(g => g.rows.length > 0),
+}));
 ---
 
 <Layout title="커리큘럼 - 대치프라임" description="대치프라임학원 커리큘럼을 안내합니다.">
@@ -70,6 +103,12 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
             </button>
           ))}
         </div>
+        <button
+          data-tab="examprep"
+          class="cur-tab w-full mt-2 py-4 text-sm font-bold rounded-sm border border-brand/30 bg-brand-light text-brand transition-colors"
+        >
+          {EXAM_PREP_TITLE}
+        </button>
       </div>
     </div>
 
@@ -197,6 +236,73 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
           )}
         </div>
       ))}
+
+      <div id="panel-examprep" class="cur-panel hidden">
+        <h2 class="text-xl font-bold text-gray-900 mb-2">{EXAM_PREP_TITLE}</h2>
+        <p class="text-sm text-gray-500 mb-6">2026학년도 2학기 기말고사 대비 · 중1/중2 · 학교를 선택하면 해당 학교 일정만 볼 수 있습니다.</p>
+
+        <div class="flex flex-wrap gap-2 mb-8" id="exam-school-filter">
+          <button data-school="all" class="exam-school-btn px-4 py-2 rounded-full text-sm font-semibold bg-brand text-white">전체</button>
+          {EXAM_PREP_SCHOOLS.map(sc => (
+            <button data-school={sc} class="exam-school-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200">{sc}</button>
+          ))}
+        </div>
+
+        <div class="space-y-10">
+          {examGroups.map(g => (
+            <section data-exam-school={g.school}>
+              <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-900">{g.school}</h3>
+              <div class="space-y-6">
+                {g.grades.map(gr => (
+                  <div>
+                    <p class="text-sm font-bold text-brand-dark mb-2">{gr.grade}</p>
+                    <!-- 데스크톱: 표 -->
+                    <table class="hidden sm:table w-full text-sm">
+                      <thead>
+                        <tr class="text-xs text-gray-400 border-b border-gray-200">
+                          <th class="text-left font-medium py-2 w-16">과목</th>
+                          <th class="text-left font-medium py-2 w-20">진행관</th>
+                          <th class="text-left font-medium py-2 w-40">시간</th>
+                          <th class="text-left font-medium py-2">비고</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {gr.rows.map(r => (
+                          <tr class="border-b border-gray-100">
+                            <td class={`py-3 font-bold ${EXAM_SUBJECT_COLOR[r.subject]}`}>{r.subject}</td>
+                            <td class="py-3 text-gray-700">{r.campus}</td>
+                            <td class="py-3 text-gray-900 font-medium">
+                              {r.time || <a href="tel:0313130979" class="text-brand underline">학원 문의 요망</a>}
+                            </td>
+                            <td class="py-3 text-gray-500">{r.note}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <!-- 모바일: 카드 -->
+                    <div class="sm:hidden space-y-2">
+                      {gr.rows.map(r => (
+                        <div class="rounded-lg border border-gray-200 px-4 py-3">
+                          <div class="flex items-center justify-between">
+                            <span class={`text-sm font-bold ${EXAM_SUBJECT_COLOR[r.subject]}`}>{r.subject}</span>
+                            <span class="text-xs text-gray-500">{r.campus}</span>
+                          </div>
+                          <p class="mt-1 text-sm font-medium text-gray-900">
+                            {r.time || <a href="tel:0313130979" class="text-brand underline">학원 문의 요망</a>}
+                          </p>
+                          {r.note && <p class="mt-0.5 text-xs text-gray-500">{r.note}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <p class="mt-10 text-xs text-gray-400">※ 일정은 학교 시험 일정에 따라 변동될 수 있습니다. 자세한 사항은 학원(031-313-0979)으로 문의해 주세요.</p>
+      </div>
     </div>
 
   </div>
@@ -248,7 +354,7 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
     function activate(id: string) {
       tabs.forEach(t => {
         t.classList.remove('bg-brand', 'text-white', 'bg-brand-light', 'text-brand', 'font-bold');
-        if (t.dataset.tab === 'entrance') {
+        if (t.dataset.tab === 'entrance' || t.dataset.tab === 'examprep') {
           t.classList.add('bg-brand-light', 'text-brand', 'font-bold');
         } else {
           t.classList.add('bg-white', 'text-gray-500');
@@ -262,6 +368,20 @@ const TIMETABLE_SHEET_NAMES: Record<string, string> = {
     }
 
     tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
+
+    // 내신대비 시간표: 학교 필터
+    const schoolBtns = document.querySelectorAll<HTMLButtonElement>('.exam-school-btn');
+    schoolBtns.forEach(btn => btn.addEventListener('click', () => {
+      const sc = btn.dataset.school;
+      schoolBtns.forEach(b => {
+        const on = b === btn;
+        b.classList.toggle('bg-brand', on); b.classList.toggle('text-white', on);
+        b.classList.toggle('bg-gray-100', !on); b.classList.toggle('text-gray-600', !on);
+      });
+      document.querySelectorAll<HTMLElement>('[data-exam-school]').forEach(sec => {
+        sec.classList.toggle('hidden', sc !== 'all' && sec.dataset.examSchool !== sc);
+      });
+    }));
 
     subjects.forEach(s => loadContent(s.key, `content-${s.id}`));
     loadTimetables();
