@@ -88,7 +88,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
       <div class="container mx-auto px-4 py-4">
         <button
           data-tab="examprep"
-          class="cur-tab w-full mb-2 py-4 text-sm font-bold rounded-sm border border-brand/30 bg-brand-light text-brand transition-colors"
+          class="cur-tab w-full mb-2 py-4 text-sm font-bold rounded-sm border border-brand/30 bg-brand text-white transition-colors"
         >
           {EXAM_PREP_TITLE}
         </button>
@@ -99,9 +99,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
               data-key={s.key}
               class={`cur-tab py-4 text-sm font-medium border-r border-gray-200 transition-colors
                 ${i < 4 ? 'border-b' : ''}
-                ${i === 0
-                  ? 'bg-brand text-white'
-                  : s.id === 'entrance'
+                ${s.id === 'entrance'
                     ? 'bg-brand-light text-brand font-bold hover:bg-brand-light'
                     : 'bg-white text-gray-500 hover:bg-gray-50'}`}
             >
@@ -114,7 +112,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
 
     <div class="container mx-auto px-4 py-16 max-w-3xl">
       {subjects.map((s, i) => (
-        <div id={`panel-${s.id}`} class={`cur-panel ${i !== 0 ? 'hidden' : ''}`}>
+        <div id={`panel-${s.id}`} class="cur-panel hidden">
           <h2 class="text-xl font-bold text-gray-900 mb-6">{s.label} 커리큘럼</h2>
           <div id={`content-${s.id}`} class="page-content-area text-gray-700 leading-relaxed">
             <p class="text-gray-400 text-sm text-center py-10">불러오는 중...</p>
@@ -237,7 +235,7 @@ const examGroups = EXAM_PREP_SCHOOLS.map(school => ({
         </div>
       ))}
 
-      <div id="panel-examprep" class="cur-panel hidden">
+      <div id="panel-examprep" class="cur-panel">
         <h2 class="text-xl font-bold text-gray-900 mb-2">{EXAM_PREP_TITLE}</h2>
         <p class="text-sm text-gray-500 mb-6">2026학년도 2학기 기말고사 대비 · 중1/중2 · 학교를 선택하면 해당 학교 일정만 볼 수 있습니다.</p>
 
