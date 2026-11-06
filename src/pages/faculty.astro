@@ -151,7 +151,7 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
           <div class="${isExec ? 'px-5 py-4' : 'px-4 py-3'}">
             <p class="${isExec ? 'text-sm' : 'text-xs'} font-semibold mb-0.5 ${color}">${esc(label)}</p>
             <p class="${isExec ? 'text-base' : 'text-sm'} font-bold text-gray-900 mb-2">${esc(f.name)} 선생님</p>
-            <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2">${esc(f.motto ?? '')}</p>
+            <p class="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-2 whitespace-pre-line">${esc(String(f.motto ?? '').trim())}</p>
             ${snsIcons(f)}
             ${isExec ? bioList(f.bio) : ''}
           </div>
@@ -185,7 +185,7 @@ const divisions = ['임원진', '데스크와 튜터', '초등부', '중등부',
                     <p class="text-base font-bold text-gray-900">${esc(f.name)} <span class="ml-1 text-sm font-medium text-brand">${esc(String(f.role ?? '').includes('데스크') && String(f.role ?? '').includes('튜터') ? title : (f.role ?? ''))}</span></p>
                     ${CAMPUSES.filter(c => (f.divisions ?? []).includes(c)).map(c => `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${c === '능곡관' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}">${c}</span>`).join('')}
                   </div>
-                  ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed break-keep">${esc(f.motto)}</p>` : ''}
+                  ${f.motto ? `<p class="mt-1 text-xs text-gray-500 leading-relaxed break-keep whitespace-pre-line">${esc(String(f.motto).trim())}</p>` : ''}
                   ${duties.length ? `
                     <ul class="mt-3 pt-3 border-t border-gray-100 space-y-1">
                       ${duties.map((d: string) => `<li class="text-[13px] text-gray-700 leading-relaxed pl-3 relative before:content-['·'] before:absolute before:left-0 before:text-brand">${esc(d)}</li>`).join('')}

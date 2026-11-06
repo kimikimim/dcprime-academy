@@ -320,7 +320,7 @@ import Layout from '../components/layout/Layout.astro';
               </select>
               <input id="faculty-name-input" type="text" placeholder="이름" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand" />
             </div>
-            <input id="faculty-motto-input" type="text" placeholder="한마디" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand" />
+            <textarea id="faculty-motto-input" rows="2" placeholder="한마디 (엔터로 줄바꿈하면 사이트에도 그대로 줄바꿈됩니다)" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-brand"></textarea>
             <div class="mb-3">
               <p class="text-xs text-gray-500 mb-2">소속 학부 (중복 선택 가능)</p>
               <div class="flex flex-wrap gap-x-4 gap-y-2">
@@ -1256,9 +1256,9 @@ import Layout from '../components/layout/Layout.astro';
       btn.addEventListener('click', () => {
         facultyEditId = Number(btn.dataset.id);
         (document.getElementById('faculty-name-input') as HTMLInputElement).value = btn.dataset.name ?? '';
-        (document.getElementById('faculty-motto-input') as HTMLInputElement).value = btn.dataset.motto ?? '';
-        (document.getElementById('faculty-role-input') as HTMLInputElement).value = btn.dataset.role ?? '';
         const editingRow = data.find((x: any) => x.id === facultyEditId);
+        (document.getElementById('faculty-motto-input') as HTMLTextAreaElement).value = editingRow?.motto ?? btn.dataset.motto ?? '';
+        (document.getElementById('faculty-role-input') as HTMLInputElement).value = btn.dataset.role ?? '';
         (document.getElementById('faculty-bio-input') as HTMLTextAreaElement).value = editingRow?.bio ?? '';
         (document.getElementById('faculty-instagram-input') as HTMLInputElement).value = editingRow?.instagram_url ?? '';
         (document.getElementById('faculty-blog-input') as HTMLInputElement).value = editingRow?.blog_url ?? '';
