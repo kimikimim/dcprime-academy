@@ -20,7 +20,6 @@ import Layout from './layout/Layout.astro';
 
         <div class="flex items-center gap-4 text-sm text-gray-400 pb-6 border-b border-gray-200 mb-8">
           <span id="notice-date"></span>
-          <span>조회수 <span id="notice-views"></span></span>
         </div>
 
         <div id="notice-image-wrap" class="hidden mb-8">
@@ -100,7 +99,7 @@ import Layout from './layout/Layout.astro';
     document.getElementById('notice-title')!.textContent = data.title;
     document.getElementById('notice-date')!.textContent = new Date(data.created_at)
       .toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    document.getElementById('notice-views')!.textContent = ((data.views ?? 0) + 1).toLocaleString();
+    // 조회수는 화면에 표시하지 않지만 DB에는 계속 집계 (방문 보고용)
     document.getElementById('notice-body')!.innerHTML = data.content ?? '<p>내용이 없습니다.</p>';
     if (data.image_url) {
       const img = document.getElementById('notice-image') as HTMLImageElement;

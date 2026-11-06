@@ -17,12 +17,11 @@ import Layout from '../components/layout/Layout.astro';
       </div>
 
       <!-- 테이블 헤더 -->
-      <div class="grid grid-cols-[60px_80px_1fr_110px_80px] text-sm text-gray-400 font-medium border-b border-gray-200 pb-3 mb-1 hidden md:grid">
+      <div class="grid grid-cols-[60px_80px_1fr_110px] text-sm text-gray-400 font-medium border-b border-gray-200 pb-3 mb-1 hidden md:grid">
         <span>NO.</span>
         <span>분류</span>
         <span>제목</span>
         <span class="text-right">작성일</span>
-        <span class="text-right">조회수</span>
       </div>
 
       <!-- 로딩 -->
@@ -60,7 +59,7 @@ import Layout from '../components/layout/Layout.astro';
 
     const { data, error } = await supabase
       .from('notices')
-      .select('id, title, created_at, views, category')
+      .select('id, title, created_at, category')
       .order('created_at', { ascending: false });
 
     document.getElementById('loading')?.classList.add('hidden');
@@ -92,20 +91,18 @@ import Layout from '../components/layout/Layout.astro';
       const date = new Date(n.created_at).toLocaleDateString('ko-KR', {
         year: 'numeric', month: '2-digit', day: '2-digit'
       }).replace(/\. /g, '.').replace(/\.$/, '');
-      const views = (n.views ?? 0) >= 9999 ? '9,999+' : (n.views ?? 0).toLocaleString();
       const category = n.category || '공지';
       const catStyle = CATEGORY_STYLE[category] ?? CATEGORY_STYLE['공지'];
 
       return `
         <li>
-          <a href="/notice/view/?id=${n.id}" class="grid md:grid-cols-[60px_80px_1fr_110px_80px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
+          <a href="/notice/view/?id=${n.id}" class="grid md:grid-cols-[60px_80px_1fr_110px] grid-cols-1 items-center py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-y-1 group">
             <span class="text-sm text-gray-400 hidden md:block">${no}</span>
             <span class="hidden md:block"><span class="text-xs font-semibold px-2 py-1 rounded ${catStyle}">${category}</span></span>
             <span class="text-sm md:text-base font-medium text-gray-800 group-hover:text-brand transition-colors">
               <span class="md:hidden text-xs font-semibold px-1.5 py-0.5 rounded mr-1.5 ${catStyle}">${category}</span>${escHtml(n.title)}
             </span>
             <span class="text-sm text-gray-400 md:text-right">${date}</span>
-            <span class="text-sm text-gray-400 md:text-right hidden md:block">${views}</span>
           </a>
         </li>
       `;
